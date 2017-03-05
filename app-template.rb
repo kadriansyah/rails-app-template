@@ -5,6 +5,10 @@ def source_paths
   [File.expand_path(File.dirname(__FILE__))]
 end
 
+# rvm environment related
+copy_file '.ruby-gemset'
+copy_file '.ruby-version'
+
 # Remove the gemfile so we can start with a clean slate otherwise Rails groups
 # the gems in a very strange way
 remove_file "Gemfile"
@@ -13,10 +17,6 @@ add_file "Gemfile"
 prepend_to_file "Gemfile" do
   "source \"https://rubygems.org\""
 end
-
-# rvm environment related
-copy_file '.ruby-gemset'
-copy_file '.ruby-version'
 
 # gems
 gem "rails", "~> 5.0.2"
@@ -71,7 +71,6 @@ directory 'app/assets/components', 'app/assets/components'
 copy_file 'app/assets/components/application.html.erb', 'app/assets/components/application.html.erb'
 
 # copy files
-copy_file '.bowerrc'
 copy_file 'bower.json'
 copy_file 'package.json'
 copy_file 'post_install.rb'
@@ -302,7 +301,7 @@ copy_file 'app/views/admin/index.html.erb', 'app/views/admin/index.html.erb'
 copy_file 'app/views/layouts/application.html.erb', 'app/views/layouts/application.html.erb'
 
 # setup stylesheets
-insert_into_file 'app/assets/stylesheets/application.css', before: "*= require_tree ." do <<-RUBY
+insert_into_file 'app/assets/stylesheets/application.css', before: "*= require_tree .\n" do <<-RUBY
  *= require mdc-layout-grid
     RUBY
 end
