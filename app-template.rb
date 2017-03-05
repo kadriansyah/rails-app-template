@@ -84,6 +84,9 @@ directory 'vendor/assets/stylesheets', 'vendor/assets/stylesheets'
 # install polymer elements
 run 'bower install --save'
 
+# adding missing src from web-animations-js
+directory 'vendor/assets/components/web-animations-js/src', 'vendor/assets/components/web-animations-js/src'
+
 # install mdc-layout-grid (https://github.com/material-components/material-components-web/tree/master/packages/mdc-layout-grid)
 run 'npm install --save @material/layout-grid'
 
@@ -267,6 +270,23 @@ generate('devise admin/core_user')
 generate('devise:controllers admin/core_user')
 generate('devise:views admin/core_user')
 
+# adding collection name
+insert_into_file 'app/models/admin/core_user.rb', after: "include Mongoid::Document\n" do <<-RUBY
+    store_in collection: 'core_users'
+    RUBY
+end
+
+# adding fields to core_user
+insert_into_file 'app/models/admin/core_user.rb', before: "end" do <<-RUBY
+
+    # non devise field
+    field :username, type: String, default: ''
+    field :firstname, type: String, default: ''
+    field :lastname, type: String, default: ''
+
+    RUBY
+end
+
 # configure routing
 insert_into_file 'config/routes.rb', after: "Rails.application.routes.draw do\n" do <<-RUBY
 
@@ -299,6 +319,21 @@ copy_file 'app/controllers/admin/user_controller.rb', 'app/controllers/admin/use
 # copy views
 copy_file 'app/views/admin/index.html.erb', 'app/views/admin/index.html.erb'
 copy_file 'app/views/layouts/application.html.erb', 'app/views/layouts/application.html.erb'
+
+# adding devise sign_in sign_out redirect path method
+insert_into_file 'app/controllers/application_controller.rb', before: "end" do <<-RUBY
+
+    # Overwriting the sign_in redirect path method
+    def after_sign_in_path_for(resource)
+        Rails.application.routes.url_helpers.root_path
+    end
+
+    # Overwriting the sign_out redirect path method
+    def after_sign_out_path_for(resource_or_scope)
+        Rails.application.routes.url_helpers.root_path
+    end
+    RUBY
+end
 
 # setup stylesheets
 insert_into_file 'app/assets/stylesheets/application.css', before: "*= require_tree .\n" do <<-RUBY

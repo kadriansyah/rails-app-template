@@ -1,9 +1,9 @@
 class CustomFailure < Devise::FailureApp
     def redirect_url
-        if @scope_class == Quran::CoreUser
-            '/quran/admin/login'
+        if @scope_class == Admin::CoreUser
+            '/admin/login'
         else
-            '/quran/auth/login' # Quran::CoreAccount
+            '/auth/login' # Admin::CoreAccount
         end
     end
 
