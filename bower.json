@@ -1,0 +1,39 @@
+{
+  "name": "quran",
+  "authors": [
+    "kadriansyah <kadriansayah@gmail.com>"
+  ],
+  "description": "MoslemCorners Base Framework",
+  "main": "",
+  "license": "MIT",
+  "homepage": "www.moslemcorners.com",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "vendor/assets/components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "iron-elements": "PolymerElements/iron-elements#^1.0.10",
+    "paper-ui-elements": "PolymerElements/paper-ui-elements",
+    "paper-elements": "PolymerElements/paper-elements#^1.0.7",
+    "iron-input-elements": "PolymerElements/iron-input-elements",
+    "iron-behaviors-collection": "PolymerElements/iron-behaviors-collection",
+    "paper-input-elements": "PolymerElements/paper-input-elements",
+    "paper-overlay-elements": "PolymerElements/paper-overlay-elements",
+    "layout-elements": "PolymerElements/layout-elements",
+    "app-elements": "PolymerElements/app-elements#^0.10.1",
+    "data-elements": "PolymerElements/data-elements",
+    "iron-localstorage": "PolymerElements/iron-localstorage#^1.0.6",
+    "paper-audio-player": "^1.1.1",
+    "pdf-browser-viewer": "^1.0.6",
+    "web-animations-js": "^2.2.2",
+    "iron-data-table": "^1.0.6",
+    "paper-fab-menu": "paperfabmenu#^1.0.2",
+    "paper-ripple": "PolymerElements/paper-ripple#^1.0.10",
+    "polymer-redux": "^0.4.0",
+    "neon-animation": "PolymerElements/neon-animation#^1.2.4"
+  }
+}
