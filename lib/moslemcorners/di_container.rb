@@ -7,7 +7,7 @@ module MoslemCorners
         extend Dry::Container::Mixin
 
         register 'user_management_service' do
-            Quran::UserManagementService.new
+            Admin::UserManagementService.new
         end
 
         register 'system_cache' do

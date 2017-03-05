@@ -1,0 +1,93 @@
+<!--
+@license
+The MIT License (MIT)
+Copyright (c) 2017 Kiagus Arief Adriansyah
+
+Permission is hereby granted, free of charge,
+to any person obtaining a copy of this software and associated documentation files (the "Software"),
+to deal in the Software without restriction, including without limitation the rights to use, copy,
+modify, merge, publish, distribute, sublicense, and/or sell copies of the Software,
+and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+-->
+
+<script>
+    var moslemcorners = window.moslemcorners || {};
+
+    /** @polymerBehavior */
+    moslemcorners.DataGridTemplatizerBehaviorImpl = {
+        properties: {
+            item: Object,
+            template: Object,
+            _instances: { // singleton
+                type: Array,
+                value: []
+            },
+            _forwardedParentProps: { // singleton
+                type: Object,
+                value: {}
+            },
+            _instance: { // template instance
+                type: Object,
+                computed: '_templatize(template)'
+            }
+        },
+        observers: [ '_itemChanged(_instance, item)' ],
+        created: function() {
+            /*
+             * In order to determine which properties are instance-specific and require custom forwarding
+             * via _forwardInstanceProp/_forwardInstancePath, define an _instanceProps map containing keys for each instance prop
+             * https://www.polymer-project.org/1.0/docs/api/Polymer.Templatizer
+             */
+            this._instanceProps = {
+                column: true,
+                item: true
+            };
+        },
+        /** templatizer */
+        _templatize: function(template) {
+            this.templatize(template);
+            // fix _rootDataHost to the context where template has been defined
+            if (template._rootDataHost) {
+                this._getRootDataHost = function() { return template._rootDataHost; };
+            }
+            var instance = this.stamp({});
+            // initializing new template instance with previously forwarded parent props.
+            // could be done with observers, but this is simpler.
+            for (var key in this._forwardedParentProps) {
+                instance[key] = this._forwardedParentProps[key];
+            }
+            this._instances.push(instance);
+            Polymer.dom(this).insertBefore(instance.root, Polymer.dom(this).firstElementChild);
+            return instance;
+        },
+        /** templatizer */
+        _forwardParentProp: function(prop, value) {
+            // store props to initialize new instances.
+            this._forwardedParentProps[prop] = value;
+
+            // TODO: Bug in Polymer
+            // Seems to two-way bind any parent property only to the last template instance created.
+            // We need to push the property to all instances manually.
+            this._instances.forEach(function(_instance) {
+                _instance[prop] = value;
+            });
+        },
+        _forwardInstanceProp: function(_instance, prop, value) {
+            // NOP
+        },
+        _itemChanged: function(_instance, item) {
+            _instance.item = item;
+        }
+    };
+
+    /** @polymerBehavior */
+    moslemcorners.DataGridTemplatizerBehavior = [ Polymer.Templatizer, moslemcorners.DataGridTemplatizerBehaviorImpl ];
+</script>

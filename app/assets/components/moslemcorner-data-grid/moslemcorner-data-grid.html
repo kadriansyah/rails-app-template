@@ -1,0 +1,221 @@
+<!--
+@license
+The MIT License (MIT)
+Copyright (c) 2017 Kiagus Arief Adriansyah
+
+Permission is hereby granted, free of charge,
+to any person obtaining a copy of this software and associated documentation files (the "Software"),
+to deal in the Software without restriction, including without limitation the rights to use, copy,
+modify, merge, publish, distribute, sublicense, and/or sell copies of the Software,
+and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+-->
+
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../iron-ajax/iron-ajax.html">
+<link rel="import" href="../iron-list/iron-list.html">
+<link rel="import" href="../iron-scroll-threshold/iron-scroll-threshold.html">
+<link rel="import" href="../paper-spinner/paper-spinner.html">
+<link rel="import" href="../moslemcorner-shared-styles/moslemcorner-shared-styles.html">
+
+<link rel="import" href="moslemcorner-data-grid-row.html">
+<link rel="import" href="moslemcorner-data-grid-cell.html">
+
+<dom-module id="moslemcorner-data-grid">
+    <template>
+        <style include="shared-styles">
+            :host {
+                display: block;
+            }
+            iron-list {
+                height: var(--moslemcorner-data-grid-height, 80vh); /* don't use % values unless the parent element is sized. */
+            }
+            .header {
+                padding: var(--moslemcorner-data-grid-header-padding, 10px);
+                color: var(--moslemcorner-data-grid-header-color, #000000);
+                font-weight: var(--moslemcorner-data-grid-header-font-weight, bold);
+                border-radius: 0;
+                background-color: var(--moslemcorner-data-grid-header-background-color, #dddddd);
+                border-bottom: solid;
+                border-color: var(--moslemcorner-data-grid-header-border-color, #111111);
+                border-bottom-width: thin;
+            }
+            .item {
+                padding: var(--moslemcorner-data-grid-item-padding, 10px);
+                color: var(--moslemcorner-data-grid-item-color, #757575);
+                font-weight: var(--moslemcorner-data-grid-header-font-weight, normal);
+                border-radius: 0;
+                background-color: var(--moslemcorner-data-grid-item-background-color, #f9f9f9);
+                border-bottom: solid;
+                border-color: var(--moslemcorner-data-grid-item-border-color, #dddddd);
+                border-bottom-width: thin;
+            }
+            .loader {
+                margin-top: 2px;
+                color: var(--moslemcorner-data-grid-loader-color, #FFFFFF);
+                background-color: var(--moslemcorner-data-grid-loader-background-color, #1e88e5);
+                opacity: 0.5;
+                text-align: center;
+                height: 30px;
+                font: 13px arial;
+                font-weight: bold;
+                line-height: 30px;
+            }
+        </style>
+        <iron-ajax
+                id="dataAjax"
+                url="[[dataUrl]]"
+                handle-as="json"
+                loading='{{_loading}}'
+                on-response='_onResponse'
+                on-error='_onError'>
+        </iron-ajax>
+        <iron-ajax
+                id="deleteAjax"
+                handle-as="json"
+                loading='{{_loading}}'
+                on-response='_onDeleteResponse'
+                on-error='_onDeleteError'>
+        </iron-ajax>
+        <div class="card">
+            <div class="header">
+                <moslemcorner-data-grid-row>
+                    <template is="dom-repeat" items="[[columns]]" as="column">
+                        <moslemcorner-data-grid-cell
+                                header
+                                column="[[column]]"
+                                template="[[column.headerTemplate]]"
+                                width="[[column.width]]"
+                                align="[[column.align]]">
+                        </moslemcorner-data-grid-cell>
+                    </template>
+                </moslemcorner-data-grid-row>
+            </div>
+            <iron-scroll-threshold lower-threshold="{{threshold}}" on-lower-threshold="_loadMoreData" scroll-target="list" id="threshold">
+                <iron-list items="[[data]]" as="item" id="list">
+                    <template>
+                        <div class="item">
+                            <moslemcorner-data-grid-row>
+                                <template is="dom-repeat" items="[[columns]]" as="column">
+                                    <moslemcorner-data-grid-cell
+                                            item="[[item]]"
+                                            column="[[column]]"
+                                            template="[[column.template]]"
+                                            width="[[column.width]]">
+                                    </moslemcorner-data-grid-cell>
+                                </template>
+                            </moslemcorner-data-grid-row>
+                        </div>
+                    </template>
+                </iron-list>
+                <div class="loader" hidden$="[[!_loading]]">{{loadingText}}</div>
+            </iron-scroll-threshold>
+            <content select="paper-fab"></content>
+        </div>
+        <content select="moslemcorner-data-grid-column"></content>
+    </template>
+
+    <script>
+        (function () {
+            Polymer({
+                is: 'moslemcorner-data-grid',
+                behaviors: [ Polymer.IronResizableBehavior ],
+                properties: {
+                    paging: Boolean,
+                    dataUrl: String,
+                    data: {
+                        type: Array,
+                        value: function() {
+                            return [];
+                        }
+                    },
+                    /**
+                     * An array of `data-grid-column` elements which contain the templates
+                     * to be stamped with items.
+                     */
+                    columns: {
+                        type: Array,
+                        notify: true,
+                        value: function() {
+                            return [];
+                        },
+                        observer: '_columnsChanged'
+                    },
+                    threshold: {
+                        type: String,
+                        value: 200
+                    },
+                    _loading: {
+                        type: Boolean,
+                        value: false
+                    },
+                    loadingText: {
+                        type: String,
+                        value: "loading more data..."
+                    }
+                },
+                created: function() {
+                    this._observer = Polymer.dom(this).observeNodes(function(info) {
+                        var hasColumns = function(node) {
+                            return (node.nodeType === Node.ELEMENT_NODE && node.tagName.toUpperCase() === 'MOSLEMCORNER-DATA-GRID-COLUMN');
+                        };
+
+                        if (info.addedNodes.filter(hasColumns).length > 0 || info.removedNodes.filter(hasColumns).length > 0) {
+                            this.set('columns', this.getContentChildren('[select=moslemcorner-data-grid-column]'));
+                            this.notifyResize();
+                        }
+                    }.bind(this));
+                },
+                ready: function() {
+                    // NOP
+                },
+                _columnsChanged: function(columns, oldColumns) {
+                    // NOP
+                },
+                _loadMoreData: function() {
+                    this.async(function() {
+                        this.$.dataAjax.generateRequest();
+                    });
+                },
+                _onResponse: function(e) {
+                    var json = e.detail.response;
+                    json.results.forEach(function(item) {
+                        this.push('data', item);
+                    }, this);
+
+                    // Clear the lower threshold so we can load more data when the user scrolls down again.
+                    this.$.threshold.clearTriggers();
+                },
+                _onError: function(e) {
+                    // show alert
+                },
+                _onDeleteResponse: function(e) {
+                    var json = e.detail.response;
+                    if (json.status.code == '200') {
+                        this.set('data', []); // clear data
+                        this.$.dataAjax.generateRequest();
+                    }
+                    else {
+                        this.$.dataAjax.generateRequest();
+                    }
+                },
+                _onDeleteError: function(e) {
+                    // show alert
+                },
+                delete: function(url) {
+                    this.async(function() {
+                        this.$.deleteAjax.url = url;
+                        this.$.deleteAjax.generateRequest();
+                    });
+                }
+            });
+        })();
+    </script>
+</dom-module>
