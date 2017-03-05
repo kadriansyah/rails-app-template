@@ -368,6 +368,7 @@ end
 
 after_bundle do
   git :init
+  run 'echo node_modules >> .gitignore'
   git add: "."
   git commit: %Q{ -m 'Initial commit' }
 end
