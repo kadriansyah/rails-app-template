@@ -28,6 +28,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 <link rel="import" href="../paper-button/paper-button.html">
 <link rel="import" href="../paper-fab/paper-fab.html" />
 <link rel="import" href="../nebula-loader/nebula-loader.html">
+<link rel="import" href="../paper-progress/paper-progress.html">
 
 <link rel="import" href="../user-form/user-form.html">
 <link rel="import" href="../../shared-styles/shared-styles.html">
@@ -82,6 +83,12 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
             #form {
                 width: 50%;
             }
+            paper-progress {
+                width: 100%;
+            }
+            paper-progress.slow {
+                --paper-progress-indeterminate-cycle-duration: 20s;
+            }
         </style>
 
         <iron-location id="location" path="{{path}}" hash="{{hash}}" query="{{query}}" dwell-time="{{dwellTime}}"></iron-location>
@@ -109,7 +116,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
             <paper-fab icon="icons:add" on-tap="_new"></paper-fab>
         </moslemcorner-data-grid>
         <paper-dialog class="card" id="form" modal>
-            <div class="title"><div><iron-icon icon="[[_icon]]"></iron-icon>[[_formTitle]]</div></div>
+            <div class="title">
+                <div><iron-icon icon="[[_icon]]"></iron-icon>[[_formTitle]]</div>
+                <paper-progress id="progress" hidden indeterminate></paper-progress>
+            </div>
             <user-form action-url="[[dataUrl]]" form-authenticity-token="[[formAuthenticityToken]]" id="userForm"></user-form>
         </paper-dialog>
         <paper-dialog class="card" id="confirmation" modal>
@@ -146,11 +156,20 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
                     }
                 },
                 listeners: {
+                    'beforeSave': '_onBeforeSave',
                     'saveSuccess': '_onSaveSuccess',
                     'editSuccess': '_onEditSuccess',
-                    'cancel': '_onCancel'
+                    'cancel': '_onCancel',
+                    'saveError': '_onSaveError'
+                },
+                _onBeforeSave: function() {
+                    this.$.progress.hidden = false;
+                },
+                _onSaveError: function() {
+                    this.$.progress.hidden = true;
                 },
                 _new: function() {
+                    this.$.progress.hidden = true;
                     this._icon = 'icons:add';
                     this._formTitle = 'Create New User';
                     this.$.form.open();

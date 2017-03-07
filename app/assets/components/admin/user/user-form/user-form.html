@@ -177,6 +177,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
                 },
                 _onSaveError: function() {
                     this._error = 'Creating User Error';
+                    this.fire('saveError');
                 },
                 _onUpdateResponse: function(e) {
                     var response = e.detail.response;
@@ -204,6 +205,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
                     this._error = 'Edit User Error';
                 },
                 _save: function() {
+                    this.fire('beforeSave');
                     if (this._mode === 'new' || this._mode === 'copy') {
                         this.$.saveAjax.headers['X-CSRF-Token'] = this.formAuthenticityToken;
                         this.$.saveAjax.body = this.core_user;
