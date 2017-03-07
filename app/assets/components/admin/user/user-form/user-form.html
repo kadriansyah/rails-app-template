@@ -173,6 +173,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
                     }
                     else {
                         this._error = 'Creating User Error';
+                        this.fire('saveError');
                     }
                 },
                 _onSaveError: function() {
@@ -188,10 +189,12 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
                     }
                     else {
                         this._error = 'Updating User Error';
+                        this.fire('updateError');
                     }
                 },
                 _onUpdateError: function() {
                     this._error = 'Creating User Error';
+                    this.fire('updateError');
                 },
                 _onEditResponse: function(e) {
                     var response = e.detail.response;
@@ -205,13 +208,14 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
                     this._error = 'Edit User Error';
                 },
                 _save: function() {
-                    this.fire('beforeSave');
                     if (this._mode === 'new' || this._mode === 'copy') {
+                        this.fire('beforeSave');
                         this.$.saveAjax.headers['X-CSRF-Token'] = this.formAuthenticityToken;
                         this.$.saveAjax.body = this.core_user;
                         this.$.saveAjax.generateRequest();
                     }
                     else {
+                        this.fire('beforeUpdate');
                         this.$.updateAjax.headers['X-CSRF-Token'] = this.formAuthenticityToken;
                         this.$.updateAjax.body = this.core_user;
                         this.$.updateAjax.url = this.$.location.path + '/users/'+ this.core_user.id;
@@ -220,6 +224,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
                 },
                 _cancel: function() {
                     this._error = '';
+                    this.core_user = {};
                     this._mode = 'new';
                     this.fire('cancel');
                 }
