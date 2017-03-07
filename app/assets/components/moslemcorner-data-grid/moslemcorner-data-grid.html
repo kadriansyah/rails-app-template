@@ -68,6 +68,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
                 font-weight: bold;
                 line-height: 30px;
             }
+            .title iron-icon {
+                padding: 0;
+                padding-right: 2px;
+            }
         </style>
         <iron-ajax
                 id="dataAjax"
@@ -119,6 +123,12 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
             </iron-scroll-threshold>
             <content select="paper-fab"></content>
         </div>
+        <paper-dialog class="card" id="error" modal>
+            <div class="title"><iron-icon icon="icons:info"></iron-icon>[[_error]]</div>
+            <div class="buttons">
+                <paper-button dialog-confirm autofocus>Close</paper-button>
+            </div>
+        </paper-dialog>
         <content select="moslemcorner-data-grid-column"></content>
     </template>
 
@@ -154,6 +164,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
                     threshold: {
                         type: String,
                         value: 200
+                    },
+                    _error: {
+                        type: String,
+                        value: ''
                     },
                     _loading: {
                         type: Boolean,
@@ -212,7 +226,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
                     this.$.threshold.clearTriggers();
                 },
                 _onError: function(e) {
-                    // show alert
+                    this._error = 'Something wrong... Please try again.';
+                    this.$.error.open();
                 },
                 _onDeleteResponse: function(e) {
                     var response = e.detail.response;
@@ -220,11 +235,13 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
                         this.reload();
                     }
                     else {
-                        // TODO please implement the handler
+                        this._error = 'Something wrong... Please try again.';
+                        this.$.error.open();
                     }
                 },
                 _onDeleteError: function(e) {
-                    // show alert
+                    this._error = 'Something wrong... Please try again.';
+                    this.$.error.open();
                 },
                 delete: function(url) {
                     this.async(function() {
