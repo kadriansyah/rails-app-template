@@ -200,6 +200,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
                 reload: function() {
                     this.async(function() {
                         this._reload = true;
+                        this.page = 1;
+                        this.$.dataAjax.url = this.dataUrl + '?page=' + this.page.toString();
                         this.$.dataAjax.generateRequest();
                     });
                 },

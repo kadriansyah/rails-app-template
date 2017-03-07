@@ -283,7 +283,7 @@ insert_into_file 'app/models/admin/core_user.rb', after: "include Mongoid::Docum
     store_in collection: 'core_users'
 
     # kaminari page setting
-    paginates_per 10
+    paginates_per 20
 
     RUBY
 end
