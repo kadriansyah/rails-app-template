@@ -271,8 +271,8 @@ generate('devise:controllers admin/core_user')
 generate('devise:views admin/core_user')
 
 # adding dependency
-insert_into_file 'app/models/admin/core_user.rb', before: "class CoreUser\n" do <<-RUBY
-    require_dependency 'moslemcorners/common_model'
+insert_into_file 'app/models/admin/core_user.rb', before: "class Admin::CoreUser\n" do <<-RUBY
+    require 'moslemcorners/common_model'
 
     RUBY
 end
