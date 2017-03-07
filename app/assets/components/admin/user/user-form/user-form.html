@@ -24,6 +24,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 <link rel="import" href="../paper-card/paper-card.html">
 <link rel="import" href="../iron-ajax/iron-ajax.html">
 <link rel="import" href="../iron-location/iron-location.html">
+<link rel="import" href="../paper-progress/paper-progress.html">
 
 <link rel="import" href="../../shared-styles/shared-styles.html">
 
@@ -56,10 +57,31 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
             paper-button.green[active] {
                 background-color: var(--paper-red-500);
             }
+            paper-progress {
+                width: 100%;
+            }
             #formContainer {
                 width: var(--user-form-width, 100%);
                 margin: 0 auto;
                 @apply(--user-form);
+            }
+            .title {
+                margin-bottom: 10px;
+            }
+            .title > div {
+                display: flex;
+                flex-direction: row;
+                justify-content: flex-start;
+                align-items: center;
+
+                padding: 5px 0 5px 0;
+                border-bottom: 2px solid #757575;
+                font-size: 16px;
+                font-weight: bold;
+            }
+            .title iron-icon {
+                padding: 0;
+                padding-right: 2px;
             }
         </style>
 
@@ -90,6 +112,11 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
                 on-response="_onEditResponse"
                 on-error="_onEditError">
         </iron-ajax>
+
+        <div class="title">
+            <div><iron-icon icon="[[icon]]"></iron-icon>[[title]]</div>
+            <paper-progress id="progress" hidden indeterminate></paper-progress>
+        </div>
 
         <div id="formContainer">
             <template is="dom-if" if="[[_error]]">
@@ -148,6 +175,14 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
                         type: Object,
                         value: {}
                     },
+                    title: {
+                        type: String,
+                        value: ''
+                    },
+                    icon: {
+                        type: String,
+                        value: ''
+                    },
                     _mode: {
                         type: String,
                         value: 'new'
@@ -167,18 +202,18 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
                 _onSaveResponse: function(e) {
                     var response = e.detail.response;
                     if (response.status == '200') {
-                        this.core_user = {};
                         this._mode = 'new';
+                        this.core_user = {};
                         this.fire('saveSuccess');
                     }
                     else {
                         this._error = 'Creating User Error';
-                        this.fire('saveError');
                     }
+                    this.$.progress.hidden = true;
                 },
                 _onSaveError: function() {
                     this._error = 'Creating User Error';
-                    this.fire('saveError');
+                    this.$.progress.hidden = true;
                 },
                 _onUpdateResponse: function(e) {
                     var response = e.detail.response;
@@ -189,12 +224,12 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
                     }
                     else {
                         this._error = 'Updating User Error';
-                        this.fire('updateError');
                     }
+                    this.$.progress.hidden = true;
                 },
                 _onUpdateError: function() {
                     this._error = 'Creating User Error';
-                    this.fire('updateError');
+                    this.$.progress.hidden = true;
                 },
                 _onEditResponse: function(e) {
                     var response = e.detail.response;
@@ -209,23 +244,23 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
                 },
                 _save: function() {
                     if (this._mode === 'new' || this._mode === 'copy') {
-                        this.fire('beforeSave');
                         this.$.saveAjax.headers['X-CSRF-Token'] = this.formAuthenticityToken;
                         this.$.saveAjax.body = this.core_user;
                         this.$.saveAjax.generateRequest();
+                        this.$.progress.hidden = false;
                     }
                     else {
-                        this.fire('beforeUpdate');
                         this.$.updateAjax.headers['X-CSRF-Token'] = this.formAuthenticityToken;
                         this.$.updateAjax.body = this.core_user;
                         this.$.updateAjax.url = this.$.location.path + '/users/'+ this.core_user.id;
                         this.$.updateAjax.generateRequest();
+                        this.$.progress.hidden = false;
                     }
                 },
                 _cancel: function() {
                     this._error = '';
-                    this.core_user = {};
                     this._mode = 'new';
+                    this.core_user = {};
                     this.fire('cancel');
                 }
             });

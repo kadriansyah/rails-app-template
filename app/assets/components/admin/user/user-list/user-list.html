@@ -28,7 +28,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 <link rel="import" href="../paper-button/paper-button.html">
 <link rel="import" href="../paper-fab/paper-fab.html" />
 <link rel="import" href="../nebula-loader/nebula-loader.html">
-<link rel="import" href="../paper-progress/paper-progress.html">
 
 <link rel="import" href="../user-form/user-form.html">
 <link rel="import" href="../../shared-styles/shared-styles.html">
@@ -52,6 +51,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
                 cursor: pointer;
             }
             paper-fab {
+                --paper-fab-background: var(--paper-indigo-500);
                 position: absolute;
                 right: 30px;
                 bottom: 30px;
@@ -61,33 +61,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
                 --nebula-loader-dialog-border-color: #FFFFFF;
                 --nebula-loader-dialog-color: #ff4081;
             }
-            .title {
-                padding-left: 24px;
-                padding-right: 24px;
-            }
-            .title > div {
-                display: flex;
-                flex-direction: row;
-                justify-content: flex-start;
-                align-items: center;
-
-                padding: 5px 0 5px 0;
-                border-bottom: 2px solid #757575;
-                font-size: 16px;
-                font-weight: bold;
-            }
-            .title iron-icon {
-                padding: 0;
-                padding-right: 2px;
-            }
             #form {
                 width: 50%;
-            }
-            paper-progress {
-                width: 100%;
-            }
-            paper-progress.slow {
-                --paper-progress-indeterminate-cycle-duration: 20s;
             }
         </style>
 
@@ -116,10 +91,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
             <paper-fab icon="icons:add" on-tap="_new"></paper-fab>
         </moslemcorner-data-grid>
         <paper-dialog class="card" id="form" modal>
-            <div class="title">
-                <div><iron-icon icon="[[_icon]]"></iron-icon>[[_formTitle]]</div>
-                <paper-progress id="progress" hidden indeterminate></paper-progress>
-            </div>
             <user-form action-url="[[dataUrl]]" form-authenticity-token="[[formAuthenticityToken]]" id="userForm"></user-form>
         </paper-dialog>
         <paper-dialog class="card" id="confirmation" modal>
@@ -145,46 +116,21 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
                     _id: {
                         type: String,
                         value: ''
-                    },
-                    _formTitle: {
-                        type: String,
-                        value: ''
-                    },
-                    _icon: {
-                        type: String,
-                        value: ''
                     }
                 },
                 listeners: {
-                    'beforeSave': '_onBeforeSave',
-                    'beforeUpdate': '_onBeforeUpdate',
                     'saveSuccess': '_onSaveSuccess',
                     'editSuccess': '_onEditSuccess',
-                    'saveError': '_onSaveError',
-                    'updateError': '_onUpdateError',
                     'cancel': '_onCancel'
                 },
-                _onBeforeSave: function() {
-                    this.$.progress.hidden = false;
-                },
-                _onBeforeUpdate: function() {
-                    this.$.progress.hidden = false;
-                },
-                _onSaveError: function() {
-                    this.$.progress.hidden = true;
-                },
-                _onUpdateError: function() {
-                    this.$.progress.hidden = true;
-                },
                 _new: function() {
-                    this._icon = 'icons:add';
-                    this._formTitle = 'Create New User';
-                    this.$.progress.hidden = true;
+                    this.$.userForm.icon = 'icons:add';
+                    this.$.userForm.title = 'Create New User';
                     this.$.form.open();
                 },
                 _edit: function(e) {
-                    this._icon = 'icons:create';
-                    this._formTitle = 'Edit User';
+                    this.$.userForm.icon = 'icons:create';
+                    this.$.userForm.title = 'Edit User';
                     this.$.userForm.edit(e.target.id);
                     this.$.loader.show();
                 },
@@ -196,12 +142,11 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 //                        self.$.form.open();
 //                    }, 1500);
                     this.$.loader.close();
-                    this.$.progress.hidden = true;
                     this.$.form.open();
                 },
                 _copy: function(e) {
-                    this._icon = 'icons:content-copy';
-                    this._formTitle = 'Copy User';
+                    this.$.userForm.icon = 'icons:content-copy';
+                    this.$.userForm.title = 'Copy User';
                     this.$.userForm.copy(e.target.id);
                     this.$.loader.show();
                 },
