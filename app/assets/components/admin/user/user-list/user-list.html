@@ -156,10 +156,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
                 _onEditSuccess: function() {
                     this.$.form.open();
                 },
-                _copy: function() {
+                _copy: function(e) {
                     this._icon = 'icons:content-copy';
                     this._formTitle = 'Copy User';
-                    this.$.form.open();
+                    this.$.userForm.copy(e.target.id);
                 },
                 _confirmation: function(e) {
                     this._id = e.target.id;
