@@ -202,6 +202,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
                 _onSaveResponse: function(e) {
                     var response = e.detail.response;
                     if (response.status == '200') {
+                        this._error = '';
                         this._mode = 'new';
                         this.core_user = {};
                         this.fire('saveSuccess');
@@ -218,8 +219,9 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
                 _onUpdateResponse: function(e) {
                     var response = e.detail.response;
                     if (response.status == '200') {
-                        this.core_user = {};
+                        this._error = '';
                         this._mode = 'new';
+                        this.core_user = {};
                         this.fire('saveSuccess');
                     }
                     else {
