@@ -23,6 +23,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 <link rel="import" href="../iron-list/iron-list.html">
 <link rel="import" href="../iron-scroll-threshold/iron-scroll-threshold.html">
 <link rel="import" href="../paper-spinner/paper-spinner.html">
+<link rel="import" href="../nebula-loader/nebula-loader.html">
 <link rel="import" href="../moslemcorner-shared-styles/moslemcorner-shared-styles.html">
 
 <link rel="import" href="moslemcorner-data-grid-row.html">
@@ -36,6 +37,11 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
             }
             iron-list {
                 height: var(--moslemcorner-data-grid-height, 80vh); /* don't use % values unless the parent element is sized. */
+            }
+            nebula-loader {
+                --nebula-loader-dialog-background-color: #2E3032;
+                --nebula-loader-dialog-border-color: #FFFFFF;
+                --nebula-loader-dialog-color: #ff4081;
             }
             .header {
                 padding: var(--moslemcorner-data-grid-header-padding, 10px);
@@ -129,6 +135,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
                 <paper-button dialog-confirm autofocus>Close</paper-button>
             </div>
         </paper-dialog>
+        <nebula-loader id="loader" icon="icons:refresh" text="Please wait..."></nebula-loader>
         <content select="moslemcorner-data-grid-column"></content>
     </template>
 
@@ -226,22 +233,32 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 
                     // Clear the lower threshold so we can load more data when the user scrolls down again.
                     this.$.threshold.clearTriggers();
+
+                    this.$.loader.close();
                 },
-                _onError: function(e) {
+                _onError: function() {
+                    this.$.loader.close();
                     this._error = 'Something wrong... Please try again.';
                     this.$.error.open();
                 },
                 _onDeleteResponse: function(e) {
                     var response = e.detail.response;
                     if (response.status == '200') {
+//                        /* network delay simulation */
+//                        self = this;
+//                        setTimeout(function() {
+//                            self.reload();
+//                        }, 1500);
                         this.reload();
                     }
                     else {
+                        this.$.loader.close();
                         this._error = 'Something wrong... Please try again.';
                         this.$.error.open();
                     }
                 },
-                _onDeleteError: function(e) {
+                _onDeleteError: function() {
+                    this.$.loader.close();
                     this._error = 'Something wrong... Please try again.';
                     this.$.error.open();
                 },
@@ -249,6 +266,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
                     this.async(function() {
                         this.$.deleteAjax.url = url;
                         this.$.deleteAjax.generateRequest();
+                        this.$.loader.show();
                     });
                 }
             });

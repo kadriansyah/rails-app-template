@@ -30,6 +30,7 @@
         "web-animations-js": "^2.2.2",
         "paper-fab-menu": "paperfabmenu#^1.0.2",
         "paper-ripple": "PolymerElements/paper-ripple#^1.0.10",
-        "neon-animation": "PolymerElements/neon-animation#^1.2.4"
+        "neon-animation": "PolymerElements/neon-animation#^1.2.4",
+        "nebula-loader": "arsnebula/nebula-loader#^1.2.0"
     }
 }

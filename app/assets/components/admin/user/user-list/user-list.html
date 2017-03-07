@@ -27,6 +27,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 <link rel="import" href="../paper-dialog/paper-dialog.html">
 <link rel="import" href="../paper-button/paper-button.html">
 <link rel="import" href="../paper-fab/paper-fab.html" />
+<link rel="import" href="../nebula-loader/nebula-loader.html">
 
 <link rel="import" href="../user-form/user-form.html">
 <link rel="import" href="../../shared-styles/shared-styles.html">
@@ -53,6 +54,11 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
                 position: absolute;
                 right: 30px;
                 bottom: 30px;
+            }
+            nebula-loader {
+                --nebula-loader-dialog-background-color: #2E3032;
+                --nebula-loader-dialog-border-color: #FFFFFF;
+                --nebula-loader-dialog-color: #ff4081;
             }
             .title {
                 padding-left: 24px;
@@ -113,6 +119,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
                 <paper-button on-tap="_delete" dialog-confirm autofocus>Ok</paper-button>
             </div>
         </paper-dialog>
+        <nebula-loader id="loader" icon="icons:refresh" text="Please wait..."></nebula-loader>
     </template>
 
     <script>
@@ -152,14 +159,23 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
                     this._icon = 'icons:create';
                     this._formTitle = 'Edit User';
                     this.$.userForm.edit(e.target.id);
+                    this.$.loader.show();
                 },
                 _onEditSuccess: function() {
+//                    /* network delay simulation */
+//                    self = this;
+//                    setTimeout(function() {
+//                        self.$.loader.close();
+//                        self.$.form.open();
+//                    }, 1500);
+                    this.$.loader.close();
                     this.$.form.open();
                 },
                 _copy: function(e) {
                     this._icon = 'icons:content-copy';
                     this._formTitle = 'Copy User';
                     this.$.userForm.copy(e.target.id);
+                    this.$.loader.show();
                 },
                 _confirmation: function(e) {
                     this._id = e.target.id;
