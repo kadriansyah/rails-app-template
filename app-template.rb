@@ -270,9 +270,21 @@ generate('devise admin/core_user')
 generate('devise:controllers admin/core_user')
 generate('devise:views admin/core_user')
 
-# adding collection name
+# adding dependency
+insert_into_file 'app/models/admin/core_user.rb', before: "class CoreUser\n" do <<-RUBY
+    require_dependency 'moslemcorners/common_model'
+
+    RUBY
+end
+
+# adding MoslemCorners::CommonModel & collection name
 insert_into_file 'app/models/admin/core_user.rb', after: "include Mongoid::Document\n" do <<-RUBY
+    include MoslemCorners::CommonModel
     store_in collection: 'core_users'
+
+    # kaminari page setting
+    paginates_per 10
+
     RUBY
 end
 
@@ -400,6 +412,9 @@ body {
 }
     RUBY
 end
+
+# kaminari config
+generate('kaminari:config')
 
 after_bundle do
   git :init

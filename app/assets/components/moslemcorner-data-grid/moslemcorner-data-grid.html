@@ -128,8 +128,11 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
                 is: 'moslemcorner-data-grid',
                 behaviors: [ Polymer.IronResizableBehavior ],
                 properties: {
-                    paging: Boolean,
                     dataUrl: String,
+                    page: {
+                        type: Number,
+                        value: 0
+                    },
                     data: {
                         type: Array,
                         value: function() {
@@ -156,6 +159,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
                         type: Boolean,
                         value: false
                     },
+                    _reload: {
+                        type: Boolean,
+                        value: false
+                    },
                     loadingText: {
                         type: String,
                         value: "loading more data..."
@@ -173,20 +180,31 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
                         }
                     }.bind(this));
                 },
-                ready: function() {
-                    // NOP
-                },
                 _columnsChanged: function(columns, oldColumns) {
                     // NOP
                 },
+                reload: function() {
+                    this.async(function() {
+                        this._reload = true;
+                        this.$.dataAjax.generateRequest();
+                    });
+                },
                 _loadMoreData: function() {
                     this.async(function() {
+                        this._reload = false;
+                        this.page++;
+                        this.$.dataAjax.url = this.dataUrl + '?page=' + this.page.toString();
                         this.$.dataAjax.generateRequest();
                     });
                 },
                 _onResponse: function(e) {
-                    var json = e.detail.response;
-                    json.results.forEach(function(item) {
+                    if (this._reload) {
+                        this.set('data', []);
+                        this._reload = false;
+                    } // clear data
+
+                    var response = e.detail.response;
+                    response.results.forEach(function(item) {
                         this.push('data', item);
                     }, this);
 
@@ -197,13 +215,12 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
                     // show alert
                 },
                 _onDeleteResponse: function(e) {
-                    var json = e.detail.response;
-                    if (json.status.code == '200') {
-                        this.set('data', []); // clear data
-                        this.$.dataAjax.generateRequest();
+                    var response = e.detail.response;
+                    if (response.status == '200') {
+                        this.reload();
                     }
                     else {
-                        this.$.dataAjax.generateRequest();
+                        // TODO please implement the handler
                     }
                 },
                 _onDeleteError: function(e) {

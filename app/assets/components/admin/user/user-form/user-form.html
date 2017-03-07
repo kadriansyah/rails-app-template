@@ -27,11 +27,12 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 
 <link rel="import" href="../../shared-styles/shared-styles.html">
 
-<dom-module id="user-new-form">
+<dom-module id="user-form">
     <template>
         <style include="shared-styles">
             :host {
                 display: block;
+                margin-top: 10px;
             }
             .wrapper-btns {
                 margin-top: 15px;
@@ -65,19 +66,37 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
         <iron-location id="location" path="{{path}}" hash="{{hash}}" query="{{query}}" dwell-time="{{dwellTime}}"></iron-location>
 
         <iron-ajax
-                id="ajax"
+                id="saveAjax"
                 method="post"
-                url="[[action]]"
+                url="[[actionUrl]]"
                 content-type="application/json"
                 handle-as="json"
-                on-response="_handleResponse"
-                on-error="_handleError">
+                on-response="_onSaveResponse"
+                on-error="_onSaveError">
+        </iron-ajax>
+        <iron-ajax
+                id="updateAjax"
+                method="put"
+                content-type="application/json"
+                handle-as="json"
+                on-response="_onUpdateResponse"
+                on-error="_onUpdateError">
+        </iron-ajax>
+        <iron-ajax
+                id="editAjax"
+                method="get"
+                content-type="application/json"
+                handle-as="json"
+                on-response="_onEditResponse"
+                on-error="_onEditError">
         </iron-ajax>
 
         <div id="formContainer">
-            <template is="dom-if" if="[[error]]">
-                <p class="alert-error">[[error]]</p>
+            <template is="dom-if" if="[[_error]]">
+                <p class="alert-error">[[_error]]</p>
             </template>
+
+            <input is="iron-input" id="id" type="hidden" bind-value="{{core_user.id}}">
 
             <paper-input-container>
                 <label>Email</label>
@@ -118,41 +137,81 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
     <script>
         (function() {
             Polymer({
-                is: 'user-new-form',
+                is: 'user-form',
                 properties: {
-                    action: {
-                        type: String
+                    actionUrl: {
+                        type: String,
+                        value: ''
                     },
                     formAuthenticityToken: String,
                     core_user: {
                         type: Object,
                         value: {}
                     },
-                    error: String
+                    _editMode: {
+                        type: Boolean,
+                        value: false
+                    },
+                    _error: String
                 },
-                ready: function() {
-                    this.$.ajax.headers['X-CSRF-Token'] = this.formAuthenticityToken;
+                edit: function(id) {
+                    this.$.editAjax.url = this.$.location.path + '/users/'+ id +'/edit';
+                    this.$.editAjax.generateRequest();
+                    this._editMode = true;
                 },
-                _setReqBody: function() {
-                    this.$.ajax.body = this.core_user;
+                _onSaveResponse: function(e) {
+                    var response = e.detail.response;
+                    if (response.status == '200') {
+                        this.core_user = {};
+                        this._editMode = false;
+                        this.fire('saveSuccess');
+                    }
+                    else {
+                        this._error = 'Creating User Error';
+                    }
                 },
-                _handleResponse: function(e) {
-//                    console.log(e.detail.response);
-                    this.core_user = {};
-                    this.$.location.path = 'quran/admin';
-                    window.location.reload(true);
+                _onSaveError: function() {
+                    this._error = 'Creating User Error';
                 },
-                _handleError: function(e) {
-//                    this.error = event.detail.request.xhr.response;
-                    this.error = 'Creating User Error';
+                _onUpdateResponse: function(e) {
+                    var response = e.detail.response;
+                    if (response.status == '200') {
+                        this.core_user = {};
+                        this._editMode = false;
+                        this.fire('saveSuccess');
+                    }
+                    else {
+                        this._error = 'Updating User Error';
+                    }
+                },
+                _onUpdateError: function() {
+                    this._error = 'Creating User Error';
+                },
+                _onEditResponse: function(e) {
+                    var response = e.detail.response;
+                    this.core_user = response.payload;
+                    this.fire('editSuccess');
+                },
+                _onEditError: function() {
+                    this._error = 'Edit User Error';
                 },
                 _save: function() {
-                    this._setReqBody();
-//                    this.$.ajax.generateRequest();
-                    this.fire('save', {kicked: true});
+                    if (!this._editMode) {
+                        this.$.saveAjax.headers['X-CSRF-Token'] = this.formAuthenticityToken;
+                        this.$.saveAjax.body = this.core_user;
+                        this.$.saveAjax.generateRequest();
+                    }
+                    else {
+                        this.$.updateAjax.headers['X-CSRF-Token'] = this.formAuthenticityToken;
+                        this.$.updateAjax.body = this.core_user;
+                        this.$.updateAjax.url = this.$.location.path + '/users/'+ this.core_user.id;
+                        this.$.updateAjax.generateRequest();
+                    }
                 },
                 _cancel: function() {
-                    this.fire('cancel', {kicked: true});
+                    this._error = '';
+                    this._editMode = false;
+                    this.fire('cancel');
                 }
             });
         })();

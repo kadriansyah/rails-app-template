@@ -6,8 +6,8 @@ module MoslemCorners
     class DIContainer
         extend Dry::Container::Mixin
 
-        register 'user_management_service' do
-            Admin::UserManagementService.new
+        register 'admin_service' do
+            Admin::AdminService.new
         end
 
         register 'system_cache' do

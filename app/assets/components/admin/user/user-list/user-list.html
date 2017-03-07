@@ -28,7 +28,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 <link rel="import" href="../paper-button/paper-button.html">
 <link rel="import" href="../paper-fab/paper-fab.html" />
 
-<link rel="import" href="../user-new-form/user-new-form.html">
+<link rel="import" href="../user-form/user-form.html">
 <link rel="import" href="../../shared-styles/shared-styles.html">
 <link rel="import" href="../../../moslemcorner-data-grid/moslemcorner-data-grid.html">
 <link rel="import" href="../../../moslemcorner-data-grid/moslemcorner-data-grid-column.html">
@@ -54,9 +54,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
                 right: 30px;
                 bottom: 30px;
             }
-            user-new-form {
-                margin-top: 10px;
-            }
             .title {
                 padding-left: 24px;
                 padding-right: 24px;
@@ -80,6 +77,9 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
                 width: 50%;
             }
         </style>
+
+        <iron-location id="location" path="{{path}}" hash="{{hash}}" query="{{query}}" dwell-time="{{dwellTime}}"></iron-location>
+
         <moslemcorner-data-grid data-url="[[dataUrl]]" id="dataGrid">
             <moslemcorner-data-grid-column name="Email" width="20%">
                 <template>[[item.email]]</template>
@@ -104,7 +104,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
         </moslemcorner-data-grid>
         <paper-dialog class="card" id="form" modal>
             <div class="title"><div><iron-icon icon="[[_icon]]"></iron-icon>[[_formTitle]]</div></div>
-            <user-new-form action="[[dataUrl]]" form-authenticity-token="[[formAuthenticityToken]]"></user-new-form>
+            <user-form action-url="[[dataUrl]]" form-authenticity-token="[[formAuthenticityToken]]" id="userForm"></user-form>
         </paper-dialog>
         <paper-dialog class="card" id="confirmation" modal>
             <div class="title"><iron-icon icon="icons:delete"></iron-icon>Delete Data?</div>
@@ -139,20 +139,21 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
                     }
                 },
                 listeners: {
-                    'save': '_onSave',
+                    'saveSuccess': '_onSaveSuccess',
+                    'editSuccess': '_onEditSuccess',
                     'cancel': '_onCancel'
-                },
-                ready: function() {
-                    // NOP
                 },
                 _new: function() {
                     this._icon = 'icons:add';
                     this._formTitle = 'Create New User';
                     this.$.form.open();
                 },
-                _edit: function() {
+                _edit: function(e) {
                     this._icon = 'icons:create';
                     this._formTitle = 'Edit User';
+                    this.$.userForm.edit(e.target.id);
+                },
+                _onEditSuccess: function() {
                     this.$.form.open();
                 },
                 _copy: function() {
@@ -165,10 +166,11 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
                     this.$.confirmation.open();
                 },
                 _delete: function(e) {
-                    this.$.dataGrid.delete('http://localhost:3000/admin/users/'+ this._id + '/delete');
+                    this.$.dataGrid.delete(this.$.location.path + '/users/'+ this._id + '/delete');
                 },
-                _onSave: function() {
+                _onSaveSuccess: function() {
                     this.$.form.close();
+                    this.$.dataGrid.reload();
                 },
                 _onCancel: function() {
                     this.$.form.close();
