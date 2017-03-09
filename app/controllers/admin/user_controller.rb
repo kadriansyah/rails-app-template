@@ -1,4 +1,4 @@
-require 'moslemcorners/di_container'
+require_dependency 'moslemcorners/di_container'
 
 module Admin
     class UserController < ApplicationController
