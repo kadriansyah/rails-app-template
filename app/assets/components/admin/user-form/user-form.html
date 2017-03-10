@@ -187,12 +187,12 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
                     _error: String
                 },
                 edit: function(id) {
-                    this.$.editAjax.url = this.actionUrl + '/'+ id +'/edit';
+                    this.$.editAjax.url = this.actionUrl +'/'+ id +'/edit';
                     this.$.editAjax.generateRequest();
                     this._mode = 'edit';
                 },
                 copy: function(id) {
-                    this.$.editAjax.url = this.actionUrl + '/'+ id +'/edit';
+                    this.$.editAjax.url = this.actionUrl +'/'+ id +'/edit';
                     this.$.editAjax.generateRequest();
                     this._mode = 'copy';
                 },
@@ -251,7 +251,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
                     else {
                         this.$.updateAjax.headers['X-CSRF-Token'] = this.formAuthenticityToken;
                         this.$.updateAjax.body = this.core_user;
-                        this.$.updateAjax.url = this.actionUrl + '/'+ this.core_user.id;
+                        this.$.updateAjax.url = this.actionUrl +'/'+ this.core_user.id;
                         this.$.updateAjax.generateRequest();
                         this.$.progress.hidden = false;
                     }
