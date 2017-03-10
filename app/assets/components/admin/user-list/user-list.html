@@ -154,8 +154,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
                     this._id = e.target.id;
                     this.$.confirmation.open();
                 },
-                _delete: function(e) {
-                    this.$.dataGrid.delete(this.$.location.path + '/users/'+ this._id + '/delete');
+                _delete: function() {
+                    this.$.dataGrid.delete(this.dataUrl + '/'+ this._id + '/delete');
                 },
                 _onSaveSuccess: function() {
                     this.$.form.close();

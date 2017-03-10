@@ -31,9 +31,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 
 <link rel="import" href="../moslemcorner-search-bar/moslemcorner-search-bar.html">
 
+<link rel="import" href="user-list/user-list.html" />
 <link rel="import" href="shared-styles/shared-styles.html">
 
-<dom-module id="admin-page">
+<dom-module id="groups-page">
     <template>
         <style include="shared-styles">
             :host {
@@ -198,13 +199,13 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
                     </paper-submenu>
                 </paper-menu>
             </app-drawer>
-            <div>Manage Articles</div>
+            <div>manage groups</div>
         </app-drawer-layout>
     </template>
     <script>
         (function() {
             Polymer({
-                is: 'admin-page',
+                is: 'groups-page',
                 properties: {
                     formAuthenticityToken: String,
                     title: {
@@ -227,9 +228,11 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
                 ready: function() {
                     self = this;
                     this.async(function() {
-                        this.title = 'Manage Articles';
+                        this.title = 'Manage Groups';
                         this.$.contentSubmenu.open();
                         this.$.accessSubmenu.open();
+
+                        this.$.accessItems.selectIndex(0);
                     });
                 },
                 _shouldShowTabs: function(smallScreen) {
@@ -246,7 +249,11 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
                 },
                 _openUrl: function(e) {
                     this._removeFocus(e.target.id);
-                    this.$.location.path = this.$.location.path +'/page/'+ e.target.id;
+
+                    var path = this.$.location.path.split('/');
+                    path[path.length - 1] = e.target.id;
+
+                    this.$.location.path = path.join('/');
                     window.location.reload(true);
                 }
             });

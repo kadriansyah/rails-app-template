@@ -314,6 +314,8 @@ insert_into_file 'config/routes.rb', after: "Rails.application.routes.draw do\n"
 
     scope :admin do
         root to: 'admin#index'
+        get 'page/:name', to: 'admin#page'
+
         resources :users, controller: 'admin/user' do
             get 'delete', on: :member # http://guides.rubyonrails.org/routing.html#adding-more-restful-actions
         end
