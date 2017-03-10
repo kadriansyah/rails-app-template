@@ -331,8 +331,7 @@ copy_file 'app/controllers/admin_controller.rb', 'app/controllers/admin_controll
 copy_file 'app/controllers/admin/user_controller.rb', 'app/controllers/admin/user_controller.rb'
 
 # copy views
-copy_file 'app/views/admin/index.html.erb', 'app/views/admin/index.html.erb'
-copy_file 'app/views/layouts/application.html.erb', 'app/views/layouts/application.html.erb'
+directory 'app/views', 'app/views'
 
 # adding devise sign_in sign_out redirect path method
 insert_into_file 'app/controllers/application_controller.rb', before: "end" do <<-RUBY
