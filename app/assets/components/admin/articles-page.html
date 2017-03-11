@@ -73,11 +73,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
             app-header:not([shadow]) {
                 border-bottom: 1px solid #ddd;
             }
-            app-drawer {
-                --app-drawer-content-container: {
-                    background-color: #f3f3f3;
-                };
-            }
             paper-icon-button {
                 color: #000;
                 --paper-icon-button-ink-color: #31f0ef;
@@ -88,27 +83,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
             .sublist paper-item {
                 padding-left: 30px;
             }
-            /*paper-tabs {*/
-                /*--paper-tabs-selection-bar-color: #31f0ef;*/
-                /*margin-left: -55px;*/
-                /*color: #31f0ef;*/
-                /*font-size: 13px;*/
-            /*}*/
-            /*paper-tab {*/
-                /*@apply(--layout-flex-none);*/
-                /*padding: 0;*/
-                /*--paper-tab-ink: #31f0ef;*/
-            /*}*/
-            /*paper-tab a {*/
-                /*@apply(--layout-horizontal);*/
-                /*@apply(--layout-center-center);*/
-                /*text-decoration: none;*/
-                /*text-transform: uppercase;*/
-                /*color: #7c7c7c;*/
-                /*font-weight: 500;*/
-                /*padding: 0 20px;*/
-                /*height: 100%;*/
-            /*}*/
             .pannel {
                 width: 100%;
                 height: 100%;
@@ -133,6 +107,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
                 width: 100%;
                 height: 64px;
                 display: table;
+                background-color: #f3f3f3;
                 border-bottom: 1px solid #e0e0e0;
             }
             #drawerTitle {
@@ -145,9 +120,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
                 display: block;
                 padding: 5px;
                 font-size: 15px;
-            }
-            paper-menu#mainMenu {
-                border-bottom: 1px solid #e0e0e0;
             }
         </style>
 
@@ -166,22 +138,13 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
                         <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-5 search"><moslemcorner-search-bar on-tap="_openSearch" id="search"></moslemcorner-search-bar></div>
                     </div>
                 </app-toolbar>
-                <!--<template is="dom-if" if="[[_shouldShowTabs(smallScreen)]]">-->
-                    <!--<paper-tabs selected="{{selected}}" scrollable sticky$="[[_shouldShowTabs(smallScreen)]]">-->
-                        <!--<template is="dom-repeat" items="[[sections]]" as="section">-->
-                            <!--<paper-tab>-->
-                                <!--<a href="#[[section]]">[[section]]</a>-->
-                            <!--</paper-tab>-->
-                        <!--</template>-->
-                    <!--</paper-tabs>-->
-                <!--</template>-->
             </app-header>
         </app-header-layout>
 
         <app-drawer-layout drawer-width="288px" force-narrow>
             <app-drawer id="drawer" swipe-open>
                 <div id="drawerTitleContainer"><div id="drawerTitle">markazunaa</div></div>
-                <paper-menu id="mainMenu" tabindex="-1" multi>
+                <paper-menu tabindex="-1" multi>
                     <paper-submenu id="contentSubmenu">
                         <paper-item class="menu-trigger">Content</paper-item>
                         <paper-menu class="menu-content sublist" id="contentItems">
