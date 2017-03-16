@@ -23,9 +23,8 @@ gem "rails", "~> 5.0.2"
 gem 'sass-rails', '~> 5.0'
 gem 'uglifier', '>= 1.3.0'
 gem 'jquery-rails'
-gem 'jbuilder', '~> 2.5'
-gem 'mongoid'
 gem 'jbuilder'
+gem 'mongoid'
 gem 'sass-rails'
 gem 'jquery-rails'
 gem 'dry-container'
@@ -297,6 +296,143 @@ insert_into_file 'app/models/admin/core_user.rb', before: "end" do <<-RUBY
     field :lastname, type: String, default: ''
 
     RUBY
+end
+
+# modify devise RegistrationsController
+remove_file "app/controllers/admin/core_user/registrations_controller.rb"
+add_file "app/controllers/admin/core_user/registrations_controller.rb"
+
+# insert from beginning of file using \A, for end of file using \Z
+insert_into_file "app/controllers/admin/core_user/registrations_controller.rb", after: /\A/ do <<-EOF
+class Admin::CoreUser::RegistrationsController < Devise::RegistrationsController
+    # http://api.rubyonrails.org/classes/ActionController/ParamsWrapper.html
+    wrap_parameters :core_user, include: [:email, :username, :password, :confirmation_password, :firstname, :lastname]
+
+    before_action :configure_sign_up_params, only: [:create]
+    before_action :configure_account_update_params, only: [:update]
+
+    respond_to :json
+
+    # GET /resource/sign_up
+    # def new
+    #   super
+    # end
+
+    # POST /resource
+    def create
+        super
+        # TODO custom signup
+        # build_resource(sign_up_params)
+        # resource.save
+        # yield resource if block_given?
+        # if resource.persisted?
+        #     respond_to do |format|
+        #         format.json { render :json => {status: {code: "200", message: "Success"}} }
+        #     end
+        # else
+        #     clean_up_passwords resource
+        #     set_minimum_password_length
+        #     respond_to do |format|
+        #         format.json { render :json => {status: {code: "404", message: "Error"}} }
+        #     end
+        # end
+    end
+
+    # GET /resource/edit
+    # def edit
+    #   super
+    # end
+
+    # PUT /resource
+    def update
+        super
+        # TODO custom update
+        # respond_to do |format|
+        #     format.json { render :json => {status: {code: "200", message: "Success"}} }
+        # end
+    end
+
+    # DELETE /resource
+    # def destroy
+    #   super
+    # end
+
+    # GET /resource/cancel
+    # Forces the session data which is usually expired after sign
+    # in to be expired now. This is useful if the user wants to
+    # cancel oauth signing in/up in the middle of the process,
+    # removing all OAuth session data.
+    # def cancel
+    #   super
+    # end
+
+    protected
+
+    # If you have extra params to permit, append them to the sanitizer.
+    # def configure_sign_up_params
+    #     devise_parameter_sanitizer.permit(:sign_up, keys: [:attribute])
+    # end
+
+    # http://www.peoplecancode.com/tutorials/adding-custom-fields-to-devise
+    def configure_sign_up_params
+        devise_parameter_sanitizer.permit(:sign_up, keys: [:email, :username, :password, :firstname, :lastname])
+    end
+
+    # If you have extra params to permit, append them to the sanitizer.
+    # def configure_account_update_params
+    #   devise_parameter_sanitizer.permit(:account_update, keys: [:attribute])
+    # end
+
+    def configure_account_update_params
+        devise_parameter_sanitizer.permit(:account_update, keys: [:email, :username, :password, :firstname, :lastname])
+    end
+
+    # The path used after sign up.
+    # def after_sign_up_path_for(resource)
+    #   super(resource)
+    # end
+
+    # The path used after sign up for inactive accounts.
+    # def after_inactive_sign_up_path_for(resource)
+    #   super(resource)
+    # end
+end
+EOF
+end
+
+# modify devise SessionsController
+remove_file "app/controllers/admin/core_user/sessions_controller.rb"
+add_file "app/controllers/admin/core_user/sessions_controller.rb"
+
+# insert from beginning of file using \A, for end of file using \Z
+insert_into_file "app/controllers/admin/core_user/sessions_controller.rb", after: /\A/ do <<-EOF
+class Admin::CoreUser::SessionsController < Devise::SessionsController
+    # before_action :configure_sign_in_params, only: [:create]
+
+    # GET /resource/sign_in
+    # def new
+    #   super
+    # end
+
+    # POST /resource/sign_in
+    # def create
+    #   super
+    # end
+
+    # DELETE /resource/sign_out
+    # def destroy
+    #   super
+    # end
+
+    # protected
+
+    # If you have extra params to permit, append them to the sanitizer.
+    # def configure_sign_in_params
+    #   devise_parameter_sanitizer.permit(:sign_in, keys: [:attribute])
+    # end
+    respond_to :json
+end
+EOF
 end
 
 # configure routing
