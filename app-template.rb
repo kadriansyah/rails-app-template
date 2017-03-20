@@ -38,6 +38,8 @@ gem 'devise'
 gem 'kaminari-mongoid'
 gem 'kaminari-actionview'
 gem 'polymer-rails', :git=>'https://github.com/kadriansyah/polymer-rails.git'
+gem 'figaro' # put environment variable on application.yml
+gem 'capistrano', '~> 3.8'
 
 gem_group :development, :test do
     gem 'factory_girl'
@@ -59,8 +61,8 @@ run 'bundle install'
 directory 'app/services', 'app/services'
 directory 'app/value_objects', 'app/value_objects'
 
-# copy moslemcorners lib
-directory 'lib/moslemcorners', 'lib/moslemcorners'
+# copy lib
+directory 'lib', 'lib'
 
 # polymer setup
 generate("polymer:install")
@@ -262,7 +264,7 @@ end
 generate('devise:install')
 
 # copy devise.rb
-copy_file "config/initializers/devise.rb", "config/initializers/devise.rb"
+directory "config", "config"
 
 # prepare devise
 generate('devise admin/core_user')
@@ -552,6 +554,75 @@ end
 
 # kaminari config
 generate('kaminari:config')
+
+# capistrano
+run 'bundle exec cap install'
+gsub_file 'config/deploy.rb', /set :application.*$/, ""
+gsub_file 'config/deploy.rb', /set :repo_url.*$/, ""
+gsub_file 'config/deploy.rb', /#.*$/, ""
+insert_into_file 'config/deploy.rb', after: /lock.*$/ do <<-EOF
+
+set :application, 'android.alodokter.com'
+set :rvm_ruby_version, '2.2.3@alodokter_android'
+
+set :repo_url, 'git@bitbucket.org:kadriansyah_alodokter/android-user-application-backend.git'
+set :branch, 'master'
+
+set :user,  'grumpycat'
+set :use_sudo,  false
+set :ssh_options,   { forward_agent: true, user: fetch(:user), keys: %w(~/.ssh/id_rsa.pub) }
+
+# for staging, use development environment
+if fetch(:stage) == 'staging'
+  set :rails_env, :development
+else
+  set :rails_env, fetch(:stage)
+end
+
+set :deploy_to, "/var/www/html/\#{fetch(:application)}"
+
+# how many old releases do we want to keep
+set :keep_releases, 3
+
+# # There is a known bug that prevents sidekiq from starting when pty is true on Capistrano 3.
+# set :pty, false
+
+# files we want symlinking to specific entries in shared
+set :linked_files, fetch(:linked_files, []).push('config/application.yml', 'config/mongoid.yml', 'config/secrets.yml')
+set :linked_dirs, fetch(:linked_dirs, []).push('log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'vendor/bundle', 'public/system')
+
+# Passenger
+set :passenger_roles, :app
+set :passenger_restart_runner, :sequence
+set :passenger_restart_wait, 5
+set :passenger_restart_limit, 2
+set :passenger_restart_with_sudo, false
+# set :passenger_environment_variables, {}
+set :passenger_restart_command, 'passenger-config restart-app'
+set :passenger_restart_options, -> { "\#{deploy_to} --ignore-app-not-running" }
+
+# # Sidekiq
+# set :sidekiq_config, -> { File.join(shared_path, 'config', 'sidekiq.yml') }
+    EOF
+end
+
+# production.rb
+insert_into_file 'config/deploy/production.rb', after: /# server "db.example.com".*$\n/ do <<-EOF
+
+set :stage, :production
+server 'alodokter-android01', port: 3006, user: 'grumpycat', roles: %w{app db web}, primary: true
+
+    EOF
+end
+
+# staging.rb
+insert_into_file 'config/deploy/staging.rb', after: /# server "db.example.com".*$\n/ do <<-EOF
+
+set :stage, :staging
+server 'alodokter-android01', port: 3006, user: 'grumpycat', roles: %w{app db web}, primary: true
+
+    EOF
+end
 
 after_bundle do
   git :init
