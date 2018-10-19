@@ -38,7 +38,6 @@ gem 'sidekiq'
 gem 'devise'
 gem 'kaminari-mongoid'
 gem 'kaminari-actionview'
-# gem 'polymer-rails', :git=>'https://github.com/kadriansyah/polymer-rails.git'
 gem 'webpacker', '~> 3.5'
 gem 'figaro' # put environment variable on application.yml
 gem 'capistrano'
@@ -69,28 +68,10 @@ directory 'lib', 'lib'
 run 'rails webpacker:install'
 
 # # copy polymer components
-# directory 'app/assets/components', 'app/assets/components'
-# copy_file 'app/assets/components/application.html.erb', 'app/assets/components/application.html.erb'
+directory 'app/assets/components', 'app/assets/components'
 
-# # copy files
-# copy_file 'bower.json'
-# copy_file 'package.json'
+# copy files
 # copy_file 'post_install.rb'
-
-# # copy webcomponentsjs
-# directory 'vendor/assets/webcomponentsjs', 'vendor/assets/webcomponentsjs'
-
-# # copy stylesheets
-# directory 'vendor/assets/stylesheets', 'vendor/assets/stylesheets'
-
-# # install polymer elements
-# run 'bower install --save'
-
-# # adding missing src from web-animations-js
-# directory 'vendor/assets/components/web-animations-js/src', 'vendor/assets/components/web-animations-js/src'
-
-# install mdc-layout-grid (https://github.com/material-components/material-components-web/tree/master/packages/mdc-layout-grid)
-# run 'npm install --save @material/layout-grid'
 
 # https://yarnpkg.com/en/docs/install#mac-stable
 run 'yarn add @webcomponents/webcomponentsjs' # https://github.com/webcomponents/webcomponentsjs
