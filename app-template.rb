@@ -19,9 +19,10 @@ prepend_to_file "Gemfile" do
 end
 
 # gems
-gem "rails", "~> 5.0.2"
-gem 'sass-rails', '~> 5.0'
-gem 'uglifier', '>= 1.3.0'
+gem 'rails'
+gem 'bootsnap'
+gem 'sass-rails'
+gem 'uglifier'
 gem 'jquery-rails'
 gem 'jbuilder'
 gem 'mongoid'
@@ -37,22 +38,23 @@ gem 'sidekiq'
 gem 'devise'
 gem 'kaminari-mongoid'
 gem 'kaminari-actionview'
-gem 'polymer-rails', :git=>'https://github.com/kadriansyah/polymer-rails.git'
+# gem 'polymer-rails', :git=>'https://github.com/kadriansyah/polymer-rails.git'
+gem 'webpacker', '~> 3.5'
 gem 'figaro' # put environment variable on application.yml
-gem 'capistrano', '~> 3.8'
+gem 'capistrano'
 
 gem_group :development, :test do
-    gem 'factory_girl'
-    gem 'factory_girl_rails'
+    gem 'factory_bot'
+    gem 'factory_bot_rails'
     gem 'byebug', platform: :mri
 
     # Access an IRB console on exception pages or by using <%= console %> anywhere in the code.
-    gem 'web-console', '>= 3.3.0'
-    gem 'listen', '~> 3.0.5'
+    gem 'web-console'
+    gem 'listen'
 
     # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
     gem 'spring'
-    gem 'spring-watcher-listen', '~> 2.0.0'
+    gem 'spring-watcher-listen'
 end
 
 run 'bundle install'
@@ -64,32 +66,45 @@ directory 'app/value_objects', 'app/value_objects'
 # copy lib
 directory 'lib', 'lib'
 
-# polymer setup
-generate("polymer:install")
+run 'rails webpacker:install'
 
-# copy polymer components
-directory 'app/assets/components', 'app/assets/components'
-copy_file 'app/assets/components/application.html.erb', 'app/assets/components/application.html.erb'
+# # copy polymer components
+# directory 'app/assets/components', 'app/assets/components'
+# copy_file 'app/assets/components/application.html.erb', 'app/assets/components/application.html.erb'
 
-# copy files
-copy_file 'bower.json'
-copy_file 'package.json'
-copy_file 'post_install.rb'
+# # copy files
+# copy_file 'bower.json'
+# copy_file 'package.json'
+# copy_file 'post_install.rb'
 
-# copy webcomponentsjs
-directory 'vendor/assets/webcomponentsjs', 'vendor/assets/webcomponentsjs'
+# # copy webcomponentsjs
+# directory 'vendor/assets/webcomponentsjs', 'vendor/assets/webcomponentsjs'
 
-# copy stylesheets
-directory 'vendor/assets/stylesheets', 'vendor/assets/stylesheets'
+# # copy stylesheets
+# directory 'vendor/assets/stylesheets', 'vendor/assets/stylesheets'
 
-# install polymer elements
-run 'bower install --save'
+# # install polymer elements
+# run 'bower install --save'
 
-# adding missing src from web-animations-js
-directory 'vendor/assets/components/web-animations-js/src', 'vendor/assets/components/web-animations-js/src'
+# # adding missing src from web-animations-js
+# directory 'vendor/assets/components/web-animations-js/src', 'vendor/assets/components/web-animations-js/src'
 
 # install mdc-layout-grid (https://github.com/material-components/material-components-web/tree/master/packages/mdc-layout-grid)
-run 'npm install --save @material/layout-grid'
+# run 'npm install --save @material/layout-grid'
+
+# https://yarnpkg.com/en/docs/install#mac-stable
+run 'yarn add @webcomponents/webcomponentsjs' # https://github.com/webcomponents/webcomponentsjs
+run 'yarn add @material/layout-grid'
+
+# polymer elements needed
+run 'yarn add @polymer/polymer'
+
+# adding assets precompile
+# insert from beginning of file using \A, for end of file using \Z
+insert_into_file 'config/initializers/assets.rb', after: "Rails.application.config.assets.paths << Rails.root.join('node_modules')\n" do <<-EOF
+Rails.application.config.assets.precompile += %w( @webcomponents/webcomponentsjs/custom-elements-es5-adapter.js )
+EOF
+end
 
 application do <<-RUBY
     # autoload_paths
@@ -119,7 +134,7 @@ development:
     default:
       # Defines the name of the default database that Mongoid can connect to.
       # (required).
-      database: quran
+      database: myapp
       # Provides the hosts the default client can connect to. Must be an array
       # of host:port pairs. (required)
       hosts:
@@ -138,10 +153,10 @@ development:
         #     - use: web
 
         # The name of the user for authentication.
-        user: 'moslemcorner'
+        user: 'myuser'
 
         # The password of the user for authentication.
-        password: 'password'
+        password: 'mypassword'
 
         # The user's database roles.
         # roles:
@@ -487,8 +502,8 @@ insert_into_file 'app/controllers/application_controller.rb', before: "end" do <
 end
 
 # setup stylesheets
-insert_into_file 'app/assets/stylesheets/application.css', before: "*= require_tree .\n" do <<-RUBY
- *= require mdc-layout-grid
+insert_into_file 'app/assets/stylesheets/application.css', before: " *= require_tree .\n" do <<-RUBY
+ *= require @material/layout-grid/dist/mdc.layout-grid
     RUBY
 end
 

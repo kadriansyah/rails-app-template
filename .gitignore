@@ -1,0 +1,17 @@
+.DS_Store
+app/.DS_Store
+app/assets/.DS_Store
+app/assets/components/.DS_Store
+app/controllers/.DS_Store
+app/controllers/admin/.DS_Store
+app/services/.DS_Store
+app/value_objects/.DS_Store
+app/value_objects/admin/.DS_Store
+app/views/.DS_Store
+config/.DS_Store
+lib/.DS_Store
+lib/capistrano/.DS_Store
+vendor/.DS_Store
+vendor/assets/.DS_Store
+vendor/assets/components/.DS_Store
+vendor/assets/components/web-animations-js/.DS_Store
