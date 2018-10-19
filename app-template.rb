@@ -65,10 +65,8 @@ directory 'app/value_objects', 'app/value_objects'
 # copy lib
 directory 'lib', 'lib'
 
+# webpacker
 run 'rails webpacker:install'
-
-# # copy polymer components
-directory 'app/assets/components', 'app/assets/components'
 
 # copy files
 # copy_file 'post_install.rb'
@@ -79,6 +77,9 @@ run 'yarn add @material/layout-grid'
 
 # polymer elements needed
 run 'yarn add @polymer/polymer'
+
+# polymer custom components
+directory 'app/javascript/packs/components', 'app/javascript/packs/components'
 
 # adding assets precompile
 # insert from beginning of file using \A, for end of file using \Z
