@@ -78,16 +78,16 @@ run 'yarn add @material/layout-grid'
 # polymer elements needed
 run 'yarn add @polymer/polymer'
 run 'yarn add @polymer/app-layout'
-run 'yarn add @polymer/paper-menu-button'
 run 'yarn add @polymer/paper-item'
 run 'yarn add @polymer/paper-icon-button'
 run 'yarn add @polymer/paper-input'
 run 'yarn add @polymer/iron-input'
 run 'yarn add @polymer/iron-location'
 run 'yarn add @polymer/iron-icons'
+run 'yarn add app-menu-polymer3'
 
 # moving folder (somehow polymer can't work if in folder node_modules)
-run 'mv node_modules/@polymer app/javascript/'
+run 'mv node_modules/@polymer/ app/javascript/'
 run 'cp node_modules/@webcomponents/webcomponentsjs/custom-elements-es5-adapter.js public/'
 
 # polymer custom components
@@ -628,7 +628,7 @@ end
 
 insert_into_file 'package.json', before: /"devDependencies": {/ do <<-EOF
 "scripts": {
-    "postinstall": "cp -R node_modules/@polymer app/javascript/"
+    "postinstall": "rsync -av node_modules/@polymer app/javascript/; rm -rf node_modules/@polymer"
   },
   EOF
 end

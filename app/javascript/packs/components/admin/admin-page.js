@@ -4,7 +4,6 @@ import '@polymer/iron-location/iron-location.js';
 import '@polymer/iron-media-query/iron-media-query.js';
 import '@polymer/paper-icon-button/paper-icon-button.js';
 import '@polymer/iron-icons/iron-icons.js'
-import '@polymer/paper-menu-button/paper-menu-button.js';
 import '@polymer/paper-item/paper-item.js';
 import '@polymer/app-layout/app-layout.js';
 import '@polymer/app-layout/app-header-layout/app-header-layout.js';
@@ -12,6 +11,9 @@ import '@polymer/app-layout/app-drawer/app-drawer.js';
 import '@polymer/app-layout/app-drawer-layout/app-drawer-layout.js';
 import '@polymer/app-layout/app-toolbar/app-toolbar.js';
 import '@polymer/app-layout/app-scroll-effects/app-scroll-effects.js';
+import 'app-menu-polymer3/app-menu.js'
+import 'app-menu-polymer3/app-submenu.js'
+import 'app-menu-polymer3/app-menu-icon-item.js'
 
 import '../moslemcorner/moslemcorner-shared-styles.js';
 import '../moslemcorner/moslemcorner-search-bar.js';
@@ -111,44 +113,39 @@ class AdminPage extends PolymerElement {
 
             <iron-location id="location" path="{{path}}" hash="{{hash}}" query="{{query}}" dwell-time="{{dwellTime}}"></iron-location>
 
-            <app-header-layout>
-                <app-header reveals>
-                    <app-toolbar id="toolbar">
-                        <paper-icon-button icon="menu" onclick="drawer.toggle()"></paper-icon-button>
-                        <div main-title></div>
-                        <div class="mdc-layout-grid pannel">
-                            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-5"></div>
-                            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2 title">[[title]]</div>
-                            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-5 search"><moslemcorner-search-bar on-tap="_openSearch" id="search"></moslemcorner-search-bar></div>
-                        </div>
-                    </app-toolbar>
-                </app-header>
-            </app-header-layout>
-
             <app-drawer-layout drawer-width="288px" force-narrow>
-                <app-drawer id="drawer" swipe-open>
-                    <div id="drawerTitleContainer"><div id="drawerTitle">markazunaa</div></div>
-                    <paper-menu-button tabindex="-1" multi>
-                        <paper-item class="menu-trigger">Content</paper-item>
-                        <paper-item class="menu-trigger">Access</paper-item>
-                        <!--
-                        <paper-submenu id="contentSubmenu">
-                            <paper-item class="menu-trigger">Content</paper-item>
-                            <paper-menu class="menu-content sublist" id="contentItems">
-                                <paper-item on-tap="_openUrl" id="articles">Articles</paper-item>
-                                <paper-item on-tap="_openUrl" id="tags">Tags</paper-item>
-                            </paper-menu>
-                        </paper-submenu>
-                        <paper-submenu id="accessSubmenu">
-                            <paper-item class="menu-trigger">Access</paper-item>
-                            <paper-menu class="menu-content sublist"  id="accessItems">
-                                <paper-item on-tap="_openUrl" id="groups">Groups</paper-item>
-                                <paper-item on-tap="_openUrl" id="users">Users</paper-item>
-                            </paper-menu>
-                        </paper-submenu>
-                        -->
-                    </paper-menu-button>
+                <app-drawer id="drawer" swipe-open slot="drawer">
+                    <div id="drawerTitleContainer"><div id="drawerTitle">Main Menu</div></div>
+                    <app-menu selected="0">
+                        <a class="app-menu-item" href="javascript:void(0)">
+                            <app-menu-icon-item icon="icons:chrome-reader-mode">News</app-menu-icon-item>
+                        </a>
+                        <app-submenu>
+                            <div class="app-menu-item" slot="submenu-trigger">
+                                <app-menu-icon-item icon="icons:account-balance">Accounts</app-menu-icon-item>
+                                <iron-icon icon="expand-more" class="expand-icon"></iron-icon>
+                            </div>
+                            <app-menu slot="submenu-content">
+                                <a class="app-menu-item" href="javascript:void(0)">Google</a>
+                                <a class="app-menu-item" href="javascript:void(0)">Facebook</a>
+                                <a class="app-menu-item" href="javascript:void(0)">Twitter</a>
+                            </app-menu>
+                        </app-submenu>
+                    </app-menu>
                 </app-drawer>
+                <app-header-layout>
+                    <app-header reveals slot="header">
+                        <app-toolbar id="toolbar">
+                            <paper-icon-button icon="menu" on-click="_toggleDrawer"></paper-icon-button>
+                            <div main-title></div>
+                            <div class="mdc-layout-grid pannel">
+                                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-5"></div>
+                                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2 title">[[title]]</div>
+                                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-5 search"><moslemcorner-search-bar/></div>
+                            </div>
+                        </app-toolbar>
+                    </app-header>
+                </app-header-layout>
                 <div>Manage Articles</div>
             </app-drawer-layout>
         `;
@@ -185,12 +182,16 @@ class AdminPage extends PolymerElement {
     ready() {
         super.ready();
         self = this;
-        this.title = 'Title';
+        this.title = 'Title Here';
         // this.async(function() {
         //     this.title = 'Manage Articles';
         //     this.$.contentSubmenu.open();
         //     this.$.accessSubmenu.open();
         // });
+    }
+
+    _toggleDrawer() {
+        this.$.drawer.toggle();
     }
 
     _shouldShowTabs(smallScreen) {
