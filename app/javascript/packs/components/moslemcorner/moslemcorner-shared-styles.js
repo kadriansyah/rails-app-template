@@ -1,7 +1,7 @@
-<link rel="import" href="../polymer/polymer.html">
+import '@polymer/polymer/polymer-legacy.js';
 
-<!-- shared styles for all admin components -->
-<dom-module id="shared-styles">
+const styleElement = document.createElement('dom-module');
+styleElement.innerHTML = `
     <template>
         <style>
             :root {
@@ -28,4 +28,5 @@
             }
         </style>
     </template>
-</dom-module>
+`;
+styleElement.register('shared-styles'); 

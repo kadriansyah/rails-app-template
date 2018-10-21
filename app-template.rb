@@ -72,21 +72,25 @@ run 'rails webpacker:install'
 # copy_file 'post_install.rb'
 
 # https://yarnpkg.com/en/docs/install#mac-stable
-run 'yarn add @webcomponents/webcomponentsjs' # https://github.com/webcomponents/webcomponentsjs
+run 'yarn add @webcomponents/webcomponentsjs'
 run 'yarn add @material/layout-grid'
 
 # polymer elements needed
 run 'yarn add @polymer/polymer'
+run 'yarn add @polymer/app-layout'
+run 'yarn add @polymer/paper-menu-button'
+run 'yarn add @polymer/paper-item'
+run 'yarn add @polymer/paper-icon-button'
+run 'yarn add @polymer/paper-input'
+run 'yarn add @polymer/iron-input'
+run 'yarn add @polymer/iron-location'
+
+# moving folder (somehow polymer can't work if in folder node_modules)
+run 'mv node_modules/@polymer app/javascript/'
+run 'cp node_modules/@webcomponents/webcomponentsjs/custom-elements-es5-adapter.js public/'
 
 # polymer custom components
-directory 'app/javascript/packs/components', 'app/javascript/packs/components'
-
-# adding assets precompile
-# insert from beginning of file using \A, for end of file using \Z
-insert_into_file 'config/initializers/assets.rb', after: "Rails.application.config.assets.paths << Rails.root.join('node_modules')\n" do <<-EOF
-Rails.application.config.assets.precompile += %w( @webcomponents/webcomponentsjs/custom-elements-es5-adapter.js )
-EOF
-end
+directory 'app/javascript/packs', 'app/javascript/packs'
 
 application do <<-RUBY
     # autoload_paths
@@ -485,7 +489,7 @@ end
 
 # setup stylesheets
 insert_into_file 'app/assets/stylesheets/application.css', before: " *= require_tree .\n" do <<-RUBY
- *= require @material/layout-grid/dist/mdc.layout-grid
+ *= require @material/layout-grid/mdc-layout-grid
     RUBY
 end
 
