@@ -84,6 +84,7 @@ run 'yarn add @polymer/paper-icon-button'
 run 'yarn add @polymer/paper-input'
 run 'yarn add @polymer/iron-input'
 run 'yarn add @polymer/iron-location'
+run 'yarn add @polymer/iron-icons'
 
 # moving folder (somehow polymer can't work if in folder node_modules)
 run 'mv node_modules/@polymer app/javascript/'
@@ -623,6 +624,13 @@ set :stage, :staging
 server 'alodokter-android01', port: 3006, user: 'grumpycat', roles: %w{app db web}, primary: true
 
     EOF
+end
+
+insert_into_file 'package.json', before: /"devDependencies": {/ do <<-EOF
+"scripts": {
+    "postinstall": "cp -R node_modules/@polymer app/javascript/"
+  },
+  EOF
 end
 
 after_bundle do

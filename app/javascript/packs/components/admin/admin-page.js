@@ -1,12 +1,17 @@
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import '@polymer/iron-flex-layout/iron-flex-layout.js';
+import '@polymer/iron-location/iron-location.js';
 import '@polymer/iron-media-query/iron-media-query.js';
 import '@polymer/paper-icon-button/paper-icon-button.js';
+import '@polymer/iron-icons/iron-icons.js'
 import '@polymer/paper-menu-button/paper-menu-button.js';
 import '@polymer/paper-item/paper-item.js';
 import '@polymer/app-layout/app-layout.js';
+import '@polymer/app-layout/app-header-layout/app-header-layout.js';
+import '@polymer/app-layout/app-drawer/app-drawer.js';
+import '@polymer/app-layout/app-drawer-layout/app-drawer-layout.js';
+import '@polymer/app-layout/app-toolbar/app-toolbar.js';
 import '@polymer/app-layout/app-scroll-effects/app-scroll-effects.js';
-import '@polymer/iron-location/iron-location.js';
 
 import '../moslemcorner/moslemcorner-shared-styles.js';
 import '../moslemcorner/moslemcorner-search-bar.js';
@@ -126,20 +131,22 @@ class AdminPage extends PolymerElement {
                     <paper-menu-button tabindex="-1" multi>
                         <paper-item class="menu-trigger">Content</paper-item>
                         <paper-item class="menu-trigger">Access</paper-item>
-                        // <paper-submenu id="contentSubmenu">
-                        //     <paper-item class="menu-trigger">Content</paper-item>
-                        //     <paper-menu class="menu-content sublist" id="contentItems">
-                        //         <paper-item on-tap="_openUrl" id="articles">Articles</paper-item>
-                        //         <paper-item on-tap="_openUrl" id="tags">Tags</paper-item>
-                        //     </paper-menu>
-                        // </paper-submenu>
-                        // <paper-submenu id="accessSubmenu">
-                        //     <paper-item class="menu-trigger">Access</paper-item>
-                        //     <paper-menu class="menu-content sublist"  id="accessItems">
-                        //         <paper-item on-tap="_openUrl" id="groups">Groups</paper-item>
-                        //         <paper-item on-tap="_openUrl" id="users">Users</paper-item>
-                        //     </paper-menu>
-                        // </paper-submenu>
+                        <!--
+                        <paper-submenu id="contentSubmenu">
+                            <paper-item class="menu-trigger">Content</paper-item>
+                            <paper-menu class="menu-content sublist" id="contentItems">
+                                <paper-item on-tap="_openUrl" id="articles">Articles</paper-item>
+                                <paper-item on-tap="_openUrl" id="tags">Tags</paper-item>
+                            </paper-menu>
+                        </paper-submenu>
+                        <paper-submenu id="accessSubmenu">
+                            <paper-item class="menu-trigger">Access</paper-item>
+                            <paper-menu class="menu-content sublist"  id="accessItems">
+                                <paper-item on-tap="_openUrl" id="groups">Groups</paper-item>
+                                <paper-item on-tap="_openUrl" id="users">Users</paper-item>
+                            </paper-menu>
+                        </paper-submenu>
+                        -->
                     </paper-menu-button>
                 </app-drawer>
                 <div>Manage Articles</div>
@@ -178,6 +185,7 @@ class AdminPage extends PolymerElement {
     ready() {
         super.ready();
         self = this;
+        this.title = 'Title';
         // this.async(function() {
         //     this.title = 'Manage Articles';
         //     this.$.contentSubmenu.open();
