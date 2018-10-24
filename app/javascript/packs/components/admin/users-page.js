@@ -1,6 +1,5 @@
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import '@polymer/iron-flex-layout/iron-flex-layout.js';
-import '@polymer/iron-flex-layout/iron-flex-layout-classes.js';
 import '@polymer/iron-location/iron-location.js';
 import '@polymer/iron-media-query/iron-media-query.js';
 import '@polymer/paper-icon-button/paper-icon-button.js';
@@ -16,8 +15,9 @@ import 'app-menu-polymer3/app-menu-icon-item.js'
 
 import '../moslemcorner/moslemcorner-shared-styles.js';
 import '../moslemcorner/moslemcorner-search-bar.js';
+import './user-list/user-list.js';
 
-class AdminPage extends PolymerElement {
+class UsersPage extends PolymerElement {
     static get template() {
         return html`
             <style include="shared-styles">
@@ -127,10 +127,10 @@ class AdminPage extends PolymerElement {
                     </div>
                 </app-toolbar>
             </app-header>
-            <div>Admin Page</div>
+            <user-list data-url="http://localhost:3000/admin/users" form-authenticity-token="[[formAuthenticityToken]]"></user-list>
             <app-drawer id="drawer" swipe-open slot="drawer">
                 <div id="drawerTitleContainer"><div id="drawerTitle">Main Menu</div></div>
-                <app-menu selected="0">
+                <app-menu>
                     <a class="app-menu-item">
                         <app-menu-icon-item icon="icons:chrome-reader-mode" on-tap="_openUrl" id="questions">Questions</app-menu-icon-item>
                     </a>
@@ -142,7 +142,7 @@ class AdminPage extends PolymerElement {
                             <app-menu-icon-item icon="icons:accessibility">Access</app-menu-icon-item>
                             <iron-icon icon="expand-more" class="expand-icon"></iron-icon>
                         </div>
-                        <app-menu slot="submenu-content">
+                        <app-menu selected="1" slot="submenu-content">
                             <a class="app-menu-item" on-tap="_openUrl" id="groups">Groups</a>
                             <a class="app-menu-item" on-tap="_openUrl" id="users">Users</a>
                         </app-menu>
@@ -182,8 +182,7 @@ class AdminPage extends PolymerElement {
 
     ready() {
         super.ready();
-        self = this;
-        this.title = 'Admin';
+        this.title = 'Users';
     }
 
     _toggleDrawer() {
@@ -205,8 +204,11 @@ class AdminPage extends PolymerElement {
     }
 
     _openUrl(e) {
-        this.$.location.path = this.$.location.path +'/page/'+ e.target.id;
+        var path = this.$.location.path.split('/');
+        path[path.length - 1] = e.target.id;
+
+        this.$.location.path = path.join('/');
         window.location.reload(true);
     }
 }
-customElements.define('admin-page', AdminPage);
+customElements.define('users-page', UsersPage);

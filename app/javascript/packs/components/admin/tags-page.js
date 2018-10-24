@@ -1,6 +1,5 @@
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import '@polymer/iron-flex-layout/iron-flex-layout.js';
-import '@polymer/iron-flex-layout/iron-flex-layout-classes.js';
 import '@polymer/iron-location/iron-location.js';
 import '@polymer/iron-media-query/iron-media-query.js';
 import '@polymer/paper-icon-button/paper-icon-button.js';
@@ -17,7 +16,7 @@ import 'app-menu-polymer3/app-menu-icon-item.js'
 import '../moslemcorner/moslemcorner-shared-styles.js';
 import '../moslemcorner/moslemcorner-search-bar.js';
 
-class AdminPage extends PolymerElement {
+class TagsPage extends PolymerElement {
     static get template() {
         return html`
             <style include="shared-styles">
@@ -127,10 +126,10 @@ class AdminPage extends PolymerElement {
                     </div>
                 </app-toolbar>
             </app-header>
-            <div>Admin Page</div>
+            <div>Tags Page</div>
             <app-drawer id="drawer" swipe-open slot="drawer">
                 <div id="drawerTitleContainer"><div id="drawerTitle">Main Menu</div></div>
-                <app-menu selected="0">
+                <app-menu selected="1">
                     <a class="app-menu-item">
                         <app-menu-icon-item icon="icons:chrome-reader-mode" on-tap="_openUrl" id="questions">Questions</app-menu-icon-item>
                     </a>
@@ -183,7 +182,7 @@ class AdminPage extends PolymerElement {
     ready() {
         super.ready();
         self = this;
-        this.title = 'Admin';
+        this.title = 'Tags';
     }
 
     _toggleDrawer() {
@@ -205,8 +204,11 @@ class AdminPage extends PolymerElement {
     }
 
     _openUrl(e) {
-        this.$.location.path = this.$.location.path +'/page/'+ e.target.id;
+        var path = this.$.location.path.split('/');
+        path[path.length - 1] = e.target.id;
+
+        this.$.location.path = path.join('/');
         window.location.reload(true);
     }
 }
-customElements.define('admin-page', AdminPage);
+customElements.define('tags-page', TagsPage);

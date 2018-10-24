@@ -1,13 +1,14 @@
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import '@polymer/iron-flex-layout/iron-flex-layout.js';
-import '@polymer/iron-flex-layout/iron-flex-layout-classes.js';
 import '@polymer/iron-location/iron-location.js';
 import '@polymer/iron-media-query/iron-media-query.js';
 import '@polymer/paper-icon-button/paper-icon-button.js';
 import '@polymer/iron-icons/iron-icons.js'
 import '@polymer/paper-item/paper-item.js';
 import '@polymer/app-layout/app-layout.js';
+import '@polymer/app-layout/app-header-layout/app-header-layout.js';
 import '@polymer/app-layout/app-drawer/app-drawer.js';
+import '@polymer/app-layout/app-drawer-layout/app-drawer-layout.js';
 import '@polymer/app-layout/app-toolbar/app-toolbar.js';
 import '@polymer/app-layout/app-scroll-effects/app-scroll-effects.js';
 import 'app-menu-polymer3/app-menu.js'
@@ -17,7 +18,7 @@ import 'app-menu-polymer3/app-menu-icon-item.js'
 import '../moslemcorner/moslemcorner-shared-styles.js';
 import '../moslemcorner/moslemcorner-search-bar.js';
 
-class AdminPage extends PolymerElement {
+class QuestionsPage extends PolymerElement {
     static get template() {
         return html`
             <style include="shared-styles">
@@ -127,7 +128,7 @@ class AdminPage extends PolymerElement {
                     </div>
                 </app-toolbar>
             </app-header>
-            <div>Admin Page</div>
+            <div>Manage Questions</div>
             <app-drawer id="drawer" swipe-open slot="drawer">
                 <div id="drawerTitleContainer"><div id="drawerTitle">Main Menu</div></div>
                 <app-menu selected="0">
@@ -183,7 +184,7 @@ class AdminPage extends PolymerElement {
     ready() {
         super.ready();
         self = this;
-        this.title = 'Admin';
+        this.title = 'Questions';
     }
 
     _toggleDrawer() {
@@ -205,8 +206,11 @@ class AdminPage extends PolymerElement {
     }
 
     _openUrl(e) {
-        this.$.location.path = this.$.location.path +'/page/'+ e.target.id;
+        var path = this.$.location.path.split('/');
+        path[path.length - 1] = e.target.id;
+
+        this.$.location.path = path.join('/');
         window.location.reload(true);
     }
 }
-customElements.define('admin-page', AdminPage);
+customElements.define('questions-page', QuestionsPage);

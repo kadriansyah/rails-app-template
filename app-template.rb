@@ -73,7 +73,6 @@ run 'rails webpacker:install'
 
 # https://yarnpkg.com/en/docs/install#mac-stable
 run 'yarn add @webcomponents/webcomponentsjs'
-run 'yarn add @material/layout-grid'
 
 # polymer elements needed
 run 'yarn add @polymer/polymer'
@@ -84,6 +83,16 @@ run 'yarn add @polymer/paper-input'
 run 'yarn add @polymer/iron-input'
 run 'yarn add @polymer/iron-location'
 run 'yarn add @polymer/iron-icons'
+run 'yarn add @polymer/iron-ajax'
+run 'yarn add @polymer/iron-list'
+run 'yarn add @polymer/iron-scroll-threshold'
+run 'yarn add @polymer/paper-dialog'
+run 'yarn add @polymer/paper-button'
+run 'yarn add @polymer/paper-fab'
+run 'yarn add @polymer/paper-card'
+run 'yarn add @polymer/paper-progress'
+run 'yarn add @vaadin/vaadin-grid'
+run 'yarn add @polymer/iron-flex-layout'
 run 'yarn add app-menu-polymer3'
 
 # moving folder (somehow polymer can't work if in folder node_modules)
@@ -489,10 +498,10 @@ insert_into_file 'app/controllers/application_controller.rb', before: "end" do <
 end
 
 # setup stylesheets
-insert_into_file 'app/assets/stylesheets/application.css', before: " *= require_tree .\n" do <<-RUBY
- *= require @material/layout-grid/mdc-layout-grid
-    RUBY
-end
+# insert_into_file 'app/assets/stylesheets/application.css', before: " *= require_tree .\n" do <<-RUBY
+#  *= require @material/layout-grid/mdc-layout-grid
+#     RUBY
+# end
 
 insert_into_file 'app/assets/stylesheets/application.css', after: "*/\n" do <<-RUBY
 
