@@ -1,6 +1,9 @@
 # rails app template (kadriansyah@gmail.com)
 # rails new [app_name] --skip-active-record --skip-turbolinks -m rails-app-template/app-template.rb
 
+# scaffolding
+# rails g markazuna alo/tag --service_name tag_service --fields id name description
+
 def source_paths
   [File.expand_path(File.dirname(__FILE__))]
 end
