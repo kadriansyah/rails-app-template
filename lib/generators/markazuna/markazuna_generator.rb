@@ -56,6 +56,8 @@ class MarkazunaGenerator < Rails::Generators::NamedBase
 		else
 			template "component-html.rb", File.join("app/views/#{class_path[0]}", "#{plural_name}.html.erb")
 		end
+
+		# routes
 		if class_path[0].nil?
 			insert_into_file 'config/routes.rb', before: /end\Z/ do <<-RUBY
 	resources :#{plural_name}, controller: '#{singular_name}' do
@@ -68,6 +70,25 @@ class MarkazunaGenerator < Rails::Generators::NamedBase
 	resources :#{plural_name}, controller: '#{class_path[0]}/#{singular_name}' do
 		get 'delete', on: :member # http://guides.rubyonrails.org/routing.html#adding-more-restful-actions
 	end
+		RUBY
+			end
+		end
+
+		# DI Container
+		if class_path[0].nil?
+			insert_into_file 'lib/moslemcorners/di_container.rb', after: "extend Dry::Container::Mixin\n" do <<-RUBY
+
+		register '#{singular_name}_service' do
+			#{singular_name.capitalize}Service.new
+		end
+		RUBY
+			end
+		else
+			insert_into_file 'lib/moslemcorners/di_container.rb', after: "extend Dry::Container::Mixin\n" do <<-RUBY
+
+		register '#{singular_name}_service' do
+			#{class_path[0].capitalize}::#{singular_name.capitalize}Service.new
+		end
 		RUBY
 			end
 		end
