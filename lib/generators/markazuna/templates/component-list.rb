@@ -23,7 +23,7 @@ class <%= singular_name.capitalize %>List extends PolymerElement {
                 }
                 vaadin-grid {
                     --card-margin: 5px 24px 24px 24px;
-                    height: 700px;
+                    height: 800px;
                 }
                 iron-icon {
                     padding-left: 10px;
