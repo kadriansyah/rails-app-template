@@ -10,6 +10,7 @@ import '@polymer/paper-fab/paper-fab.js';
 import '@vaadin/vaadin-grid/vaadin-grid.js';
 import '@vaadin/vaadin-grid/vaadin-grid-column.js';
 
+import './moslemcorner/markazuna-circular-pager.js';
 import './moslemcorner/moslemcorner-shared-styles.js';
 import './<%= singular_name %>-form.js';
 
@@ -47,6 +48,16 @@ class <%= singular_name.capitalize %>List extends PolymerElement {
                 .grid-header {
                     text-align: center;
                 }
+                markazuna-circular-pager {
+                    padding: 10px 10px 10px 10px;
+                }
+                .flex {
+                    display: flex;
+                    justify-content: center;
+                }
+                .grid-container {
+                    margin: 5px 5px 5px 5px;
+                }
             </style>
 
             <iron-ajax
@@ -64,31 +75,36 @@ class <%= singular_name.capitalize %>List extends PolymerElement {
                 on-error='_onDeleteError'>
             </iron-ajax>
 
-            <paper-progress id="progress" hidden indeterminate></paper-progress>
-            <vaadin-grid theme="row-stripes" aria-label="Users" items="[[data]]">
-                <%
-                @fields.each_with_index do |field, index|
-                    if index > 0
-                %>
-                <vaadin-grid-column width="20%" flex-grow="0">
-                    <template class="header"><%= field.capitalize %></template>
-                    <template>[[item.<%= field %>]]</template>
-                </vaadin-grid-column>
-                <%
+            <div class="flex grid-container" width="100%">
+                <paper-progress id="progress" hidden indeterminate></paper-progress>
+                <vaadin-grid theme="row-stripes" aria-label="Users" items="[[data]]">
+                    <%
+                    @fields.each_with_index do |field, index|
+                        if index > 0
+                    %>
+                    <vaadin-grid-column width="20%" flex-grow="0">
+                        <template class="header"><%= field.capitalize %></template>
+                        <template>[[item.<%= field %>]]</template>
+                    </vaadin-grid-column>
+                    <%
+                        end
                     end
-                end
-                %>
-                <vaadin-grid-column width="20%" flex-grow="0">
-                    <template class="header"><div class="grid-header">Actions</div></template>
-                    <template>
-                        <div class="grid-header">
-                            <iron-icon icon="icons:create" on-tap="_edit" id="[[item.id]]"></iron-icon>
-                            <iron-icon icon="icons:delete" on-tap="_confirmation" id="[[item.id]]"></iron-icon>
-                            <iron-icon icon="icons:content-copy" on-tap="_copy" id="[[item.id]]"></iron-icon>
-                        </div>
-                    </template>
-                </vaadin-grid-column>
-            </vaadin-grid>
+                    %>
+                    <vaadin-grid-column width="20%" flex-grow="0">
+                        <template class="header"><div class="grid-header">Actions</div></template>
+                        <template>
+                            <div class="grid-header">
+                                <iron-icon icon="icons:create" on-tap="_edit" id="[[item.id]]"></iron-icon>
+                                <iron-icon icon="icons:delete" on-tap="_confirmation" id="[[item.id]]"></iron-icon>
+                                <iron-icon icon="icons:content-copy" on-tap="_copy" id="[[item.id]]"></iron-icon>
+                            </div>
+                        </template>
+                    </vaadin-grid-column>
+                </vaadin-grid>
+            </div>
+            <div class="flex" width="100%">
+                <markazuna-circular-pager page="[[page]]" count="[[count]]" range="10" url="/admin/tags?page=#{page}"></markazuna-circular-pager>
+            </div>
             <paper-fab icon="icons:add" on-tap="_new"></paper-fab>
             <paper-dialog class="card" id="form" modal>
                 <<%= singular_name %>-form action-url="[[dataUrl]]" form-authenticity-token="[[formAuthenticityToken]]" id="<%= singular_name %>Form"></<%= singular_name %>-form>
@@ -112,7 +128,11 @@ class <%= singular_name.capitalize %>List extends PolymerElement {
             },
             page: {
                 type: Number,
-                value: 0
+                value: 1
+            },
+            count: {
+                type: Number,
+                value: 1
             },
             data: {
                 type: Array,
@@ -136,6 +156,7 @@ class <%= singular_name.capitalize %>List extends PolymerElement {
         this.addEventListener('saveSuccess', this._onSaveSuccess);
         this.addEventListener('editSuccess', this._onEditSuccess);
         this.addEventListener('cancel', this._onCancel);
+        this.addEventListener('pageClick', this._onPageClick);
 
         this.$.dataAjax.url = this.dataUrl + '?page=' + this.page.toString();
         this.$.dataAjax.generateRequest();
@@ -144,6 +165,7 @@ class <%= singular_name.capitalize %>List extends PolymerElement {
 
     _onResponse(data) {
         var response = data.detail.response;
+        this.count = response.count;
         this.splice('data', 0, this.data.length); // clear data
         response.results.forEach(function(item) {
             this.push('data', item);
@@ -160,6 +182,9 @@ class <%= singular_name.capitalize %>List extends PolymerElement {
     _onDeleteResponse(data) {
         var response = data.detail.response;
         if (response.status == '200') {
+            if (response.count < this.count) {
+                this.page = this.page - 1;
+            }
             this._reload();
         }
         else {
@@ -221,6 +246,13 @@ class <%= singular_name.capitalize %>List extends PolymerElement {
 
     _reload() {
         this.$.dataAjax.url = this.dataUrl + '?page=' + this.page.toString();
+        this.$.dataAjax.generateRequest();
+        this.$.progress.hidden = false;
+    }
+
+    _onPageClick(e) {
+        this.page = e.detail.page;
+        this.$.dataAjax.url = this.dataUrl + '?page=' + e.detail.page.toString();
         this.$.dataAjax.generateRequest();
         this.$.progress.hidden = false;
     }

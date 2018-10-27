@@ -16,7 +16,7 @@ class <%= generated_class_name %>Service
 
     def delete_<%= singular_name %>(id)
         <%= singular_name %> = find_<%= singular_name %>(id)
-        <%= singular_name %>.delete
+        return <%= singular_name %>.delete, <%= generated_class_name %>.page(1).total_pages
     end
 
     def find_<%= singular_name %>(id)
@@ -24,6 +24,6 @@ class <%= generated_class_name %>Service
     end
 
     def find_<%= plural_name %>(page = 0)
-        <%= generated_class_name %>.page(page)
+        return <%= generated_class_name %>.page(page), <%= generated_class_name %>.page(1).total_pages
     end
 end

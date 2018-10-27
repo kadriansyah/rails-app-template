@@ -18,10 +18,10 @@ class <%= generated_class_name %>Controller < ApplicationController
     wrap_parameters :<%= singular_name %>, include: [<%= fields %>]
 
     def index
-        <%= plural_name %> = <%= @service_name %>.find_<%= plural_name %>(params[:page])
+        <%= plural_name %>, page_count = <%= @service_name %>.find_<%= plural_name %>(params[:page])
         if (<%= plural_name %>.size > 0)
             respond_to do |format|
-                format.json { render :json => { results: <%= plural_name %> }}
+                format.json { render :json => { results: <%= plural_name %>, count: page_count }}
             end
         else
             render :json => { results: []}
@@ -29,9 +29,10 @@ class <%= generated_class_name %>Controller < ApplicationController
     end
 
     def delete
-        if <%= @service_name %>.delete_<%= singular_name %>(params[:id])
+        status, page_count = <%= @service_name %>.delete_<%= singular_name %>(params[:id])
+        if status
             respond_to do |format|
-                format.json { render :json => { status: "200", message: "Success" } }
+                format.json { render :json => { status: "200", count: page_count } }
             end
         else
             respond_to do |format|
