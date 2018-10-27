@@ -72,8 +72,8 @@ class UserList extends PolymerElement {
                 on-error='_onDeleteError'>
             </iron-ajax>
 
+            <paper-progress id="progress" hidden indeterminate></paper-progress>
             <div class="flex grid-container" width="100%">
-                <paper-progress id="progress" hidden indeterminate></paper-progress>
                 <vaadin-grid theme="row-stripes" aria-label="Users" items="[[data]]">
                     <vaadin-grid-column width="20%" flex-grow="0">
                         <template class="header">Email</template>
