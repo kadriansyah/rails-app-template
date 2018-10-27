@@ -165,6 +165,13 @@ class <%= singular_name.capitalize %>List extends PolymerElement {
         this.$.dataAjax.url = this.dataUrl + '?page=' + this.page.toString();
         this.$.dataAjax.generateRequest();
         this.$.progress.hidden = false;
+
+        // /* network delay simulation */
+        // self = this;
+        // setTimeout(function() {
+        //     self.$.dataAjax.url = self.dataUrl + '?page=' + self.page.toString();
+        //     self.$.dataAjax.generateRequest();
+        // }, 3000);
     }
 
     _onResponse(data) {
