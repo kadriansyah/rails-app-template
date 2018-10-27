@@ -127,7 +127,11 @@ class <%= plural_name.capitalize %>Page extends PolymerElement {
                     </div>
                 </app-toolbar>
             </app-header>
-            <<%= singular_name %>-list data-url="http://localhost:3000/<%= class_path[0] %>/<%= plural_name %>" form-authenticity-token="[[formAuthenticityToken]]"></<%= singular_name %>-list>
+            <% if class_path[0].nil? %>
+            <<%= singular_name %>-list data-url="/<%= plural_name %>" form-authenticity-token="[[formAuthenticityToken]]"></<%= singular_name %>-list>
+            <% else %>
+            <<%= singular_name %>-list data-url="/<%= class_path[0] %>/<%= plural_name %>" form-authenticity-token="[[formAuthenticityToken]]"></<%= singular_name %>-list>
+            <% end %>
             <app-drawer id="drawer" swipe-open slot="drawer">
                 <div id="drawerTitleContainer"><div id="drawerTitle">Main Menu</div></div>
                 <app-menu selected="0">

@@ -12,7 +12,7 @@ class <%= generated_class_name %>
     store_in collection: '<%= plural_name %>'
 
     # kaminari page setting
-    paginates_per 20
+    paginates_per 10
 	<%
 	@fields.each_with_index do |field, index|
 		if index > 0

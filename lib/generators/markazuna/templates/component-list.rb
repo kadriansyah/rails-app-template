@@ -103,7 +103,11 @@ class <%= singular_name.capitalize %>List extends PolymerElement {
                 </vaadin-grid>
             </div>
             <div class="flex" width="100%">
-                <markazuna-circular-pager page="[[page]]" count="[[count]]" range="10" url="/admin/tags?page=#{page}"></markazuna-circular-pager>
+            <% if class_path[0].nil? %>
+                <markazuna-circular-pager page="[[page]]" count="[[count]]" range="10" url="/<%= plural_name %>?page=#{page}"></markazuna-circular-pager>
+            <% else %>
+                <markazuna-circular-pager page="[[page]]" count="[[count]]" range="10" url="/<%= class_path[0] %>/<%= plural_name %>?page=#{page}"></markazuna-circular-pager>
+            <% end %>
             </div>
             <paper-fab icon="icons:add" on-tap="_new"></paper-fab>
             <paper-dialog class="card" id="form" modal>
