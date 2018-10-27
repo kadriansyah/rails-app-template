@@ -135,9 +135,6 @@ class QuestionsPage extends PolymerElement {
                     <a class="app-menu-item">
                         <app-menu-icon-item icon="icons:chrome-reader-mode" on-tap="_openUrl" id="questions">Questions</app-menu-icon-item>
                     </a>
-                    <a class="app-menu-item">
-                        <app-menu-icon-item icon="icons:chrome-reader-mode" on-tap="_openUrl" id="tags">Tags</app-menu-icon-item>
-                    </a>
                     <app-submenu>
                         <div class="app-menu-item" slot="submenu-trigger">
                             <app-menu-icon-item icon="icons:accessibility">Access</app-menu-icon-item>

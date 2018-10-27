@@ -12,9 +12,6 @@ class AdminController < ApplicationController
             when 'questions'
                 render template: 'admin/questions'
 
-            when 'tags'
-                render template: 'admin/tags'
-
             when 'groups'
                 render template: 'admin/groups'
 
