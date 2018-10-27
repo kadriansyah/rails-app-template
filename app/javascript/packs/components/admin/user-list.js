@@ -10,8 +10,9 @@ import '@polymer/paper-fab/paper-fab.js';
 import '@vaadin/vaadin-grid/vaadin-grid.js';
 import '@vaadin/vaadin-grid/vaadin-grid-column.js';
 
-import '../../moslemcorner/moslemcorner-shared-styles.js';
-import '../user-form/user-form.js';
+import '../moslemcorner/markazuna-circular-pager.js';
+import '../moslemcorner/moslemcorner-shared-styles.js';
+import './user-form.js';
 
 class UserList extends PolymerElement {
     static get template() {
@@ -22,6 +23,7 @@ class UserList extends PolymerElement {
                 }
                 vaadin-grid {
                     --card-margin: 5px 24px 24px 24px;
+                    height: 700px;
                 }
                 iron-icon {
                     padding-left: 10px;
@@ -46,6 +48,13 @@ class UserList extends PolymerElement {
                 .grid-header {
                     text-align: center;
                 }
+                .flex {
+                    display: flex;
+                    justify-content: center;
+                }
+                .grid-container {
+                    margin: 5px 5px 5px 5px;
+                }
             </style>
 
             <iron-ajax
@@ -63,35 +72,40 @@ class UserList extends PolymerElement {
                 on-error='_onDeleteError'>
             </iron-ajax>
 
-            <paper-progress id="progress" hidden indeterminate></paper-progress>
-            <vaadin-grid theme="row-stripes" aria-label="Users" items="[[data]]">
-                <vaadin-grid-column width="20%" flex-grow="0">
-                    <template class="header">Email</template>
-                    <template>[[item.email]]</template>
-                </vaadin-grid-column>
-                <vaadin-grid-column width="20%" flex-grow="0">
-                    <template class="header">Username</template>
-                    <template>[[item.username]]</template>
-                </vaadin-grid-column>
-                <vaadin-grid-column width="20%" flex-grow="0">
-                    <template class="header">First Name</template>
-                    <template>[[item.firstname]]</template>
-                </vaadin-grid-column>
-                <vaadin-grid-column width="20%" flex-grow="0">
-                    <template class="header">Last Name</template>
-                    <template>[[item.lastname]]</template>
-                </vaadin-grid-column>
-                <vaadin-grid-column width="20%" flex-grow="0">
-                    <template class="header"><div class="grid-header">Actions</div></template>
-                    <template>
-                        <div class="grid-header">
-                            <iron-icon icon="icons:create" on-tap="_edit" id="[[item.id]]"></iron-icon>
-                            <iron-icon icon="icons:delete" on-tap="_confirmation" id="[[item.id]]"></iron-icon>
-                            <iron-icon icon="icons:content-copy" on-tap="_copy" id="[[item.id]]"></iron-icon>
-                        </div>
-                    </template>
-                </vaadin-grid-column>
-            </vaadin-grid>
+            <div class="flex grid-container" width="100%">
+                <paper-progress id="progress" hidden indeterminate></paper-progress>
+                <vaadin-grid theme="row-stripes" aria-label="Users" items="[[data]]">
+                    <vaadin-grid-column width="20%" flex-grow="0">
+                        <template class="header">Email</template>
+                        <template>[[item.email]]</template>
+                    </vaadin-grid-column>
+                    <vaadin-grid-column width="20%" flex-grow="0">
+                        <template class="header">Username</template>
+                        <template>[[item.username]]</template>
+                    </vaadin-grid-column>
+                    <vaadin-grid-column width="20%" flex-grow="0">
+                        <template class="header">First Name</template>
+                        <template>[[item.firstname]]</template>
+                    </vaadin-grid-column>
+                    <vaadin-grid-column width="20%" flex-grow="0">
+                        <template class="header">Last Name</template>
+                        <template>[[item.lastname]]</template>
+                    </vaadin-grid-column>
+                    <vaadin-grid-column width="20%" flex-grow="0">
+                        <template class="header"><div class="grid-header">Actions</div></template>
+                        <template>
+                            <div class="grid-header">
+                                <iron-icon icon="icons:create" on-tap="_edit" id="[[item.id]]"></iron-icon>
+                                <iron-icon icon="icons:delete" on-tap="_confirmation" id="[[item.id]]"></iron-icon>
+                                <iron-icon icon="icons:content-copy" on-tap="_copy" id="[[item.id]]"></iron-icon>
+                            </div>
+                        </template>
+                    </vaadin-grid-column>
+                </vaadin-grid>
+            </div>
+            <div class="flex" width="100%">
+                <markazuna-circular-pager page="[[page]]" count="[[count]]" range="10" url="/admin/users?page=#{page}"></markazuna-circular-pager>
+            </div>
             <paper-fab icon="icons:add" on-tap="_new"></paper-fab>
             <paper-dialog class="card" id="form" modal>
                 <user-form action-url="[[dataUrl]]" form-authenticity-token="[[formAuthenticityToken]]" id="userForm"></user-form>
@@ -115,7 +129,11 @@ class UserList extends PolymerElement {
             },
             page: {
                 type: Number,
-                value: 0
+                value: 1
+            },
+            count: {
+                type: Number,
+                value: 1
             },
             data: {
                 type: Array,
@@ -139,6 +157,7 @@ class UserList extends PolymerElement {
         this.addEventListener('saveSuccess', this._onSaveSuccess);
         this.addEventListener('editSuccess', this._onEditSuccess);
         this.addEventListener('cancel', this._onCancel);
+        this.addEventListener('pageClick', this._onPageClick);
 
         this.$.dataAjax.url = this.dataUrl + '?page=' + this.page.toString();
         this.$.dataAjax.generateRequest();
@@ -154,6 +173,7 @@ class UserList extends PolymerElement {
 
     _onResponse(data) {
         var response = data.detail.response;
+        this.count = response.count;
         this.splice('data', 0, this.data.length); // clear data
         response.results.forEach(function(item) {
             this.push('data', item);
@@ -170,6 +190,9 @@ class UserList extends PolymerElement {
     _onDeleteResponse(data) {
         var response = data.detail.response;
         if (response.status == '200') {
+            if (response.count < this.count) {
+                this.page = this.page - 1;
+            }
             this._reload();
         }
         else {
@@ -231,6 +254,13 @@ class UserList extends PolymerElement {
 
     _reload() {
         this.$.dataAjax.url = this.dataUrl + '?page=' + this.page.toString();
+        this.$.dataAjax.generateRequest();
+        this.$.progress.hidden = false;
+    }
+
+    _onPageClick(e) {
+        this.page = e.detail.page;
+        this.$.dataAjax.url = this.dataUrl + '?page=' + e.detail.page.toString();
         this.$.dataAjax.generateRequest();
         this.$.progress.hidden = false;
     }

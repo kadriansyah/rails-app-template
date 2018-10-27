@@ -15,7 +15,7 @@ import 'app-menu-polymer3/app-menu-icon-item.js'
 
 import '../moslemcorner/moslemcorner-shared-styles.js';
 import '../moslemcorner/moslemcorner-search-bar.js';
-import './user-list/user-list.js';
+import './user-list.js';
 
 class UsersPage extends PolymerElement {
     static get template() {
