@@ -305,16 +305,16 @@ class MarkazunaPagination extends PolymerElement {
             root.removeChild(root.firstChild);
         }
         let templateClass, instance;
-        // // first
-        // if (this.first && (templateClass = this._getTemplateType('first'))) {
-        //     instance = new templateClass(this.first);
-        //     root.appendChild(this._bindClickHandler(instance, this.first).root);
-        // }
-        // // previous
-        // if (this.previous && (templateClass = this._getTemplateType('previous'))) {
-        //     instance = new templateClass(this.previous);
-        //     root.appendChild(this._bindClickHandler(instance, this.previous).root);
-        // }
+        // first
+        if (this.first && (templateClass = this._getTemplateType('first'))) {
+            instance = new templateClass(this.first);
+            root.appendChild(this._bindClickHandler(instance, this.first).root);
+        }
+        // previous
+        if (this.previous && (templateClass = this._getTemplateType('previous'))) {
+            instance = new templateClass(this.previous);
+            root.appendChild(this._bindClickHandler(instance, this.previous).root);
+        }
         // general & current
         if ((templateClass = this._getTemplateType('general'))) {
             let currentTempateClass = this._getTemplateType('current'), pages = this.pageNumber;
@@ -327,16 +327,16 @@ class MarkazunaPagination extends PolymerElement {
                 root.appendChild(this._bindClickHandler(instance, page).root);
             });
         }
-        // // next
-        // if (this.next && (templateClass = this._getTemplateType('next'))) {
-        //     instance = new templateClass(this.next);
-        //     root.appendChild(this._bindClickHandler(instance, this.next).root);
-        // }
-        // // last
-        // if (this.last && (templateClass = this._getTemplateType('last'))) {
-        //     instance = new templateClass(this.last);
-        //     root.appendChild(this._bindClickHandler(instance, this.last).root);
-        // }
+        // next
+        if (this.next && (templateClass = this._getTemplateType('next'))) {
+            instance = new templateClass(this.next);
+            root.appendChild(this._bindClickHandler(instance, this.next).root);
+        }
+        // last
+        if (this.last && (templateClass = this._getTemplateType('last'))) {
+            instance = new templateClass(this.last);
+            root.appendChild(this._bindClickHandler(instance, this.last).root);
+        }
     }
 
     /**
