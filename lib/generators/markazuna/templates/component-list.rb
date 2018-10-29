@@ -75,8 +75,8 @@ class <%= singular_name.capitalize %>List extends PolymerElement {
                 on-error='_onDeleteError'>
             </iron-ajax>
 
-            <paper-progress id="progress" hidden indeterminate></paper-progress>
             <div class="flex grid-container" width="100%">
+                <paper-progress id="progress" hidden indeterminate></paper-progress>
                 <vaadin-grid theme="row-stripes" aria-label="Users" items="[[data]]">
                     <%
                     @fields.each_with_index do |field, index|
@@ -103,11 +103,7 @@ class <%= singular_name.capitalize %>List extends PolymerElement {
                 </vaadin-grid>
             </div>
             <div class="flex" width="100%">
-            <% if class_path[0].nil? %>
-                <markazuna-circular-pager page="[[page]]" count="[[count]]" range="10" url="/<%= plural_name %>?page=#{page}"></markazuna-circular-pager>
-            <% else %>
-                <markazuna-circular-pager page="[[page]]" count="[[count]]" range="10" url="/<%= class_path[0] %>/<%= plural_name %>?page=#{page}"></markazuna-circular-pager>
-            <% end %>
+                <markazuna-circular-pager page="[[page]]" count="[[count]]" range="10" url="<%= @url %>?page=#{page}"></markazuna-circular-pager>
             </div>
             <paper-fab icon="icons:add" on-tap="_new"></paper-fab>
             <paper-dialog class="card" id="form" modal>
@@ -165,13 +161,6 @@ class <%= singular_name.capitalize %>List extends PolymerElement {
         this.$.dataAjax.url = this.dataUrl + '?page=' + this.page.toString();
         this.$.dataAjax.generateRequest();
         this.$.progress.hidden = false;
-
-        // /* network delay simulation */
-        // self = this;
-        // setTimeout(function() {
-        //     self.$.dataAjax.url = self.dataUrl + '?page=' + self.page.toString();
-        //     self.$.dataAjax.generateRequest();
-        // }, 3000);
     }
 
     _onResponse(data) {
