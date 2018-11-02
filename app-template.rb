@@ -283,7 +283,7 @@ directory "config", "config"
 # prepare devise
 generate('devise admin/core_user')
 generate('devise:controllers admin/core_user')
-generate('devise:views admin/core_user')
+generate('devise:views admin/core_user') # devise new version issue: always generate using plural name
 
 # adding dependency
 insert_into_file 'app/models/admin/core_user.rb', before: "class Admin::CoreUser\n" do <<-RUBY
