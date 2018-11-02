@@ -6,9 +6,9 @@ require_dependency 'moslemcorners/di_container'
     end
     fields = "#{fields}:#{@fields[@fields.length-1]}"
     if namespaced?
-        generated_class_name = "#{namespace.capitalize}::#{class_name}"
+        generated_class_name = "#{namespace.capitalize}::#{plural_name.capitalize}"
     else
-        generated_class_name = "#{class_name}"
+        generated_class_name = "#{plural_name.capitalize}"
     end
 %>
 class <%= generated_class_name %>Controller < ApplicationController
