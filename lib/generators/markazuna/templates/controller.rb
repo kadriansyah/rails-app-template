@@ -13,6 +13,7 @@ require_dependency 'moslemcorners/di_container'
 %>
 class <%= generated_class_name %>Controller < ApplicationController
     include MoslemCorners::INJECT['<%= @service_name %>']
+    before_action :authenticate_core_user!
 
     # http://api.rubyonrails.org/classes/ActionController/ParamsWrapper.html
     wrap_parameters :<%= singular_name %>, include: [<%= fields %>]

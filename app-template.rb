@@ -97,6 +97,7 @@ run 'yarn add @polymer/paper-progress'
 run 'yarn add @vaadin/vaadin-grid'
 run 'yarn add @polymer/iron-flex-layout'
 run 'yarn add app-menu-polymer3'
+run 'yarn add purecss'
 
 # moving folder (somehow polymer can't work if in folder node_modules)
 run 'mv node_modules/@polymer/ app/javascript/'
@@ -283,7 +284,7 @@ directory "config", "config"
 # prepare devise
 generate('devise admin/core_user')
 generate('devise:controllers admin/core_user')
-generate('devise:views admin/core_user') # devise new version issue: always generate using plural name
+# generate('devise:views admin/core_user') # devise new version issue: always generate using plural name
 
 # adding dependency
 insert_into_file 'app/models/admin/core_user.rb', before: "class Admin::CoreUser\n" do <<-RUBY
@@ -423,6 +424,8 @@ add_file "app/controllers/admin/core_user/sessions_controller.rb"
 # insert from beginning of file using \A, for end of file using \Z
 insert_into_file "app/controllers/admin/core_user/sessions_controller.rb", after: /\A/ do <<-EOF
 class Admin::CoreUser::SessionsController < Devise::SessionsController
+    respond_to :json
+
     # before_action :configure_sign_in_params, only: [:create]
 
     # GET /resource/sign_in
@@ -446,7 +449,6 @@ class Admin::CoreUser::SessionsController < Devise::SessionsController
     # def configure_sign_in_params
     #   devise_parameter_sanitizer.permit(:sign_in, keys: [:attribute])
     # end
-    respond_to :json
 end
 EOF
 end
@@ -454,8 +456,11 @@ end
 # configure routing
 insert_into_file 'config/routes.rb', after: "Rails.application.routes.draw do\n" do <<-RUBY
 
-    devise_for :core_user, class_name: 'Admin::CoreUser', module: :devise,
-               path: 'admin', path_names: { sign_in: 'login', sign_out: 'logout' },
+    devise_for :core_user,
+                class_name: 'Admin::CoreUser',
+                module: :devise,
+                path: 'admin',
+                path_names: { sign_in: 'login', sign_out: 'logout' },
                :controllers => {
                    sessions: 'admin/core_user/sessions',
                    registrations: 'admin/core_user/registrations',
@@ -465,7 +470,7 @@ insert_into_file 'config/routes.rb', after: "Rails.application.routes.draw do\n"
     root to: 'index#index'
 
     scope :admin do
-        root to: 'admin#index'
+        root to: 'admin#index', :as => "admin"
         get 'page/:name', to: 'admin#page'
 
         resources :users, controller: 'admin/user' do
@@ -490,21 +495,21 @@ insert_into_file 'app/controllers/application_controller.rb', before: "end" do <
 
     # Overwriting the sign_in redirect path method
     def after_sign_in_path_for(resource)
-        Rails.application.routes.url_helpers.root_path
+        Rails.application.routes.url_helpers.admin_path
     end
 
     # Overwriting the sign_out redirect path method
     def after_sign_out_path_for(resource_or_scope)
-        Rails.application.routes.url_helpers.root_path
+        Rails.application.routes.url_helpers.admin_path
     end
     RUBY
 end
 
 # setup stylesheets
-# insert_into_file 'app/assets/stylesheets/application.css', before: " *= require_tree .\n" do <<-RUBY
-#  *= require @material/layout-grid/mdc-layout-grid
-#     RUBY
-# end
+insert_into_file 'app/assets/stylesheets/application.css', before: " *= require_tree .\n" do <<-RUBY
+ *= require purecss/build/pure-min
+    RUBY
+end
 
 insert_into_file 'app/assets/stylesheets/application.css', after: "*/\n" do <<-RUBY
 
