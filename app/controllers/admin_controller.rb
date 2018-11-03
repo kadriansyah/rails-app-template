@@ -8,9 +8,6 @@ class AdminController < ApplicationController
 
     def page
         case params[:name]
-            when 'questions'
-                render template: 'admin/questions'
-
             when 'groups'
                 render template: 'admin/groups'
 

@@ -61,6 +61,9 @@ end
 
 run 'bundle install'
 
+# copy db:seed
+directory 'db', 'db'
+
 # copy services & value_objects
 directory 'app/services', 'app/services'
 directory 'app/value_objects', 'app/value_objects'
@@ -656,6 +659,3 @@ after_bundle do
   git add: "."
   git commit: %Q{ -m 'Initial commit' }
 end
-
-# seeding default user
-run 'rails db:seed'
