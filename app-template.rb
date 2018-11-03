@@ -486,6 +486,7 @@ end
 gsub_file 'config/routes.rb', /devise_for :core_users, class_name: "Admin::CoreUser"/, ''
 
 # copy controllers
+copy_file 'app/controllers/index_controller.rb', 'app/controllers/index_controller.rb'
 copy_file 'app/controllers/admin_controller.rb', 'app/controllers/admin_controller.rb'
 copy_file 'app/controllers/admin/user_controller.rb', 'app/controllers/admin/user_controller.rb'
 
