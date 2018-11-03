@@ -8,7 +8,7 @@ import '@polymer/iron-ajax/iron-ajax.js';
 import '@polymer/iron-input/iron-input.js';
 import '@polymer/paper-progress/paper-progress.js';
 
-import './moslemcorner/moslemcorner-shared-styles.js';
+import './markazuna/markazuna-shared-styles.js';
 
 class LoginForm extends PolymerElement {
     static get template() {
@@ -70,7 +70,7 @@ class LoginForm extends PolymerElement {
 
             <div class="card">
                 <div id="unauthenticated">
-                    <h1>My App</h1>
+                    <h1>Tagging App</h1>
                     <p><strong>Log in</strong> or <strong>sign up</strong></p>
                     <template is="dom-if" if="[[_error]]">
                         <p class="alert-error">[[_error]]</p>

@@ -284,18 +284,17 @@ directory "config", "config"
 # prepare devise
 generate('devise admin/core_user')
 generate('devise:controllers admin/core_user')
-# generate('devise:views admin/core_user') # devise new version issue: always generate using plural name
 
 # adding dependency
 insert_into_file 'app/models/admin/core_user.rb', before: "class Admin::CoreUser\n" do <<-RUBY
-    require 'moslemcorners/common_model'
+    require 'markazuna/common_model'
 
     RUBY
 end
 
 # adding MoslemCorners::CommonModel & collection name
 insert_into_file 'app/models/admin/core_user.rb', after: "include Mongoid::Document\n" do <<-RUBY
-    include MoslemCorners::CommonModel
+    include Markazuna::CommonModel
     store_in collection: 'core_users'
 
     # kaminari page setting
@@ -492,6 +491,7 @@ directory 'app/views', 'app/views'
 
 # adding devise sign_in sign_out redirect path method
 insert_into_file 'app/controllers/application_controller.rb', before: "end" do <<-RUBY
+    before_action :authenticate_core_user!
 
     # Overwriting the sign_in redirect path method
     def after_sign_in_path_for(resource)

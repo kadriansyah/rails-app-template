@@ -67,6 +67,31 @@ styleElement.innerHTML = `
                 font-size: 14px;
                 padding: 10px;
             }
+            .bg_mark_orange {
+                background: orange;
+                color: white;
+                padding: 3px 3px;
+            }
+            .bg_mark_blue {
+                background: blue;
+                color: white;
+                padding: 3px 3px;
+            }
+            .bg_mark_red {
+                background: red;
+                color: white;
+                padding: 3px 3px;
+            }
+            .bg_mark_black {
+                background: black;
+                color: white;
+                padding: 3px 3px;
+            }
+            .bg_mark_green {
+                background: green;
+                color: white;
+                padding: 3px 3px;
+            }
         </style>
     </template>
 `;
