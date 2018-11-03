@@ -656,3 +656,6 @@ after_bundle do
   git add: "."
   git commit: %Q{ -m 'Initial commit' }
 end
+
+# seeding default user
+run 'rails db:seed'
