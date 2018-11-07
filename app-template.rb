@@ -329,7 +329,8 @@ class Admin::CoreUser::RegistrationsController < Devise::RegistrationsController
     before_action :configure_sign_up_params, only: [:create]
     before_action :configure_account_update_params, only: [:update]
 
-    respond_to :json
+    layout 'login'
+    # respond_to :json
 
     # GET /resource/sign_up
     # def new
@@ -425,7 +426,8 @@ add_file "app/controllers/admin/core_user/sessions_controller.rb"
 # insert from beginning of file using \A, for end of file using \Z
 insert_into_file "app/controllers/admin/core_user/sessions_controller.rb", after: /\A/ do <<-EOF
 class Admin::CoreUser::SessionsController < Devise::SessionsController
-    respond_to :json
+    layout 'login'
+    # respond_to :json
 
     # before_action :configure_sign_in_params, only: [:create]
 
