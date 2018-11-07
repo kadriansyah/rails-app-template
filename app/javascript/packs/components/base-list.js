@@ -21,7 +21,7 @@ export class BaseList extends PolymerElement {
                 }
                 vaadin-grid {
                     --card-margin: 5px 24px 24px 24px;
-                    height: 800px;
+                    height: 835px;
                 }
                 iron-icon {
                     padding-left: 10px;
@@ -45,6 +45,15 @@ export class BaseList extends PolymerElement {
                 }
                 .grid-header {
                     text-align: center;
+                    font-size: 14px;
+                }
+                .grid-header-left {
+                    text-align: left;
+                    font-size: 14px;
+                }
+                .grid-content-left {
+                    text-align: left;
+                    font-size: 13px;
                 }
                 markazuna-circular-pager {
                     padding: 10px 10px 10px 10px;
@@ -52,9 +61,6 @@ export class BaseList extends PolymerElement {
                 .flex {
                     display: flex;
                     justify-content: center;
-                }
-                .grid-container {
-                    margin: 5px 5px 5px 5px;
                 }
             </style>
 

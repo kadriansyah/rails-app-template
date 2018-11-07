@@ -61,21 +61,23 @@ end
 
 run 'bundle install'
 
-# copy db:seed
-directory 'db', 'db'
-
-# copy services & value_objects
-directory 'app/services', 'app/services'
-directory 'app/value_objects', 'app/value_objects'
-
-# copy lib
-directory 'lib', 'lib'
-
 # webpacker
 run 'rails webpacker:install'
 
-# copy files
-# copy_file 'post_install.rb'
+# copy db:seed
+directory 'db', 'db'
+
+# copy assets, services & value_objects, vendor
+directory 'app/assets', 'app/assets'
+directory 'app/services', 'app/services'
+directory 'app/value_objects', 'app/value_objects'
+directory 'vendor', 'vendor'
+
+# copy models
+directory 'app/models', 'app/models'
+
+# copy lib
+directory 'lib', 'lib'
 
 # https://yarnpkg.com/en/docs/install#mac-stable
 run 'yarn add @webcomponents/webcomponentsjs'
@@ -99,7 +101,6 @@ run 'yarn add @polymer/paper-card'
 run 'yarn add @polymer/paper-progress'
 run 'yarn add @vaadin/vaadin-grid'
 run 'yarn add @polymer/iron-flex-layout'
-run 'yarn add app-menu-polymer3'
 run 'yarn add purecss'
 
 # moving folder (somehow polymer can't work if in folder node_modules)
@@ -125,8 +126,6 @@ application do <<-RUBY
 end
 
 # # mongoid
-# generate('mongoid:config')
-
 inside 'config' do
     remove_file 'database.yml'
     create_file 'mongoid.yml' do <<-EOF
@@ -301,7 +300,7 @@ insert_into_file 'app/models/admin/core_user.rb', after: "include Mongoid::Docum
     store_in collection: 'core_users'
 
     # kaminari page setting
-    paginates_per 20
+    paginates_per 25
 
     RUBY
 end
@@ -475,7 +474,11 @@ insert_into_file 'config/routes.rb', after: "Rails.application.routes.draw do\n"
         root to: 'admin#index', :as => "admin"
         get 'page/:name', to: 'admin#page'
 
-        resources :users, controller: 'admin/user' do
+        resources :users, controller: 'admin/users' do
+            get 'delete', on: :member # http://guides.rubyonrails.org/routing.html#adding-more-restful-actions
+        end
+
+        resources :groups, controller: 'admin/groups' do
             get 'delete', on: :member # http://guides.rubyonrails.org/routing.html#adding-more-restful-actions
         end
     end
@@ -488,7 +491,8 @@ gsub_file 'config/routes.rb', /devise_for :core_users, class_name: "Admin::CoreU
 # copy controllers
 copy_file 'app/controllers/index_controller.rb', 'app/controllers/index_controller.rb'
 copy_file 'app/controllers/admin_controller.rb', 'app/controllers/admin_controller.rb'
-copy_file 'app/controllers/admin/user_controller.rb', 'app/controllers/admin/user_controller.rb'
+copy_file 'app/controllers/admin/users_controller.rb', 'app/controllers/admin/users_controller.rb'
+copy_file 'app/controllers/admin/groups_controller.rb', 'app/controllers/admin/groups_controller.rb'
 
 # copy views
 directory 'app/views', 'app/views'

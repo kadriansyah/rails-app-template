@@ -7,23 +7,39 @@ import './user-form.js';
 class UserList extends BaseList {
     static get listTemplate() { 
         return html`
-            <div class="flex grid-container" width="100%">
+            <div class="flex" width="100%">
                 <vaadin-grid theme="row-stripes" aria-label="Users" items="[[data]]">
                     <vaadin-grid-column width="20%" flex-grow="0">
-                        <template class="header">Email</template>
-                        <template>[[item.email]]</template>
+                        <template class="header">
+                            <div class="grid-header-left">Email</div>
+                        </template>
+                        <template>
+                            <div class="grid-header-left">[[item.email]]</div>
+                        </template>
                     </vaadin-grid-column>
                     <vaadin-grid-column width="20%" flex-grow="0">
-                        <template class="header">Username</template>
-                        <template>[[item.username]]</template>
+                        <template class="header">
+                            <div class="grid-header-left">Username</div>
+                        </template>
+                        <template>
+                            <div class="grid-header-left">[[item.username]]</div>
+                        </template>
                     </vaadin-grid-column>
                     <vaadin-grid-column width="20%" flex-grow="0">
-                        <template class="header">First Name</template>
-                        <template>[[item.firstname]]</template>
+                        <template class="header">
+                            <div class="grid-header-left">First Name</div>
+                        </template>
+                        <template>
+                            <div class="grid-header-left">[[item.firstname]]</div>
+                        </template>
                     </vaadin-grid-column>
                     <vaadin-grid-column width="20%" flex-grow="0">
-                        <template class="header">Last Name</template>
-                        <template>[[item.lastname]]</template>
+                        <template class="header">
+                            <div class="grid-header-left">Last Name</div>
+                        </template>
+                        <template>
+                            <div class="grid-header-left">[[item.lastname]]</div>
+                        </template>
                     </vaadin-grid-column>
                     <vaadin-grid-column width="20%" flex-grow="0">
                         <template class="header"><div class="grid-header">Actions</div></template>

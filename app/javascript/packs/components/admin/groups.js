@@ -7,4 +7,5 @@ import '@webcomponents/webcomponentsjs/webcomponents-loader.js'
 /*---------------------------------------------------------------------
   Import Components
 ----------------------------------------------------------------------*/
-import './groups-page.js'
+import './group-list.js'
+import './group-form.js'

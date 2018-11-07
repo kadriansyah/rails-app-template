@@ -53,14 +53,12 @@ class MarkazunaGenerator < Rails::Generators::NamedBase
 		if class_path[0].nil?
 			@url = "/#{plural_name}"
 			@component_path = "components"
-			template "component-page.rb", File.join("app/javascript/packs/components", "#{plural_name}-page.js")
 			template "component-form.rb", File.join("app/javascript/packs/components", "#{singular_name}-form.js")
 			template "component-list.rb", File.join("app/javascript/packs/components", "#{singular_name}-list.js")
 			template "component.rb", File.join("app/javascript/packs/components", "#{plural_name}.js")
 		else
 			@url = "/#{class_path[0]}/#{plural_name}"
 			@component_path = "components/#{class_path[0]}"
-			template "component-page.rb", File.join("app/javascript/packs/components/#{class_path[0]}", "#{plural_name}-page.js")
 			template "component-form.rb", File.join("app/javascript/packs/components/#{class_path[0]}", "#{singular_name}-form.js")
 			template "component-list.rb", File.join("app/javascript/packs/components/#{class_path[0]}", "#{singular_name}-list.js")
 			template "component.rb", File.join("app/javascript/packs/components/#{class_path[0]}", "#{plural_name}.js")

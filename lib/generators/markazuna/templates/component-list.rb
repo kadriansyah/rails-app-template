@@ -14,8 +14,12 @@ class <%= singular_name.capitalize %>List extends BaseList {
                         if index > 0
                     %>
                     <vaadin-grid-column width="20%" flex-grow="0">
-                        <template class="header"><%= field.capitalize %></template>
-                        <template>[[item.<%= field %>]]</template>
+                        <template class="header">
+                            <div class="grid-header-left"><%= field.capitalize %></div>
+                        </template>
+                        <template>
+                            <div class="grid-content-left">[[item.<%= field %>]]</div>
+                        </template>
                     </vaadin-grid-column>
                     <%
                         end

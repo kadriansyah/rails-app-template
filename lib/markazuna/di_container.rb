@@ -6,16 +6,12 @@ module Markazuna
     class DIContainer
         extend Dry::Container::Mixin
 
-		register 'question_service' do
-			Alo::QuestionService.new
-		end
-
-		register 'tag_service' do
-			Alo::TagService.new
-		end
-
         register 'admin_service' do
             Admin::AdminService.new
+        end
+
+        register 'group_service' do
+            Admin::GroupService.new
         end
 
         register 'system_cache' do
