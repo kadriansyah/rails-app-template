@@ -45,5 +45,5 @@ Rails.application.config.assets.precompile += %w( tinymce/tinymce.min
                                                   admin/jqvmap/examples/js/jquery.vmap.sampledata.js
                                                   admin/moment/min/moment.min.js
                                                   admin/bootstrap-daterangepicker/daterangepicker.js
-                                                  custom.css
-                                                  custom.js  )
+                                                  admin/custom.css
+                                                  admin/custom.js )
