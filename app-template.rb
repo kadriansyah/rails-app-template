@@ -1,7 +1,7 @@
-# rails app template (kadriansyah@gmail.com)
+## rails app template (kadriansyah@gmail.com)
 # rails new [app_name] --skip-active-record --skip-turbolinks -m rails-app-template/app-template.rb
 
-# scaffolding
+## scaffolding
 # rails g markazuna alo/tag --service_name tag_service --fields id name description
 
 def source_paths
@@ -10,6 +10,7 @@ end
 
 # rvm environment related
 copy_file '.ruby-gemset'
+gsub_file '.ruby-gemset', /app-template/, "#{@app_name}"
 copy_file '.ruby-version'
 
 # Remove the gemfile so we can start with a clean slate otherwise Rails groups
@@ -136,7 +137,7 @@ development:
     default:
       # Defines the name of the default database that Mongoid can connect to.
       # (required).
-      database: myapp
+      database: #{@app_name}
       # Provides the hosts the default client can connect to. Must be an array
       # of host:port pairs. (required)
       hosts:
@@ -155,10 +156,10 @@ development:
         #     - use: web
 
         # The name of the user for authentication.
-        user: 'myuser'
+        user: 'admin'
 
         # The password of the user for authentication.
-        password: 'mypassword'
+        password: 'password'
 
         # The user's database roles.
         # roles:
@@ -591,13 +592,13 @@ gsub_file 'config/deploy.rb', /set :repo_url.*$/, ""
 gsub_file 'config/deploy.rb', /#.*$/, ""
 insert_into_file 'config/deploy.rb', after: /lock.*$/ do <<-EOF
 
-set :application, 'android.alodokter.com'
-set :rvm_ruby_version, '2.2.3@alodokter_android'
+set :application, '#{@app_name}'
+set :rvm_ruby_version, '2.5.1@#{@app_name}'
 
-set :repo_url, 'git@bitbucket.org:kadriansyah_alodokter/android-user-application-backend.git'
+set :repo_url, 'git@github.com:kadriansyah/#{@app_name}.git'
 set :branch, 'master'
 
-set :user,  'grumpycat'
+set :user,  '<ssh user>'
 set :use_sudo,  false
 set :ssh_options,   { forward_agent: true, user: fetch(:user), keys: %w(~/.ssh/id_rsa.pub) }
 
@@ -639,7 +640,7 @@ end
 insert_into_file 'config/deploy/production.rb', after: /# server "db.example.com".*$\n/ do <<-EOF
 
 set :stage, :production
-server 'alodokter-android01', port: 3006, user: 'grumpycat', roles: %w{app db web}, primary: true
+server '<ip address production>', port: '<ssh port for production>', user: '<ssh user for production>', roles: %w{app db web}, primary: true
 
     EOF
 end
@@ -648,7 +649,7 @@ end
 insert_into_file 'config/deploy/staging.rb', after: /# server "db.example.com".*$\n/ do <<-EOF
 
 set :stage, :staging
-server 'alodokter-android01', port: 3006, user: 'grumpycat', roles: %w{app db web}, primary: true
+server '<ip address staging>', port: '<ssh port for staging>', user: '<ssh user for staging>', roles: %w{app db web}, primary: true
 
     EOF
 end
@@ -666,3 +667,6 @@ after_bundle do
   git add: "."
   git commit: %Q{ -m 'Initial commit' }
 end
+
+# optional: run this if you already created database
+run 'rails db:seed'
