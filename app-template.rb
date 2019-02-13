@@ -8,6 +8,9 @@
 ## scaffolding
 # rails g markazuna alo/tag --service_name tag_service --fields id name description
 
+# template options: webmag
+template_name = 'webmag'
+
 def source_paths
   [File.expand_path(File.dirname(__FILE__))]
 end
@@ -73,13 +76,38 @@ run 'rails webpacker:install'
 directory 'db', 'db'
 
 # copy assets, services & value_objects, vendor
-directory 'app/assets', 'app/assets'
+# images
+directory 'app/assets/images/admin', 'app/assets/images/admin'
+directory "app/assets/images/#{template_name}/front", 'app/assets/images/front/'
+
+# javascripts
+copy_file 'app/assets/javascripts/application.js', 'app/assets/javascripts/application.js'
+directory 'app/assets/javascripts/admin', 'app/assets/javascripts/admin'
+directory 'app/assets/javascripts/channels', 'app/assets/javascripts/channels'
+directory "app/assets/javascripts/#{template_name}/front", 'app/assets/javascripts/front'
+
+# stylesheets
+copy_file 'app/assets/stylesheets/application.css', 'app/assets/stylesheets/application.css'
+directory 'app/assets/stylesheets/admin', 'app/assets/stylesheets/admin'
+directory "app/assets/stylesheets/#{template_name}/front", 'app/assets/stylesheets/front/'
+
+# vendor
+directory 'vendor/admin', 'vendor/admin'
+directory "vendor/#{template_name}/fonts", 'vendor/fonts'
+directory "vendor/#{template_name}/front", 'vendor/front'
+
+# copy models, services, value_objects
+directory 'app/models', 'app/models'
 directory 'app/services', 'app/services'
 directory 'app/value_objects', 'app/value_objects'
-directory 'vendor', 'vendor'
 
-# copy models
-directory 'app/models', 'app/models'
+# copy views
+directory 'app/views/admin', 'app/views/admin'
+directory 'app/views/core', 'app/views/core'
+directory 'app/views/layouts', 'app/views/layouts'
+directory "app/views/#{template_name}/layouts", 'app/views/layouts'
+directory "app/views/#{template_name}/shared", 'app/views/shared'
+directory "app/views/#{template_name}/index", 'app/views/index'
 
 # copy lib
 directory 'lib', 'lib'
@@ -500,9 +528,6 @@ copy_file 'app/controllers/index_controller.rb', 'app/controllers/index_controll
 copy_file 'app/controllers/admin_controller.rb', 'app/controllers/admin_controller.rb'
 copy_file 'app/controllers/admin/users_controller.rb', 'app/controllers/admin/users_controller.rb'
 copy_file 'app/controllers/admin/groups_controller.rb', 'app/controllers/admin/groups_controller.rb'
-
-# copy views
-directory 'app/views', 'app/views'
 
 # adding devise sign_in sign_out redirect path method
 insert_into_file 'app/controllers/application_controller.rb', before: "end" do <<-RUBY
