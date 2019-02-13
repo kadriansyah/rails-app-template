@@ -46,4 +46,11 @@ Rails.application.config.assets.precompile += %w( tinymce/tinymce.min
                                                   admin/moment/min/moment.min.js
                                                   admin/bootstrap-daterangepicker/daterangepicker.js
                                                   admin/custom.css
-                                                  admin/custom.js )
+                                                  admin/custom.js
+                                                  front/jquery.min.js
+                                                  front/bootstrap.min.js
+                                                  front/main.js
+                                                  front/bootstrap.min.css
+                                                  front/font-awesome.min.css
+                                                  front/style.css
+                                                  fonts/* )
