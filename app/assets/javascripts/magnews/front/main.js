@@ -1,91 +1,89 @@
 (function($) {
 	"use strict"
-
-	// Fixed Nav
-	var lastScrollTop = 0;
+	
 	$(window).on('scroll', function() {
+		// Fixed Nav
 		var wScroll = $(this).scrollTop();
-		if ( wScroll > $('#nav').height() ) {
-			if ( wScroll < lastScrollTop ) {
-				$('#nav-fixed').removeClass('slide-up').addClass('slide-down');
-			} else {
-				$('#nav-fixed').removeClass('slide-down').addClass('slide-up');
-			}
+		wScroll > $('header').height() ? $('#nav-header').addClass('fixed') : $('#nav-header').removeClass('fixed');
+		
+		// Back to top appear
+		wScroll > 740 ? $('#back-to-top').addClass('active') : $('#back-to-top').removeClass('active')
+	});
+	
+	// Back to top
+	$('#back-to-top').on("click", function(){
+		$('body,html').animate({
+            scrollTop: 0
+        }, 500);
+	});
+	
+	// Mobile Toggle Btn
+	$('#nav-header .nav-collapse-btn').on('click',function(){
+		$('#main-nav').toggleClass('nav-collapse');
+	});
+	
+	// Search Toggle Btn
+	$('#nav-header .search-collapse-btn').on('click',function(){
+		$(this).toggleClass('active');
+		$('.search-form').toggleClass('search-collapse');
+	});
+
+	// Owl Carousel
+	$('#owl-carousel-1').owlCarousel({
+		loop:true,
+		margin:0,
+		dots : false,
+		nav: true,
+		navText : ['<i class="fa fa-angle-left"></i>','<i class="fa fa-angle-right"></i>'],
+		autoplay : true,
+		responsive:{
+			0:{
+				items:1
+			},
+			992:{
+				items:2
+			},
 		}
-		lastScrollTop = wScroll
 	});
-
-	// Search Nav
-	$('.search-btn').on('click', function () {
-		$('.search-form').addClass('active');
-	});
-
-	$('.search-close').on('click', function () {
-		$('.search-form').removeClass('active');
-	});
-
-	// Aside Nav
-	$(document).click(function(event) {
-		if (!$(event.target).closest($('#nav-aside')).length) {
-			if ( $('#nav-aside').hasClass('active') ) {
-				$('#nav-aside').removeClass('active');
-				$('#nav').removeClass('shadow-active');
-			} else {
-				if ($(event.target).closest('.aside-btn').length) {
-					$('#nav-aside').addClass('active');
-					$('#nav').addClass('shadow-active');
-				}
-			}
+	
+	$('#owl-carousel-2').owlCarousel({
+		loop:false,
+		margin:15,
+		dots : false,
+		nav: true,
+		navContainer: '#nav-carousel-2',
+		navText : ['<i class="fa fa-angle-left"></i>','<i class="fa fa-angle-right"></i>'],
+		autoplay : false,
+		responsive:{
+			0:{
+				items:1
+			},
+			768:{
+				items:2
+			},
+			992:{
+				items:3
+			},
 		}
 	});
-
-	$('.nav-aside-close').on('click', function () {
-		$('#nav-aside').removeClass('active');
-		$('#nav').removeClass('shadow-active');
+	
+	$('#owl-carousel-3').owlCarousel({
+		items:1,
+		loop:true,
+		margin:0,
+		dots : false,
+		nav: true,
+		navText : ['<i class="fa fa-angle-left"></i>','<i class="fa fa-angle-right"></i>'],
+		autoplay : true,
 	});
-
-	// Sticky Shares
-	var $shares = $('.sticky-container .sticky-shares'),
-	$sharesHeight = $shares.height(),
-	$sharesTop,
-	$sharesCon = $('.sticky-container'),
-	$sharesConTop,
-	$sharesConleft,
-	$sharesConHeight,
-	$sharesConBottom,
-	$offsetTop = 80;
-
-	function setStickyPos () {
-		if ($shares.length > 0) {
-			$sharesTop = $shares.offset().top
-			$sharesConTop = $sharesCon.offset().top;
-			$sharesConleft = $sharesCon.offset().left;
-			$sharesConHeight = $sharesCon.height();
-			$sharesConBottom = $sharesConHeight + $sharesConTop;
-		}
-	}
-
-	function stickyShares (wScroll) {
-		if ($shares.length > 0) {
-			if ( $sharesConBottom - $sharesHeight - $offsetTop < wScroll ) {
-				$shares.css({ position: 'absolute', top: $sharesConHeight - $sharesHeight , left:0});
-			} else if ( $sharesTop < wScroll + $offsetTop ) {
-				$shares.css({ position: 'fixed', top: $offsetTop, left: $sharesConleft });
-			} else {
-				$shares.css({position: 'absolute', top: 0, left: 0});
-			}
-		}
-	}
-
-	$(window).on('scroll', function() {
-		stickyShares($(this).scrollTop());
+	
+	$('#owl-carousel-4').owlCarousel({
+		items:1,
+		loop:true,
+		margin:0,
+		dots : true,
+		nav: false,
+		autoplay : true,
 	});
-
-	$(window).resize(function() {
-		setStickyPos();
-		stickyShares($(this).scrollTop());
-	});
-
-	setStickyPos();
 
 })(jQuery);

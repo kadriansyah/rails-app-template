@@ -1,17 +1,5 @@
 <!-- Header -->
-<header id="header">
-    <!-- Top Header -->
-    <%= render "shared/front/top_header" %>
-    <!-- /Top Header -->
-
-    <!-- Center Header -->
-    <%= render "shared/front/center_header" %>
-    <!-- /Center Header -->
-    
-    <!-- Nav Header -->
-    <%= render "shared/front/nav_header" %>
-    <!-- /Nav Header -->
-</header>
+<%= render "shared/front/header" %>
 <!-- /Header -->
 
 <!-- Owl Carousel 1 -->
@@ -28,7 +16,7 @@
 
 <!-- AD SECTION -->
 <div class="visible-lg visible-md">
-    <img class="center-block" src="./img/ad-3.jpg" alt="">
+    <img class="center-block" src="<%= image_path('front/ad-3.jpg') %>" alt="">
 </div>
 <!-- /AD SECTION -->
 

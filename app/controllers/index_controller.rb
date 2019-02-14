@@ -8,8 +8,11 @@ class IndexController < ActionController::Base
         render :index
     end
 
-    def show 
-        @article = article_service.find_article_by_slug(params[:slug])
+    def show
+        ## uncomment to implement this!
+        # @article = article_service.find_article_by_slug(params[:slug])
+        @article = Core::Article.new
+        @article.content = 'Hello World'
         render layout: 'post', template: 'core/article'
     end
 end

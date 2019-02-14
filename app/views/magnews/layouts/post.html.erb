@@ -31,122 +31,26 @@
 </head>
 <body>
 	<!-- Header -->
-	<header id="header">
-		<!-- Nav -->
-		<div id="nav">
-			<!-- Main Nav -->
-			<div id="nav-fixed">
-				<div class="container">
-					<!-- logo -->
-					<%= render "shared/front/logo" %>
-					<!-- /logo -->
-
-					<!-- nav -->
-					<%= render "shared/front/nav_catagories" %>
-					<!-- /nav -->
-
-					<!-- search & aside toggle -->
-					<%= render "shared/front/search" %>
-					<!-- /search & aside toggle -->
-				</div>
-			</div>
-			<!-- /Main Nav -->
-
-			<!-- Aside Nav -->
-			<div id="nav-aside">
-				<!-- nav -->
-				<%= render "shared/front/nav_home" %>
-				<!-- /nav -->
-
-				<!-- widget posts -->
-				<%= render "shared/front/recent_posts_hide" %>
-				<!-- /widget posts -->
-
-				<!-- social links -->
-				<%= render "shared/front/follow_us" %>
-				<!-- /social links -->
-
-				<!-- aside nav close -->
-				<button class="nav-aside-close"><i class="fa fa-times"></i></button>
-				<!-- /aside nav close -->
-			</div>
-			<!-- Aside Nav -->
-		</div>
-		<!-- /Nav -->
-		
-		<!-- Page Header -->
-		<%= render "shared/front/page_header" %>
-		<!-- /Page Header -->
-	</header>
+	<%= render "shared/front/header" %>
 	<!-- /Header -->
 
-	<!-- section -->
-	<div class="section">
-		<!-- container -->
-		<div class="container">
-			<!-- row -->
-			<div class="row">
-				<!-- Post content -->
-				<div class="col-md-8">
-					<div class="section-row sticky-container">
-						<%= yield %>
-					</div>
+	<!-- SECTION -->
+	<%= render "shared/front/show_article" %>
+	<!-- /SECTION -->
 
-					<!-- ad -->
-					<%= render "shared/front/ad_2" %>
-					<!-- ad -->
-					
-					<!-- author -->
-					<%= render "shared/front/author" %>
-					<!-- /author -->
-
-					<!-- comments -->
-					<%= render "shared/front/comments" %>
-					<!-- /comments -->
-
-					<!-- reply -->
-					<%= render "shared/front/reply" %>
-					<!-- /reply -->
-				</div>
-				<!-- /Post content -->
-
-				<!-- aside -->
-				<div class="col-md-4">
-					<!-- ad -->
-					<%= render "shared/front/ad_1" %>
-					<!-- /ad -->
-
-					<!-- post widget -->
-					<%= render "shared/front/most_read" %>
-					<!-- /post widget -->
-
-					<!-- post widget -->
-					<%= render "shared/front/featured_post" %>
-					<!-- /post widget -->
-					
-					<!-- catagories -->
-					<%= render "shared/front/catagories_right" %>
-					<!-- /catagories -->
-					
-					<!-- tags -->
-					<%= render "shared/front/tags" %>
-					<!-- /tags -->
-					
-					<!-- archive -->
-					<%= render "shared/front/archive" %>
-					<!-- /archive -->
-				</div>
-				<!-- /aside -->
-			</div>
-			<!-- /row -->
-		</div>
-		<!-- /container -->
+	<!-- AD SECTION -->
+	<div class="visible-lg visible-md">
+		<img class="center-block" src="<%= image_path('front/ad-3.jpg') %>" alt="">
 	</div>
-	<!-- /section -->
+	<!-- /AD SECTION -->
 
-	<!-- Footer -->
+	<!-- SECTION -->
+	<%= render "shared/front/related_post" %>
+	<!-- /SECTION -->
+
+	<!-- FOOTER -->
 	<%= render "shared/front/footer" %>
-	<!-- /Footer -->
+	<!-- /FOOTER -->
 
 	<!-- jQuery Plugins -->
     <%= javascript_include_tag 'front/jquery.min' %>

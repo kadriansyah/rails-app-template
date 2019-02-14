@@ -8,8 +8,8 @@
 ## scaffolding
 # rails g markazuna alo/tag --service_name tag_service --fields id name description
 
-# template options: webmag
-template_name = 'webmag'
+# template options: webmag, magnews
+template_name = 'magnews'
 
 def source_paths
   [File.expand_path(File.dirname(__FILE__))]
@@ -315,7 +315,9 @@ end
 generate('devise:install')
 
 # copy devise.rb
-directory "config", "config"
+copy_file "config/application.yml", "config/application.yml"
+directory "config/initializers", "config/initializers"
+directory "config/#{template_name}/initializers", "config/initializers"
 
 # prepare devise
 generate('devise admin/core_user')
@@ -511,15 +513,15 @@ insert_into_file 'config/routes.rb', after: "Rails.application.routes.draw do\n"
         get 'page/:name', to: 'admin#page'
 
         # http://guides.rubyonrails.org/routing.html#adding-more-restful-actions
-        resources :users, controller: 'admin/users', except: :delete do
+        resources :users, controller: 'admin/users', except: :destroy do
             get 'delete', on: :member
         end
 
-        resources :groups, controller: 'admin/groups', except: :delete do
+        resources :groups, controller: 'admin/groups', except: :destroy do
             get 'delete', on: :member
         end
 
-        resources :articles, controller: 'core/articles', except: :delete do
+        resources :articles, controller: 'core/articles', except: :destroy do
             get 'delete', on: :member
         end
     end

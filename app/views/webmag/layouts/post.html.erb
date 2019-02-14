@@ -87,7 +87,10 @@
 					<!-- Post content -->
 					<div class="col-md-8">
 						<div class="section-row sticky-container">
-                            <%= yield %>
+							<div class="main-post">
+                            	<%= yield %>
+							</div>
+							<%= render "shared/front/post_shares" %>
 						</div>
 
 						<!-- ad -->
