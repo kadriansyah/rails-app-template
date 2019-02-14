@@ -135,6 +135,7 @@ run 'yarn add @polymer/paper-progress'
 run 'yarn add @vaadin/vaadin-grid'
 run 'yarn add @polymer/iron-flex-layout'
 run 'yarn add purecss'
+run 'yarn add tinymce@4.8.5' # please explore version 5.0
 
 # moving folder (somehow polymer can't work if in folder node_modules)
 run 'mv node_modules/@polymer/ app/javascript/'
@@ -509,14 +510,22 @@ insert_into_file 'config/routes.rb', after: "Rails.application.routes.draw do\n"
         root to: 'admin#index', :as => "admin"
         get 'page/:name', to: 'admin#page'
 
-        resources :users, controller: 'admin/users' do
-            get 'delete', on: :member # http://guides.rubyonrails.org/routing.html#adding-more-restful-actions
+        # http://guides.rubyonrails.org/routing.html#adding-more-restful-actions
+        resources :users, controller: 'admin/users', except: :delete do
+            get 'delete', on: :member
         end
 
-        resources :groups, controller: 'admin/groups' do
-            get 'delete', on: :member # http://guides.rubyonrails.org/routing.html#adding-more-restful-actions
+        resources :groups, controller: 'admin/groups', except: :delete do
+            get 'delete', on: :member
+        end
+
+        resources :articles, controller: 'core/articles', except: :delete do
+            get 'delete', on: :member
         end
     end
+
+    get 'tinymce',  to: 'core/articles#tinymce'
+    resources :articles, param: :slug, controller: 'index', path: '/', only: :show
     RUBY
 end
 
@@ -528,9 +537,11 @@ copy_file 'app/controllers/index_controller.rb', 'app/controllers/index_controll
 copy_file 'app/controllers/admin_controller.rb', 'app/controllers/admin_controller.rb'
 copy_file 'app/controllers/admin/users_controller.rb', 'app/controllers/admin/users_controller.rb'
 copy_file 'app/controllers/admin/groups_controller.rb', 'app/controllers/admin/groups_controller.rb'
+copy_file 'app/controllers/core/articles_controller.rb', 'app/controllers/core/articles_controller.rb'
 
 # adding devise sign_in sign_out redirect path method
 insert_into_file 'app/controllers/application_controller.rb', before: "end" do <<-RUBY
+    include ActionController::MimeResponds
     before_action :authenticate_core_user!
 
     # Overwriting the sign_in redirect path method
