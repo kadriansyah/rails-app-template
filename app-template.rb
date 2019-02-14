@@ -8,6 +8,9 @@
 ## scaffolding
 # rails g markazuna alo/tag --service_name tag_service --fields id name description
 
+# template options: webmag
+template_name = 'webmag'
+
 def source_paths
   [File.expand_path(File.dirname(__FILE__))]
 end
@@ -73,13 +76,38 @@ run 'rails webpacker:install'
 directory 'db', 'db'
 
 # copy assets, services & value_objects, vendor
-directory 'app/assets', 'app/assets'
+# images
+directory 'app/assets/images/admin', 'app/assets/images/admin'
+directory "app/assets/images/#{template_name}/front", 'app/assets/images/front/'
+
+# javascripts
+copy_file 'app/assets/javascripts/application.js', 'app/assets/javascripts/application.js'
+directory 'app/assets/javascripts/admin', 'app/assets/javascripts/admin'
+directory 'app/assets/javascripts/channels', 'app/assets/javascripts/channels'
+directory "app/assets/javascripts/#{template_name}/front", 'app/assets/javascripts/front'
+
+# stylesheets
+copy_file 'app/assets/stylesheets/application.css', 'app/assets/stylesheets/application.css'
+directory 'app/assets/stylesheets/admin', 'app/assets/stylesheets/admin'
+directory "app/assets/stylesheets/#{template_name}/front", 'app/assets/stylesheets/front/'
+
+# vendor
+directory 'vendor/admin', 'vendor/admin'
+directory "vendor/#{template_name}/fonts", 'vendor/fonts'
+directory "vendor/#{template_name}/front", 'vendor/front'
+
+# copy models, services, value_objects
+directory 'app/models', 'app/models'
 directory 'app/services', 'app/services'
 directory 'app/value_objects', 'app/value_objects'
-directory 'vendor', 'vendor'
 
-# copy models
-directory 'app/models', 'app/models'
+# copy views
+directory 'app/views/admin', 'app/views/admin'
+directory 'app/views/core', 'app/views/core'
+directory 'app/views/layouts', 'app/views/layouts'
+directory "app/views/#{template_name}/layouts", 'app/views/layouts'
+directory "app/views/#{template_name}/shared", 'app/views/shared'
+directory "app/views/#{template_name}/index", 'app/views/index'
 
 # copy lib
 directory 'lib', 'lib'
@@ -107,6 +135,7 @@ run 'yarn add @polymer/paper-progress'
 run 'yarn add @vaadin/vaadin-grid'
 run 'yarn add @polymer/iron-flex-layout'
 run 'yarn add purecss'
+run 'yarn add tinymce@4.8.5' # please explore version 5.0
 
 # moving folder (somehow polymer can't work if in folder node_modules)
 run 'mv node_modules/@polymer/ app/javascript/'
@@ -481,14 +510,22 @@ insert_into_file 'config/routes.rb', after: "Rails.application.routes.draw do\n"
         root to: 'admin#index', :as => "admin"
         get 'page/:name', to: 'admin#page'
 
-        resources :users, controller: 'admin/users' do
-            get 'delete', on: :member # http://guides.rubyonrails.org/routing.html#adding-more-restful-actions
+        # http://guides.rubyonrails.org/routing.html#adding-more-restful-actions
+        resources :users, controller: 'admin/users', except: :delete do
+            get 'delete', on: :member
         end
 
-        resources :groups, controller: 'admin/groups' do
-            get 'delete', on: :member # http://guides.rubyonrails.org/routing.html#adding-more-restful-actions
+        resources :groups, controller: 'admin/groups', except: :delete do
+            get 'delete', on: :member
+        end
+
+        resources :articles, controller: 'core/articles', except: :delete do
+            get 'delete', on: :member
         end
     end
+
+    get 'tinymce',  to: 'core/articles#tinymce'
+    resources :articles, param: :slug, controller: 'index', path: '/', only: :show
     RUBY
 end
 
@@ -500,12 +537,11 @@ copy_file 'app/controllers/index_controller.rb', 'app/controllers/index_controll
 copy_file 'app/controllers/admin_controller.rb', 'app/controllers/admin_controller.rb'
 copy_file 'app/controllers/admin/users_controller.rb', 'app/controllers/admin/users_controller.rb'
 copy_file 'app/controllers/admin/groups_controller.rb', 'app/controllers/admin/groups_controller.rb'
-
-# copy views
-directory 'app/views', 'app/views'
+copy_file 'app/controllers/core/articles_controller.rb', 'app/controllers/core/articles_controller.rb'
 
 # adding devise sign_in sign_out redirect path method
 insert_into_file 'app/controllers/application_controller.rb', before: "end" do <<-RUBY
+    include ActionController::MimeResponds
     before_action :authenticate_core_user!
 
     # Overwriting the sign_in redirect path method

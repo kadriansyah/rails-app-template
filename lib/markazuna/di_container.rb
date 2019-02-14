@@ -6,6 +6,10 @@ module Markazuna
     class DIContainer
         extend Dry::Container::Mixin
 
+        register 'article_service' do
+			Core::ArticleService.new
+		end
+
         register 'admin_service' do
             Admin::AdminService.new
         end

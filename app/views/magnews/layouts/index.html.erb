@@ -6,18 +6,23 @@
     <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1"/>
     <title>Markazuna | </title>
 
+    <!-- Google font -->
+	<link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700%7CLato:300,400" rel="stylesheet">
+
+    <!-- ApplicationCSS -->
     <%= stylesheet_link_tag 'application', media: 'all' %>
     <!-- Bootstrap -->
     <%= stylesheet_link_tag 'front/bootstrap.min' %>
+    <!-- Owl Carousel -->
+    <%= stylesheet_link_tag 'front/owl.carousel' %>
+    <%= stylesheet_link_tag 'front/owl.theme.default' %>
     <!-- Font Awesome Icon -->
     <%= stylesheet_link_tag 'front/font-awesome.min' %>
     <!-- Custom stlylesheet -->
     <%= stylesheet_link_tag 'front/style' %>
 
+    <!-- ApplicationJS -->
     <%= javascript_include_tag  'application' %>
-
-    <!-- Google font -->
-    <link href="https://fonts.googleapis.com/css?family=Nunito+Sans:700%7CNunito:300,600" rel="stylesheet"> 
 
     <!-- webcomponents.js (v1 spec polyfills) -->
     <script src="/custom-elements-es5-adapter.js"></script>
@@ -29,6 +34,7 @@
     <!-- jQuery Plugins -->
     <%= javascript_include_tag 'front/jquery.min' %>
     <%= javascript_include_tag 'front/bootstrap.min' %>
+    <%= javascript_include_tag 'front/owl.carousel.min' %>
     <%= javascript_include_tag 'front/main' %>
 </body>
 </html>

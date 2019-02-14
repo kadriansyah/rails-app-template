@@ -5,11 +5,8 @@ class Admin::GroupForm
     attr_accessor(:id, :name, :description)
 
     # Validations
-    
     validates :name, presence: true
-    
     validates :description, presence: true
-    
 
     def save
         if valid?
