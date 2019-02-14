@@ -8,8 +8,8 @@
 ## scaffolding
 # rails g markazuna alo/tag --service_name tag_service --fields id name description
 
-# template options: webmag, magnews
-template_name = 'magnews'
+# template options: webmag, magnews, videomag
+template_name = 'videomag'
 
 def source_paths
   [File.expand_path(File.dirname(__FILE__))]
@@ -555,72 +555,6 @@ insert_into_file 'app/controllers/application_controller.rb', before: "end" do <
     def after_sign_out_path_for(resource_or_scope)
         Rails.application.routes.url_helpers.admin_path
     end
-    RUBY
-end
-
-# setup stylesheets
-insert_into_file 'app/assets/stylesheets/application.css', before: " *= require_tree .\n" do <<-RUBY
- *= require purecss/build/pure-min
-    RUBY
-end
-
-insert_into_file 'app/assets/stylesheets/application.css', after: "*/\n" do <<-RUBY
-
-/*
- * http://meyerweb.com/eric/tools/css/reset/
- * v2.0 | 20110126
- * License: none (public domain)
- */
-html, body, div, span, applet, object, iframe,
-h1, h2, h3, h4, h5, h6, p, blockquote, pre,
-a, abbr, acronym, address, big, cite, code,
-del, dfn, em, img, ins, kbd, q, s, samp,
-small, strike, strong, sub, sup, tt, var,
-b, u, i, center,
-dl, dt, dd, ol, ul, li,
-fieldset, form, label, legend,
-table, caption, tbody, tfoot, thead, tr, th, td,
-article, aside, canvas, details, embed,
-figure, figcaption, footer, header, hgroup,
-menu, nav, output, ruby, section, summary,
-time, mark, audio, video {
-    margin: 0;
-    padding: 0;
-    border: 0;
-    font-size: 100%;
-    font: inherit;
-    vertical-align: baseline;
-}
-/* HTML5 display-role reset for older browsers */
-article, aside, details, figcaption, figure,
-footer, header, hgroup, menu, nav, section, main {
-    display: block;
-}
-body {
-    line-height: 1;
-}
-ol, ul {
-    list-style: none;
-}
-blockquote, q {
-    quotes: none;
-}
-blockquote:before, blockquote:after,
-q:before, q:after {
-    content: '';
-    content: none;
-}
-table {
-    border-collapse: collapse;
-    border-spacing: 0;
-}
-
-body {
-    margin: 0;
-    font-family: 'Roboto', 'Noto', sans-serif;
-    -webkit-font-smoothing: antialiased;
-    background: #f1f1f1;
-}
     RUBY
 end
 

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Markazuna | </title>
+
+    <!-- Favicon -->
+    <link rel="icon" href="<%= image_path('front/core-img/favicon.ico') %>">
+
+    <!-- Custom stlylesheet -->
+    <%= stylesheet_link_tag 'front/style' %>
+
+    <!-- ApplicationCSS -->
+    <%= stylesheet_link_tag 'application', media: 'all' %>
+
+    <!-- ApplicationJS -->
+    <%= javascript_include_tag  'application' %>
+
+    <!-- webcomponents.js (v1 spec polyfills) -->
+    <script src="/custom-elements-es5-adapter.js"></script>
+
+    <%= csrf_meta_tags %>
+</head>
+<body>
+    <!-- Preloader -->
+    <div class="preloader d-flex align-items-center justify-content-center">
+        <div class="spinner">
+            <div class="double-bounce1"></div>
+            <div class="double-bounce2"></div>
+        </div>
+    </div>
+
+	<!-- ##### Header Area Start ##### -->
+    <%= render "shared/front/header" %>
+    <!-- ##### Header Area End ##### -->
+
+	<!-- ##### Post Details Area Start ##### -->
+	<%= render "shared/front/post_detail" %>
+	<!-- ##### Post Details Area End ##### -->
+
+	<!-- ##### Footer Area Start ##### -->
+    <%= render "shared/front/footer" %>
+    <!-- ##### Footer Area End ##### -->
+
+	<!-- jQuery Plugins -->
+    <%= javascript_include_tag 'front/jquery-2.2.4.min' %>
+    <%= javascript_include_tag 'front/popper.min' %>
+    <%= javascript_include_tag 'front/bootstrap.min' %>
+    <%= javascript_include_tag 'front/plugins' %>
+    <%= javascript_include_tag 'front/active' %>
+</body>
+</html>
