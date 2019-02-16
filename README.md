@@ -8,34 +8,28 @@ TODO
 
 ### Prerequisites
 
-you must have nodejs installed (https://github.com/creationix/nvm)
-you must have yarn installed (https://yarnpkg.com/lang/en/docs/install/#mac-stable)
-
-```
-Give examples
-```
+* you must have nodejs installed (https://github.com/creationix/nvm)
+* you must have yarn installed (https://yarnpkg.com/lang/en/docs/install/#mac-stable)
 
 ### Installing
 
-Cloning the project
+* Cloning the project
 
 ```
 git clone git@github.com:kadriansyah/rails-app-template.git
 ```
 
-Creating project
+* Creating project
 
 ```
-example:
 rails new [app_name] --skip-active-record --skip-turbolinks -m rails-app-template/app-template.rb
 ```
 
 define template_name for front end inside app-template.rb, options are webmag, magnews, videomag
 
-Scaffolding
+* Scaffolding
 
 ```
-example:
 rails g markazuna alo/tag --service_name tag_service --fields id name description
 ```
 
