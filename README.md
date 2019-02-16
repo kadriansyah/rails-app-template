@@ -8,10 +8,29 @@ TODO
 
 ### Prerequisites
 
+* you must have rvm installed https://rvm.io/
 * you must have nodejs installed (https://github.com/creationix/nvm)
 * you must have yarn installed (https://yarnpkg.com/lang/en/docs/install/#mac-stable)
 
 ### Installing
+
+* Install Ruby using RVM
+
+```
+https://rvm.io/rvm/install
+```
+
+* Creating gemset for the project
+
+```
+https://rvm.io/rvm/install
+```
+
+* Use gemset
+
+```
+https://rvm.io/gemsets/using
+```
 
 * Cloning the project
 
