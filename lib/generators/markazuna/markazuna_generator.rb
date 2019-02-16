@@ -73,18 +73,18 @@ class MarkazunaGenerator < Rails::Generators::NamedBase
 		# routes
 		if class_path[0].nil?
 			insert_into_file 'config/routes.rb', before: /end\Z/ do <<-RUBY
-	resources :#{plural_name}, controller: '#{plural_name}' do
-		get 'delete', on: :member # http://guides.rubyonrails.org/routing.html#adding-more-restful-actions
+	resources :#{plural_name}, controller: '#{plural_name}', except: :destroy do
+		get 'delete', on: :member
 	end
 			RUBY
 			end
 		else
 			insert_into_file 'config/routes.rb', before: /end\Z/ do <<-RUBY
-scope :#{class_path[0]} do
-	resources :#{plural_name}, controller: '#{class_path[0]}/#{plural_name}' do
-		get 'delete', on: :member # http://guides.rubyonrails.org/routing.html#adding-more-restful-actions
+	scope :#{class_path[0]} do
+		resources :#{plural_name}, controller: '#{class_path[0]}/#{plural_name}', except: :destroy do
+			get 'delete', on: :member
+		end
 	end
-end
 		RUBY
 			end
 		end
