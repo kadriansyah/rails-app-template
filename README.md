@@ -33,10 +33,6 @@ define template_name for front end inside app-template.rb, options are webmag, m
 rails g markazuna alo/tag --service_name tag_service --fields id name description
 ```
 
-## Running the tests
-
-TODO
-
 ## Authors
 
 * **Kiagus Arief Adriansyah** - *Initial work* - [kadriansyah](https://github.com/kadriansyah)
