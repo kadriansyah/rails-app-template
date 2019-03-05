@@ -4,7 +4,15 @@ require 'rails_helper'
 # https://relishapp.com/rspec/rspec-expectations/v/3-8/docs
 RSpec.describe "Users", type: :request do
 	describe "Users API" do
-		# before(:all) { puts 'TODO' }
+		admin_user = Admin::CoreUser.find_by(email: "admin@gmail.com")
+		before(:each) {
+			sign_in admin_user
+		}
+
+		after(:each) { 
+			sign_out admin_user
+		}
+
 		after(:all) { 
 			core_user = Admin::CoreUser.find_by(email: "kadriansyah@gmail.com")
 			core_user.delete if core_user.present?
@@ -26,9 +34,7 @@ RSpec.describe "Users", type: :request do
 				"HTTP_ACCEPT" => "application/json"
 			}
 			post '/admin/users', :params => payload, :headers => headers
-
 			json = JSON.parse(response.body)
-			# puts "response is #{json}"
 
 			expect(response).to have_http_status(200)
 			expect(json['status']).to eq('200')
@@ -49,9 +55,7 @@ RSpec.describe "Users", type: :request do
 				"HTTP_ACCEPT" => "application/json"
 			}
 			post '/admin/users', :params => payload, :headers => headers
-
 			json = JSON.parse(response.body)
-			# puts "response is #{json}"
 
 			expect(response).to have_http_status(200)
 			expect(json['status']).to eq('404')
@@ -72,9 +76,7 @@ RSpec.describe "Users", type: :request do
 				"HTTP_ACCEPT" => "application/json"
 			}
 			post '/admin/users', :params => payload, :headers => headers
-
 			json = JSON.parse(response.body)
-			# puts "response is #{json}"
 
 			expect(response).to have_http_status(200)
 			expect(json['status']).to eq('404')
@@ -95,9 +97,7 @@ RSpec.describe "Users", type: :request do
 				"HTTP_ACCEPT" => "application/json"
 			}
 			post '/admin/users', :params => payload, :headers => headers
-
 			json = JSON.parse(response.body)
-			# puts "response is #{json}"
 
 			expect(response).to have_http_status(200)
 			expect(json['status']).to eq('404')

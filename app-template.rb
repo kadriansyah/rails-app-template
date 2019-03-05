@@ -77,6 +77,15 @@ run 'bundle install'
 # rspec
 run 'rails generate rspec:install'
 directory 'spec', 'spec'
+insert_into_file 'spec/rails_helper.rb', after: "require 'rspec/rails'\n" do <<-RUBY
+require 'devise'
+    RUBY
+end
+insert_into_file 'spec/rails_helper.rb', after: "config.filter_rails_from_backtrace!\n" do <<-RUBY
+	# devise
+	config.include Devise::Test::IntegrationHelpers, type: :request
+	RUBY
+end
 
 # webpacker
 run 'rails webpacker:install'
