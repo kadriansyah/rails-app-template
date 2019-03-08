@@ -53,7 +53,7 @@ gem 'kaminari-actionview'
 gem 'webpacker', '~> 3.5'
 gem 'figaro' # put environment variable on application.yml
 gem 'capistrano'
-gem 'capybara'
+gem 'rails-controller-testing'
 
 group :development do
     gem 'byebug', platform: :mri
@@ -88,6 +88,12 @@ insert_into_file 'spec/rails_helper.rb', after: "config.filter_rails_from_backtr
 	# devise
 	config.include Devise::Test::IntegrationHelpers, type: :request
 	RUBY
+end
+
+# prevent Sass::SyntaxError: Invalid CSS when running tests using Rspec
+insert_into_file 'config/environments/test.rb', before: "end\n" do <<-RUBY
+  config.assets.css_compressor = nil
+  RUBY
 end
 
 # webpacker
