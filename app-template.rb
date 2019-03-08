@@ -25,9 +25,12 @@ copy_file '.ruby-version'
 remove_file "Gemfile"
 add_file "Gemfile"
 
-prepend_to_file "Gemfile" do
-    "source \"https://rubygems.org\""
-end
+# prepend_to_file "Gemfile" do
+# "source \"https://rubygems.org\""
+# end
+
+append_to_file "Gemfile", <<-EOF
+source "https://rubygems.org"
 
 # gems
 gem 'rails'
@@ -37,8 +40,6 @@ gem 'uglifier'
 gem 'jquery-rails'
 gem 'jbuilder'
 gem 'mongoid'
-gem 'sass-rails'
-gem 'jquery-rails'
 gem 'dry-container'
 gem 'dry-auto_inject'
 gem 'redis'
@@ -52,8 +53,9 @@ gem 'kaminari-actionview'
 gem 'webpacker', '~> 3.5'
 gem 'figaro' # put environment variable on application.yml
 gem 'capistrano'
+gem 'capybara'
 
-gem_group :development do
+group :development do
     gem 'byebug', platform: :mri
 
     # Access an IRB console on exception pages or by using <%= console %> anywhere in the code.
@@ -65,12 +67,13 @@ gem_group :development do
     gem 'spring-watcher-listen'
 end
 
-gem_group :development, :test do
+group :development, :test do
     gem 'rspec'
     gem 'rspec-rails'
     gem 'factory_bot'
     gem 'factory_bot_rails'
 end
+EOF
 
 run 'bundle install'
 
