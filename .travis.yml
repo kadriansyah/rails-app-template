@@ -1,0 +1,21 @@
+language: ruby
+cache:
+  - bundler
+  - yarn
+rvm:
+  - ruby-2.5.1
+before_script:
+  - sleep 15
+  - mongo markazuna --eval 'db.createUser({user:"admin",pwd:"password",roles:["readWrite"]});'
+  - mongo markazuna --eval 'db.core_users.insertOne({ email:"admin@gmail.com",username:"admin",password:"password",firstname:"Admin",lastname:"App"});'
+  - yarn
+script:
+  - bundle exec rspec spec/
+services:
+  - mongodb
+notifications:
+  email:
+    recipients:
+      - kadriansyah@gmail.com
+    on_success: always # default: never
+    on_failure: always # default: always

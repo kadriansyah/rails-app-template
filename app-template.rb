@@ -20,6 +20,9 @@ copy_file '.ruby-gemset'
 gsub_file '.ruby-gemset', /app-template/, "#{@app_name}"
 copy_file '.ruby-version'
 
+# travis config
+copy_file '.travis.yml'
+
 # Remove the gemfile so we can start with a clean slate otherwise Rails groups
 # the gems in a very strange way
 remove_file "Gemfile"
