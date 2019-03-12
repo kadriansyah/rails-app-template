@@ -20,6 +20,9 @@ copy_file '.ruby-gemset'
 gsub_file '.ruby-gemset', /app-template/, "#{@app_name}"
 copy_file '.ruby-version'
 
+# circleci
+directory '.circleci'
+
 # travis config
 copy_file '.travis.yml'
 
