@@ -5,6 +5,10 @@ require 'rails_helper'
 RSpec.describe "Users", type: :request do
 	describe "Users API" do
 		admin_user = Admin::CoreUser.find_by(email: "admin@gmail.com")
+		before(:all) {
+			@core_user = create(:admin_core_user)
+		}
+
 		before(:each) {
 			sign_in admin_user
 		}
@@ -13,7 +17,8 @@ RSpec.describe "Users", type: :request do
 			sign_out admin_user
 		}
 
-		after(:all) { 
+		after(:all) {
+			@core_user.delete
 			core_user = Admin::CoreUser.find_by(email: "kadriansyah@gmail.com")
 			core_user.delete if core_user.present?
 		}
