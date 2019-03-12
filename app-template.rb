@@ -489,6 +489,11 @@ insert_into_file 'app/models/admin/core_user.rb', after: "include Mongoid::Docum
     # kaminari page setting
     paginates_per 25
 
+    validates_presence_of :username
+    validates_presence_of :email
+    validates_presence_of :firstname
+    validates_presence_of :lastname
+
     RUBY
 end
 
