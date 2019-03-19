@@ -1,0 +1,27 @@
+version: "3"
+services:
+  mongo:
+    image: kadriansyah/ubuntu_16_04_mongo:v1
+    container_name: mongo
+    ports:
+      - 27017:27017
+    volumes:
+      - mongo:/data
+  app:
+    build: .
+    container_name: app
+    tty: true
+    environment:
+      - RAILS_ENV='production'
+      - RAILS_SERVE_STATIC_FILES=true
+    entrypoint: /var/www/html/markazuna.com/docker-entrypoint.sh
+    command: ["nginx", "-g", "daemon off;"]
+    depends_on:
+      - mongo
+    ports:
+      - 80:80
+    volumes:
+      - ./:/var/www/html/markazuna.com
+volumes:
+  mongo:
+    driver: local
