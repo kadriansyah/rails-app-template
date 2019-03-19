@@ -6,9 +6,9 @@ LABEL maintainer="Kiagus Arief Adriansyah <kadriansyah@gmail.com>"
 # add our user and group first to make sure their IDs get assigned consistently, regardless of whatever dependencies get added
 RUN groupadd -r app && useradd -r -m app -g app
 
-RUN mkdir /var/www/html/markazuna.com
-RUN chown -R app:app /var/www/html/markazuna.com
-WORKDIR /var/www/html/markazuna.com
+RUN mkdir /var/www/html/#appname.com
+RUN chown -R app:app /var/www/html/#appname.com
+WORKDIR /var/www/html/#appname.com
 COPY --chown=app:app . .
 RUN chmod +x reload.sh
 RUN chmod +x docker-entrypoint.sh
@@ -21,8 +21,8 @@ RUN set -ex \
         && bundle install --jobs 20 --retry 5 \
         && yarn install --check-files
 
-COPY markazuna.com /etc/nginx/sites-available/
-RUN ln -s /etc/nginx/sites-available/markazuna.com /etc/nginx/sites-enabled/markazuna.com
+COPY #appname.com /etc/nginx/sites-available/
+RUN ln -s /etc/nginx/sites-available/#appname.com /etc/nginx/sites-enabled/#appname.com
 
 EXPOSE 80
 ENTRYPOINT ["docker-entrypoint.sh"]

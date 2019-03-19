@@ -32,7 +32,10 @@ copy_file 'docker-compose.yml'
 copy_file 'docker-entrypoint.sh'
 copy_file 'Dockerfile'
 copy_file 'run.sh'
-copy_file 'reload.yml'
+copy_file 'reload.sh'
+
+gsub_file 'docker-compose.yml', /#appname/, "#{app_name}"
+gsub_file 'Dockerfile', /#appname/, "#{app_name}"
 
 # allow permission to be executed
 run 'chmod +x docker-entrypoint.sh'
@@ -598,7 +601,7 @@ end
 
 insert_into_file 'package.json', before: /"devDependencies": {/ do <<-EOF
 "scripts": {
-    "postinstall": "if [ -d \"node_modules/@polymer\" ]; then rsync -av node_modules/@polymer app/javascript/; rm -rf node_modules/@polymer; fi"
+    "postinstall": "if [ -d \\"node_modules/@polymer\\" ]; then rsync -av node_modules/@polymer app/javascript/; rm -rf node_modules/@polymer; fi"
   },
   EOF
 end
