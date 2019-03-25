@@ -91,6 +91,9 @@ server {
 }
 EOF
 
+# kubernetes
+directory 'kube'
+
 # Remove the gemfile so we can start with a clean slate otherwise Rails groups
 # the gems in a very strange way
 remove_file "Gemfile"
