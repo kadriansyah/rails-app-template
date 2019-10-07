@@ -41,6 +41,11 @@ git clone git@github.com:kadriansyah/rails-app-template.git
 * Creating project
 
 ```
+rvm gemset create [project name]
+gem install bundler
+```
+
+```
 rails new [app_name] --skip-active-record --skip-turbolinks -m rails-app-template/app-template.rb
 ```
 
