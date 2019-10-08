@@ -55,7 +55,7 @@ rails new [app_name] --skip-active-record --skip-turbolinks -m rails-app-templat
 ```
 
 ```
-rails db/seeds.rb 
+rails db:seed
 ```
 
 define template_name for front end inside app-template.rb, options are webmag, magnews, videomag
