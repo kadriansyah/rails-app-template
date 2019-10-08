@@ -54,6 +54,10 @@ rvm gemset use [project name]
 rails new [app_name] --skip-active-record --skip-turbolinks -m rails-app-template/app-template.rb
 ```
 
+```
+rails db/seeds.rb 
+```
+
 define template_name for front end inside app-template.rb, options are webmag, magnews, videomag
 
 * Scaffolding
