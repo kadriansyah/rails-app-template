@@ -43,6 +43,11 @@ git clone git@github.com:kadriansyah/rails-app-template.git
 ```
 rvm gemset create [project name]
 gem install bundler
+gem install rails --no-document
+```
+
+```
+rvm gemset use [project name]
 ```
 
 ```
