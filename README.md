@@ -51,6 +51,10 @@ docker exec -it app /bin/bash
 ./init_db.sh
 ```
 
+```
+rails db:seed
+```
+
 define template_name for front end inside app-template.rb, options are webmag, magnews, videomag
 
 * Scaffolding
@@ -122,6 +126,5 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 
 ## Acknowledgments
 
-* Hat tip to anyone whose code was used
-* Inspiration
+* alodokter team
 * etc
