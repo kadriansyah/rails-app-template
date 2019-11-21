@@ -26,6 +26,9 @@ directory '.circleci'
 # travis config
 copy_file '.travis.yml'
 
+# empty log
+directory 'log'
+
 # docker
 copy_file 'build.sh'
 gsub_file 'build.sh', /#appname/, "#{app_name}"
