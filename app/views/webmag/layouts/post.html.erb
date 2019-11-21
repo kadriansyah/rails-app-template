@@ -15,12 +15,15 @@
 
         <!-- Bootstrap -->
         <%= stylesheet_link_tag 'front/bootstrap.min' %>
+		
         <!-- Font Awesome Icon -->
         <%= stylesheet_link_tag 'front/font-awesome.min' %>
+
         <!-- Custom stlylesheet -->
         <%= stylesheet_link_tag 'front/style' %>
 
-        <%= javascript_include_tag 'application' %>
+        <!-- ApplicationJS -->
+    	<%= javascript_pack_tag 'application' %>
 
         <!-- webcomponents.js (v1 spec polyfills) -->
         <script src="/custom-elements-es5-adapter.js"></script>

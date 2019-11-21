@@ -1,25 +1,26 @@
 version: "3"
 services:
   mongo:
-    image: kadriansyah/ubuntu_16_04_mongo:v1
+    image: kadriansyah/mongo
     container_name: mongo
     ports:
       - 27017:27017
     volumes:
-      - mongo:/data
+      - mongo:/data/db
+      - mongo:/data/configdb
   app:
-    build: .
+    image: kadriansyah/#appname_app
     container_name: app
     tty: true
     environment:
       - RAILS_ENV='production'
       - RAILS_SERVE_STATIC_FILES=true
-    entrypoint: /var/www/html/#appname.com/docker-entrypoint.sh
     command: ["nginx", "-g", "daemon off;"]
     depends_on:
       - mongo
     ports:
       - 80:80
+      - 3000:3000
     volumes:
       - ./:/var/www/html/#appname.com
 volumes:

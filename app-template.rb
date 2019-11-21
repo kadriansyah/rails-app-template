@@ -9,7 +9,7 @@
 # rails g markazuna alo/tag --service_name tag_service --fields id name description
 
 # template options: webmag, magnews, videomag
-template_name = 'videomag'
+template_name = 'webmag'
 
 def source_paths
   [File.expand_path(File.dirname(__FILE__))]
@@ -17,7 +17,7 @@ end
 
 # rvm environment related
 copy_file '.ruby-gemset'
-gsub_file '.ruby-gemset', /app-template/, "#{@app_name}"
+gsub_file '.ruby-gemset', /#appname/, "#{@app_name}"
 copy_file '.ruby-version'
 
 # circleci
@@ -28,22 +28,32 @@ copy_file '.travis.yml'
 
 # docker
 copy_file 'build.sh'
-copy_file 'docker-compose.yml'
-copy_file 'docker-entrypoint.sh'
-copy_file 'Dockerfile'
+gsub_file 'build.sh', /#appname/, "#{app_name}"
+run 'chmod +x build.sh'
+
 copy_file 'run.sh'
+gsub_file 'run.sh', /#appname/, "#{app_name}"
+run 'chmod +x run.sh'
+
+copy_file 'docker-compose.yml'
+copy_file 'Dockerfile'
+copy_file 'rails_s.sh'
+run 'chmod +x rails_s.sh'
+
 copy_file 'reload.sh'
+gsub_file 'reload.sh', /#appname/, "#{app_name}"
+run 'chmod +x reload.sh'
+
+copy_file 'init_db.sh'
+gsub_file 'init_db.sh', /#appname/, "#{app_name}"
+run 'chmod +x init_db.sh'
+
+copy_file 'production_log.sh'
+gsub_file 'production_log.sh', /#appname/, "#{app_name}"
+run 'chmod +x production_log.sh'
 
 gsub_file 'docker-compose.yml', /#appname/, "#{app_name}"
 gsub_file 'Dockerfile', /#appname/, "#{app_name}"
-
-# allow permission to be executed
-run 'chmod +x docker-entrypoint.sh'
-gsub_file 'docker-entrypoint.sh', /#hostname/, "mongo"
-gsub_file 'docker-entrypoint.sh', /#appname/, "#{app_name}"
-
-run 'chmod +x reload.sh'
-gsub_file 'reload.sh', /#appname/, "#{app_name}"
 
 # nginx virtual host (be carefull with backslash on location, we need to escape it using double backslash)
 add_file "#{@app_name}.com"
@@ -107,12 +117,12 @@ append_to_file "Gemfile", <<-EOF
 source "https://rubygems.org"
 
 # gems
-gem 'rails'
-gem 'bootsnap'
-gem 'sass-rails'
+gem 'rails', '~> 6.0.1'
+gem 'bootsnap', '>= 1.4.2', require: false
+gem 'sass-rails', '>= 6'
 gem 'uglifier'
 gem 'jquery-rails'
-gem 'jbuilder'
+gem 'jbuilder', '~> 2.7'
 gem 'mongoid'
 gem 'dry-container'
 gem 'dry-auto_inject'
@@ -124,12 +134,13 @@ gem 'sidekiq'
 gem 'devise'
 gem 'kaminari-mongoid'
 gem 'kaminari-actionview'
-gem 'webpacker', '~> 3.5'
+gem 'webpacker', '~> 4.0'
 gem 'figaro' # put environment variable on application.yml
 gem 'capistrano'
 gem 'rails-controller-testing'
 gem 'tzinfo-data'
 gem 'execjs'
+gem 'puma', '~> 4.1'
 
 group :development do
     gem 'byebug', platform: :mri
@@ -151,7 +162,11 @@ group :development, :test do
 end
 EOF
 
+# bundle
 run 'bundle install'
+
+# webpacker
+run 'rails webpacker:install'
 
 # rspec
 run 'rails generate rspec:install'
@@ -165,6 +180,13 @@ insert_into_file 'spec/rails_helper.rb', after: "config.filter_rails_from_backtr
 	# devise
 	config.include Devise::Test::IntegrationHelpers, type: :request
 	RUBY
+end
+
+# whitelisted_ips on development & disable check_yarn_integrity
+insert_into_file 'config/environments/development.rb', after: "config.file_watcher = ActiveSupport::EventedFileUpdateChecker\n" do <<-RUBY
+    config.web_console.whitelisted_ips = '172.24.0.1' # change and add ips depends on your needs
+    config.webpacker.check_yarn_integrity = false
+    RUBY
 end
 
 # environment production, fallback to assets pipeline if a precompiled asset is missed.
@@ -182,9 +204,6 @@ insert_into_file 'config/environments/test.rb', before: "end\n" do <<-RUBY
   RUBY
 end
 
-# webpacker
-run 'rails webpacker:install'
-
 # copy db:seed
 directory 'db', 'db'
 
@@ -194,9 +213,7 @@ directory 'app/assets/images/admin', 'app/assets/images/admin'
 directory "app/assets/images/#{template_name}/front", 'app/assets/images/front/'
 
 # javascripts
-copy_file 'app/assets/javascripts/application.js', 'app/assets/javascripts/application.js'
 directory 'app/assets/javascripts/admin', 'app/assets/javascripts/admin'
-directory 'app/assets/javascripts/channels', 'app/assets/javascripts/channels'
 directory "app/assets/javascripts/#{template_name}/front", 'app/assets/javascripts/front'
 
 # stylesheets
@@ -247,12 +264,25 @@ run 'yarn add @polymer/paper-card'
 run 'yarn add @polymer/paper-progress'
 run 'yarn add @vaadin/vaadin-grid'
 run 'yarn add @polymer/iron-flex-layout'
+run 'yarn add @rails/activestorage'
+run 'yarn add @babel/polyfill'
+run 'yarn add @babel/runtime'
+run 'yarn add @babel/plugin-transform-runtime'
+run 'yarn add @babel/plugin-syntax-dynamic-import'
+run 'yarn add @babel/plugin-transform-async-to-generator'
+run 'yarn add jquery'
+run 'yarn add lit-element'
 run 'yarn add purecss'
 run 'yarn add tinymce@4.8.5' # please explore version 5.0
 
-# moving folder (somehow polymer can't work if in folder node_modules)
+# moving folder (somehow polymer, lit-element, lit-html can't work if in folder node_modules)
 run 'mv node_modules/@polymer/ app/javascript/'
+run 'mv node_modules/lit-element/ app/javascript/'
+run 'mv node_modules/lit-html/ app/javascript/'
 run 'cp node_modules/@webcomponents/webcomponentsjs/custom-elements-es5-adapter.js public/'
+
+# prevent from check_yarn_integrity issue
+run 'yarn install --check-files'
 
 # polymer custom components
 directory 'app/javascript/packs', 'app/javascript/packs'
@@ -609,7 +639,14 @@ insert_into_file 'package.json', before: /"devDependencies": {/ do <<-EOF
   EOF
 end
 
+# Registers a callback to be executed after bundle and spring binstubs have run.
 after_bundle do
+	# babel.config.js
+	insert_into_file 'babel.config.js', after: "plugins: [\n" do <<-RUBY
+		'@babel/plugin-transform-async-to-generator',
+		RUBY
+	end
+
   git :init
   run 'echo node_modules >> .gitignore'
   git add: "."

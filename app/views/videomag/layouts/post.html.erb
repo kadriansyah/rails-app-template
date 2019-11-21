@@ -11,13 +11,20 @@
     <link rel="icon" href="<%= image_path('front/core-img/favicon.ico') %>">
 
     <!-- Custom stlylesheet -->
+    <%= stylesheet_link_tag 'front/bootstrap.min' %>
+    <%= stylesheet_link_tag 'front/classy-nav' %>
+    <%= stylesheet_link_tag 'front/owl.carousel.min' %>
+    <%= stylesheet_link_tag 'front/animate' %>
+    <%= stylesheet_link_tag 'front/magnific-popup' %>
+    <%= stylesheet_link_tag 'front/font-awesome.min' %>
+    <%= stylesheet_link_tag 'front/nice-select' %>
     <%= stylesheet_link_tag 'front/style' %>
 
     <!-- ApplicationCSS -->
     <%= stylesheet_link_tag 'application', media: 'all' %>
 
     <!-- ApplicationJS -->
-    <%= javascript_include_tag  'application' %>
+    <%= javascript_pack_tag 'application' %>
 
     <!-- webcomponents.js (v1 spec polyfills) -->
     <script src="/custom-elements-es5-adapter.js"></script>
