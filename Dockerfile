@@ -1,5 +1,5 @@
-# image name: kadriansyah/markazuna_app:v1
-FROM  kadriansyah/ubuntu_16_04_nginx:v1
+# image name: kadriansyah/nginx
+FROM  kadriansyah/nginx
 LABEL version="1.0"
 LABEL maintainer="Kiagus Arief Adriansyah <kadriansyah@gmail.com>"
 
@@ -11,7 +11,6 @@ RUN chown -R app:app /var/www/html/#appname.com
 WORKDIR /var/www/html/#appname.com
 COPY --chown=app:app . .
 RUN chmod +x reload.sh
-RUN chmod +x docker-entrypoint.sh
 
 ENV RAILS_ENV='production'
 RUN set -ex \
@@ -24,6 +23,5 @@ RUN set -ex \
 COPY #appname.com /etc/nginx/sites-available/
 RUN ln -s /etc/nginx/sites-available/#appname.com /etc/nginx/sites-enabled/#appname.com
 
-EXPOSE 80
-ENTRYPOINT ["docker-entrypoint.sh"]
+EXPOSE 80 3000
 CMD ["nginx", "-g", "daemon off;"]

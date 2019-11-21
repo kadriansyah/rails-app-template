@@ -3,12 +3,12 @@ require 'dry-auto_inject'
 require 'markazuna/cache'
 
 module Markazuna
-    class DIContainer
+    class DiContainer
         extend Dry::Container::Mixin
 
         register 'article_service' do
-			Core::ArticleService.new
-		end
+            Core::ArticleService.new
+        end
 
         register 'admin_service' do
             Admin::AdminService.new
@@ -24,5 +24,5 @@ module Markazuna
     end
 
     # dependency injection
-    INJECT = Dry::AutoInject(Markazuna::DIContainer)
+    INJECT = Dry::AutoInject(Markazuna::DiContainer)
 end
