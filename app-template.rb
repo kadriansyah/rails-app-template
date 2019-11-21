@@ -168,6 +168,9 @@ EOF
 # bundle
 run 'bundle install'
 
+# update bundler using newest version
+run 'bundle update --bundler'
+
 # webpacker
 run 'rails webpacker:install'
 
@@ -210,12 +213,15 @@ end
 # copy db:seed
 directory 'db', 'db'
 
-# copy assets, services & value_objects, vendor
+# config/manifest.js
+directory 'app/assets/config', 'app/assets/config'
+
 # images
 directory 'app/assets/images/admin', 'app/assets/images/admin'
 directory "app/assets/images/#{template_name}/front", 'app/assets/images/front/'
 
 # javascripts
+copy_file 'app/assets/javascripts/application.js', 'app/assets/javascripts/application.js'
 directory 'app/assets/javascripts/admin', 'app/assets/javascripts/admin'
 directory "app/assets/javascripts/#{template_name}/front", 'app/assets/javascripts/front'
 
@@ -644,11 +650,13 @@ end
 
 # Registers a callback to be executed after bundle and spring binstubs have run.
 after_bundle do
-	# babel.config.js
+  # babel.config.js
 	insert_into_file 'babel.config.js', after: "plugins: [\n" do <<-RUBY
 		'@babel/plugin-transform-async-to-generator',
 		RUBY
 	end
+
+	run 'rails assets:precompile'
 
   git :init
   run 'echo node_modules >> .gitignore'
