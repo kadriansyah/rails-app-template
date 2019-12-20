@@ -632,13 +632,6 @@ server '<ip address staging>', port: '<ssh port for staging>', user: '<ssh user 
     EOF
 end
 
-insert_into_file 'package.json', before: /"devDependencies": {/ do <<-EOF
-"scripts": {
-    "postinstall": "if [ -d \\"node_modules/@polymer\\" ]; then rsync -av node_modules/@polymer app/javascript/; rm -rf node_modules/@polymer; fi"
-  },
-  EOF
-end
-
 # Registers a callback to be executed after bundle and spring binstubs have run.
 after_bundle do
   # babel.config.js
