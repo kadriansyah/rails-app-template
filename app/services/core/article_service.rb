@@ -20,6 +20,10 @@ class Core::ArticleService
         Core::Article.find_by(:slug => slug)
     end
 
+    def find_articles_by_title(title, page = 0)
+        return Core::Article.where(title: title).page(page), Core::Article.page(1).total_pages
+    end
+
     def find_articles(page = 0)
         return Core::Article.page(page), Core::Article.page(1).total_pages
     end

@@ -16,6 +16,10 @@ class Admin::GroupService
         Admin::Group.find(id)
     end
 
+    def find_groups_by_name(name, page = 0)
+        return Admin::Group.where(name: name).page(page), Admin::Group.page(1).total_pages
+    end
+
     def find_groups(page = 0)
         return Admin::Group.page(page), Admin::Group.page(1).total_pages
     end

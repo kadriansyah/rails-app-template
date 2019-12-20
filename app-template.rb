@@ -506,22 +506,25 @@ insert_into_file 'config/routes.rb', after: "Rails.application.routes.draw do\n"
                }
 
     root to: 'index#index'
-
     scope :admin do
         root to: 'admin#index', :as => "admin"
         get 'page/:name', to: 'admin#page'
+        get 'page/:name/:id', to: 'admin#page'
 
         # http://guides.rubyonrails.org/routing.html#adding-more-restful-actions
         resources :users, controller: 'admin/users', except: :destroy do
             get 'delete', on: :member
+            get 'search', on: :collection
         end
 
         resources :groups, controller: 'admin/groups', except: :destroy do
             get 'delete', on: :member
+            get 'search', on: :collection
         end
 
         resources :articles, controller: 'core/articles', except: :destroy do
             get 'delete', on: :member
+            get 'search', on: :collection
         end
     end
 

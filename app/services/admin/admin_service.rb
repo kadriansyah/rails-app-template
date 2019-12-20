@@ -21,6 +21,10 @@ module Admin
             return Admin::CoreUser.page(page), Admin::CoreUser.page(1).total_pages
         end
 
+        def find_users_by_username(username, page = 0)
+            return Admin::CoreUser.where(username: username).page(page), Admin::CoreUser.page(1).total_pages
+        end
+
         # def create_account(username, password, provider)
         #     account_form = Admin::AccountForm.new(username: username, password: password, provider: provider)
         #     account_form.save
