@@ -1,0 +1,18 @@
+<%= javascript_pack_tag 'components/admin/users', defer: true %>
+<style>
+    user-form {
+        margin: 0;
+    }
+    .component_container {
+        padding: 0;
+    }
+</style>
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12 component_container">
+        <% if _id == nil then %>
+        <user-form actionUrl="/admin/users" formAuthenticityToken="<%= form_authenticity_token.to_s %>"></group-form>
+        <% else %>
+        <user-form actionUrl="/admin/users" objectId="<%= _id %>" copy="<%= _copy %>" formAuthenticityToken="<%= form_authenticity_token.to_s %>"></user-form>
+        <% end %>
+    </div>
+</div>

@@ -17,6 +17,17 @@ class Admin::UsersController < ApplicationController
         end
     end
 
+    def search
+        core_users, page_count = admin_service.find_users_by_username(params[:username], params[:page])
+        if (core_users.size > 0)
+            respond_to do |format|
+                format.json { render :json => { results: core_users, count: page_count }}
+            end
+        else
+            render :json => { results: []}
+        end
+    end
+
     def delete
         status, page_count = admin_service.delete_user(params[:id])
         if status

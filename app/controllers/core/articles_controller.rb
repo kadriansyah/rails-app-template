@@ -18,6 +18,17 @@ class Core::ArticlesController < ApplicationController
         end
     end
 
+    def search
+        articles, page_count = article_service.find_articles_by_title(params[:title], params[:page])
+        if (articles.size > 0)
+            respond_to do |format|
+                format.json { render :json => { results: articles, count: page_count }}
+            end
+        else
+            render :json => { results: []}
+        end
+    end
+
     def delete
         status, page_count = article_service.delete_article(params[:id])
         if status

@@ -3,6 +3,10 @@ FROM  kadriansyah/nginx
 LABEL version="1.0"
 LABEL maintainer="Kiagus Arief Adriansyah <kadriansyah@gmail.com>"
 
+RUN set -ex; \
+	apt-get update; \
+	apt-get install -y --no-install-recommends build-essential;
+
 # add our user and group first to make sure their IDs get assigned consistently, regardless of whatever dependencies get added
 RUN groupadd -r app && useradd -r -m app -g app
 

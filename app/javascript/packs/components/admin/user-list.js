@@ -1,88 +1,187 @@
-import { html } from '@polymer/polymer/polymer-element.js';
+import { html, css } from 'lit-element';
 import { BaseList } from '../base-list.js'
-
-import '../markazuna/markazuna-circular-pager.js';
-import './user-form.js';
+import edit from '../images/edit.svg'
+import del from '../images/delete.svg'
+import copy from '../images/copy.svg'
 
 class UserList extends BaseList {
-    static get listTemplate() { 
-        return html`
-            <div class="flex" width="100%">
-                <vaadin-grid theme="row-stripes" aria-label="Users" items="[[data]]">
-                    <vaadin-grid-column width="20%" flex-grow="0">
-                        <template class="header">
-                            <div class="grid-header-left">Email</div>
-                        </template>
-                        <template>
-                            <div class="grid-header-left">[[item.email]]</div>
-                        </template>
-                    </vaadin-grid-column>
-                    <vaadin-grid-column width="20%" flex-grow="0">
-                        <template class="header">
-                            <div class="grid-header-left">Username</div>
-                        </template>
-                        <template>
-                            <div class="grid-header-left">[[item.username]]</div>
-                        </template>
-                    </vaadin-grid-column>
-                    <vaadin-grid-column width="20%" flex-grow="0">
-                        <template class="header">
-                            <div class="grid-header-left">First Name</div>
-                        </template>
-                        <template>
-                            <div class="grid-header-left">[[item.firstname]]</div>
-                        </template>
-                    </vaadin-grid-column>
-                    <vaadin-grid-column width="20%" flex-grow="0">
-                        <template class="header">
-                            <div class="grid-header-left">Last Name</div>
-                        </template>
-                        <template>
-                            <div class="grid-header-left">[[item.lastname]]</div>
-                        </template>
-                    </vaadin-grid-column>
-                    <vaadin-grid-column width="20%" flex-grow="0">
-                        <template class="header"><div class="grid-header">Actions</div></template>
-                        <template>
-                            <div class="grid-header">
-                                <iron-icon icon="icons:create" on-tap="_edit" id="[[item.id]]"></iron-icon>
-                                <iron-icon icon="icons:delete" on-tap="_confirmation" id="[[item.id]]"></iron-icon>
-                                <iron-icon icon="icons:content-copy" on-tap="_copy" id="[[item.id]]"></iron-icon>
-                            </div>
-                        </template>
-                    </vaadin-grid-column>
-                </vaadin-grid>
-            </div>
-            <div class="flex" width="100%">
-                <markazuna-circular-pager page="[[page]]" count="[[count]]" range="10" url="/admin/users?page=#{page}"></markazuna-circular-pager>
-            </div>
-        `;
-    }
-
-    static get formTemplate() { 
-        return html`
-            <user-form action-url="[[dataUrl]]" form-authenticity-token="[[formAuthenticityToken]]" id="formData"></user-form>
-        `;
-    }
-
     constructor() {
         super();
+        this.debug = false;
+        this.buttonName = "Add User";
     }
 
-    ready() {
-        super.ready();
+    static get styles() {
+        return [
+            super.styles, 
+            css `
+                .row-head {
+                    background-color: #2A3F54;
+                }
+                .row-head th {
+                    font-size: 15px;
+                    color: #FFFFFF;
+                    text-align: left;
+                    padding: 5px 5px;
+                }
+                .row-data-even {
+                    background-color: #F2F3F4;
+                }
+                .row-data-odd {
+                    background-color: #FFFFFF;
+                }
+                .row-data td {
+                    border-bottom: 1pt solid #AAB7B8;
+                }
+                .row-data td {
+                    font-size: 14px;
+                    text-align: left;
+                    padding: 5px 5px;
+                }
+                .col-1 {
+                    width: 10%;
+                }
+                .col-2 {
+                    width: 20%;
+                }
+                .col-3 {
+                    width: 20%;
+                }
+                .col-4 {
+                    width: 20%;
+                }
+                .col-5 {
+                    width: 20%;
+                }
+                .action {
+                    text-align: center !important;
+                }
+                .action img:hover {
+                    cursor: pointer;
+                }
+            `
+        ];
     }
 
-    _formTitleNew() {
-        return 'Create New User';
+    get headerTemplate() {
+        return html`
+            <thead>
+                <tr class='row-head'>
+                    <th class="colnum"> # </th>
+                    <th class="firstname">Firstname</th>
+                    <th class="lastname">Lastname</th>
+                    <th class="username">Username</th>
+                    <th class="email">Email</th>
+                    <th colspan="3" class="action">Action</th>
+                </tr>
+            </thead>
+        `;
     }
 
-    _formTitleEdit() {
-        return 'Edit User';
+    get dataTemplate() {
+        return html`
+            <tbody>
+                ${this.data.map(
+                        (u, idx) =>
+                        html `
+                            ${idx % 2 == 0?
+                            html `
+                                <tr class="row-data row-data-even">
+                                    <td class="col-1">${idx+1}</td>
+                                    <td class="col-2">${u.firstname}</td>
+                                    <td class="col-3">${u.lastname}</td>
+                                    <td class="col-4">${u.username}</td>
+                                    <td class="col-5">${u.email}</td>
+                                    <td class="action"><img title="edit" src="${edit}" height="24" width="24" id="${u.id}" @click="${this.edit}"/></td>
+                                    <td class="action"><img title="copy" src="${copy}" height="24" width="24" id="${u.id}" @click="${this.copy}"/></td>
+                                    <td class="action"><img title="delete" src="${del}" height="24" width="24" id="${u.id}" @click="${this.confirmation}"/></td>
+                                </tr>
+                            `:
+                            html `
+                                <tr class="row-data row-data-odd">
+                                    <td class="col-1">${idx+1}</td>
+                                    <td class="col-2">${u.firstname}</td>
+                                    <td class="col-3">${u.lastname}</td>
+                                    <td class="col-4">${u.username}</td>
+                                    <td class="col-5">${u.email}</td>
+                                    <td class="action"><img title="edit" src="${edit}" height="24" width="24" id="${u.id}" @click="${this.edit}"/></td>
+                                    <td class="action"><img title="copy" src="${copy}" height="24" width="24" id="${u.id}" @click="${this.copy}"/></td>
+                                    <td class="action"><img title="delete" src="${del}" height="24" width="24" id="${u.id}" @click="${this.confirmation}"/></td>
+                                </tr>
+                            `}
+            			`,
+					)
+				}
+            </tbody>
+        `;
     }
 
-    _formTitleCopy() {
-        return 'Copy User';
+    get footerTemplate() {
+        return html`
+            <tfoot>
+                <tr><td colspan="8"><h3>Pagination Here</h3></td></tr>
+            </tfoot>
+        `;
+    }
+
+    add(e) {
+        this.redirect('/admin/page/user_new');
+    }
+
+    edit(e) {
+        this.redirect('/admin/page/user_edit/'+ e.target.id);
+    }
+
+    copy(e) {
+        this.redirect('/admin/page/user_copy/'+ e.target.id);
+    }
+
+    async search() {
+        let username = this.shadowRoot.getElementById("search").value;
+        let data;
+		try {
+            if (username === '') {
+                const response = await fetch(this.dataUrl);
+                data = await response.json();
+            } else {
+                const response = await fetch(this.dataUrl + "/search?username="+ username + "&page=0");
+                data = await response.json();
+            }
+		} catch (error) {
+			console.error(error);
+        }
+
+        if (this.debug) {
+            console.log(data.results);            
+        }
+
+		this.data = []
+        data.results.forEach(function(item) {
+            this.data.push(item);
+        }, this);
+    }
+
+    confirmation(e) {
+        let modal = this.shadowRoot.getElementById('modal');
+        let state = {action:'delete', id: e.target.id};
+        modal.open(state, 'Delete Confirmation', 'Are you sure to delete this user?');
+    }
+
+    handleButtonYesEvent(e) {
+        this.delete(e.detail.state.id);
+    }
+
+    async delete(id) {
+        console.log(id);
+        let data;
+		try {
+			const response = await fetch(this.dataUrl +'/'+ id + '/delete');
+			data = await response.json();
+		} catch (error) {
+			console.error(error);
+        }
+        console.log(data);            
+		this.reload();
     }
 }
 customElements.define('user-list', UserList);
