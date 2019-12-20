@@ -13,7 +13,8 @@ Rails.application.config.assets.paths << Rails.root.join('vendor')
 # application.js, application.css, and all non-JS/CSS in the app/assets
 # folder are already added.
 Rails.application.config.assets.precompile += %w( tinymce/tinymce.min
-                                                  tinymce/skins/lightgray/skin.min
+                                                  tinymce/skins/ui/oxide/skin.min
+                                                  tinymce/skins/ui/oxide-dark/skin.min
                                                   admin/bootstrap/dist/css/bootstrap.min.css
                                                   admin/font-awesome/css/font-awesome.min.css
                                                   admin/nprogress/nprogress.css

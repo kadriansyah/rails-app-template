@@ -17,6 +17,17 @@ class Admin::GroupsController < ApplicationController
         end
     end
 
+    def search
+        groups, page_count = group_service.find_groups_by_name(params[:name], params[:page])
+        if (groups.size > 0)
+            respond_to do |format|
+                format.json { render :json => { results: groups, count: page_count }}
+            end
+        else
+            render :json => { results: []}
+        end
+    end
+
     def delete
         status, page_count = group_service.delete_group(params[:id])
         if status

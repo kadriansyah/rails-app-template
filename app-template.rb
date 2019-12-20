@@ -15,6 +15,9 @@ def source_paths
   [File.expand_path(File.dirname(__FILE__))]
 end
 
+# _templates generator
+directory '_templates'
+
 # rvm environment related
 copy_file '.ruby-gemset'
 gsub_file '.ruby-gemset', /#appname/, "#{@app_name}"
@@ -254,38 +257,23 @@ directory 'lib', 'lib'
 # https://yarnpkg.com/en/docs/install#mac-stable
 run 'yarn add @webcomponents/webcomponentsjs'
 
-# polymer elements needed
-run 'yarn add @polymer/polymer'
-run 'yarn add @polymer/app-layout'
-run 'yarn add @polymer/paper-item'
-run 'yarn add @polymer/paper-icon-button'
-run 'yarn add @polymer/paper-input'
-run 'yarn add @polymer/iron-input'
-run 'yarn add @polymer/iron-location'
-run 'yarn add @polymer/iron-icons'
-run 'yarn add @polymer/iron-ajax'
-run 'yarn add @polymer/iron-list'
-run 'yarn add @polymer/iron-scroll-threshold'
-run 'yarn add @polymer/paper-dialog'
-run 'yarn add @polymer/paper-button'
-run 'yarn add @polymer/paper-fab'
-run 'yarn add @polymer/paper-card'
-run 'yarn add @polymer/paper-progress'
-run 'yarn add @vaadin/vaadin-grid'
-run 'yarn add @polymer/iron-flex-layout'
-run 'yarn add @rails/activestorage'
+# elements needed
 run 'yarn add @babel/polyfill'
 run 'yarn add @babel/runtime'
 run 'yarn add @babel/plugin-transform-runtime'
 run 'yarn add @babel/plugin-syntax-dynamic-import'
 run 'yarn add @babel/plugin-transform-async-to-generator'
+run 'yarn add @rails/actioncable'
+run 'yarn add @rails/activestorage'
+run 'yarn add @rails/ujs'
+run 'yarn add @rails/webpacker'
+run 'yarn add hygen'
 run 'yarn add jquery'
 run 'yarn add lit-element'
 run 'yarn add purecss'
-run 'yarn add tinymce@4.8.5' # please explore version 5.0
+run 'yarn add tinymce@5.1.4'
 
 # moving folder (somehow polymer, lit-element, lit-html can't work if in folder node_modules)
-run 'mv node_modules/@polymer/ app/javascript/'
 run 'mv node_modules/lit-element/ app/javascript/'
 run 'mv node_modules/lit-html/ app/javascript/'
 run 'cp node_modules/@webcomponents/webcomponentsjs/custom-elements-es5-adapter.js public/'

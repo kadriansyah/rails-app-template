@@ -1,0 +1,18 @@
+<%= javascript_pack_tag 'components/admin/groups', defer: true %>
+<style>
+    group-form {
+        margin: 0;
+    }
+    .component_container {
+        padding: 0;
+    }
+</style>
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12 component_container">
+        <% if _id == nil then %>
+        <group-form actionUrl="/admin/groups" formAuthenticityToken="<%= form_authenticity_token.to_s %>"></group-form>
+        <% else %>
+        <group-form actionUrl="/admin/groups" objectId="<%= _id %>" copy="<%= _copy %>" formAuthenticityToken="<%= form_authenticity_token.to_s %>"></group-form>
+        <% end %>
+    </div>
+</div>

@@ -1,6 +1,6 @@
 <%= javascript_pack_tag 'components/admin/users', defer: true %>
 <style>
-    user-list {
+    group-list {
         margin: 0;
     }
     .component_container {
@@ -9,6 +9,6 @@
 </style>
 <div class="row">
     <div class="col-md-12 col-sm-12 col-xs-12 component_container">
-        <user-list data-url="/admin/users" form-authenticity-token="<%= form_authenticity_token.to_s %>"></user-list>
+        <user-list dataUrl="/admin/users"></user-list>
     </div>
 </div>
