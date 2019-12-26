@@ -355,7 +355,7 @@ end
 # mongoid
 remove_file 'config/database.yml'
 copy_file 'config/mongoid.yml', 'config/mongoid.yml'
-gsub_file 'config/mongoid.yml', /#dbname/, "#{app_name}"
+gsub_file 'config/mongoid.yml', /#dbname/, "#{@app_name}"
 gsub_file 'config/mongoid.yml', /#hostname/, "mongo"
 
 # devise
