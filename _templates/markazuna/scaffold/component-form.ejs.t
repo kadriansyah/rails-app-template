@@ -7,7 +7,7 @@ import { LitElement, html, css } from 'lit-element';
 export class <%= h.inflection.demodulize(name) %>Form extends LitElement {
     constructor() {
         super();
-        this.<%= h.inflection.transform(name, [ 'demodulize', 'underscore' ]) %> = {};
+        this.<%= h.inflection.transform(name, [ 'demodulize', 'underscore' ]) %> = {<% fields.split(',').forEach(function(field,idx){%>'<%= field %>':''<% if(idx < fields.split(',').length - 1) { %>, <% }}); %>};
         this.copy = 'false';
     }
 
@@ -75,7 +75,7 @@ export class <%= h.inflection.demodulize(name) %>Form extends LitElement {
                 margin-bottom: 15px;
                 padding-right: 20px;
 
-                width: 1%;
+                width: 5%;
                 text-align: right;
             }
 
@@ -96,7 +96,7 @@ export class <%= h.inflection.demodulize(name) %>Form extends LitElement {
                 margin-bottom: 15px;
                 padding-right: 20px;
 
-                width: 1%;
+                width: 5%;
                 text-align: right;
             }
 
@@ -200,7 +200,7 @@ export class <%= h.inflection.demodulize(name) %>Form extends LitElement {
             this.<%= h.inflection.transform(name, [ 'demodulize', 'underscore' ]) %>.<%= field %> = this.shadowRoot.getElementById("<%= h.inflection.transform(name, [ 'demodulize', 'underscore' ]) %>-<%= field %>").value;<% }); %>
             console.log(this.<%= h.inflection.transform(name, [ 'demodulize', 'underscore' ]) %>);
             try {
-                const data = await this.postData(this.actionUrl, this.article);
+                const data = await this.postData(this.actionUrl, this.<%= h.inflection.transform(name, [ 'demodulize', 'underscore' ]) %>);
                 console.log(JSON.stringify(data)); // JSON-string from `response.json()` call
                 if (data.status == '200') {
                     this.redirect("/<%= page_controller %>/page/<%= h.inflection.transform(name, [ 'demodulize', 'underscore', 'pluralize' ]) %>");
@@ -214,7 +214,7 @@ export class <%= h.inflection.demodulize(name) %>Form extends LitElement {
             this.<%= h.inflection.transform(name, [ 'demodulize', 'underscore' ]) %>.<%= field %> = this.shadowRoot.getElementById("<%= h.inflection.transform(name, [ 'demodulize', 'underscore' ]) %>-<%= field %>").value;<% }); %>
             console.log(this.<%= h.inflection.transform(name, [ 'demodulize', 'underscore' ]) %>);
             try {
-                const data = await this.putData(this.actionUrl +'/'+ this.article.id, this.article);
+                const data = await this.putData(this.actionUrl +'/'+ this.<%= h.inflection.transform(name, [ 'demodulize', 'underscore' ]) %>.id, this.<%= h.inflection.transform(name, [ 'demodulize', 'underscore' ]) %>);
                 console.log(JSON.stringify(data)); // JSON-string from `response.json()` call
                 if (data.status == '200') {
                     this.redirect("/<%= page_controller %>/page/<%= h.inflection.transform(name, [ 'demodulize', 'underscore', 'pluralize' ]) %>");

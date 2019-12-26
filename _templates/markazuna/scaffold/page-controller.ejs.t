@@ -1,7 +1,7 @@
 ---
 inject: true
 to: app/controllers/<%= page_controller %>_controller.rb
-after: "def page"
+after: "case params\\[:name\\]"
 ---
             ####### <%= h.inflection.transform(name, [ 'demodulize', 'underscore', 'pluralize' ]) %> #######
             when "<%= h.inflection.transform(name, [ 'demodulize', 'underscore', 'pluralize' ]) %>"

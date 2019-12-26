@@ -88,7 +88,6 @@ class <%= h.inflection.demodulize(name) %>List extends BaseList {
                             `:
                             html `
                                 <tr class="row-data row-data-odd">
-                                    <td class="col-1">${idx+1}</td>
                                     <td class="col-1">${idx+1}</td><% fields.split(",").slice(1, fields.split(",").length).forEach(function (field, index) { %>
                                     <td class="col-<%= index+2 %>">${u.<%= field %>}</td><% }); %>
                                     <td class="action"><img title="edit" src="${edit}" height="24" width="24" id="${u.id}" @click="${this.edit}"/></td>
@@ -127,7 +126,7 @@ class <%= h.inflection.demodulize(name) %>List extends BaseList {
         let <%= fields.split(",")[1] %> = this.shadowRoot.getElementById("search").value;
         let data;
 		try {
-            if (title === '') {
+            if (<%= fields.split(",")[1] %> === '') {
                 const response = await fetch(this.dataUrl);
                 data = await response.json();
             } else {

@@ -1,8 +1,8 @@
 ---
-to: "<%= name.split('::').length > 1 ? 'app/views/'+ h.changeCase.lower(name.split('::')[0]) +'/'+ h.changeCase.paramCase(h.inflection.demodulize(name))+'-form.html.erb' : 'app/views/'+ h.changeCase.paramCase(h.inflection.demodulize(name)) +'-form.html.erb' %>"
+to: "<%= name.split('::').length > 1 ? 'app/views/'+ h.changeCase.lower(name.split('::')[0]) +'/'+ h.changeCase.paramCase(h.inflection.demodulize(name))+'_form.html.erb' : 'app/views/'+ h.changeCase.paramCase(h.inflection.demodulize(name)) +'_form.html.erb' %>"
 unless_exists: true
 ---
-<%%= javascript_pack_tag "<%= name.split('::').length > 1 ? '/components/'+ h.changeCase.lower(name.split('::')[0]) +'/'+ h.changeCase.paramCase(h.inflection.transform(name, ['demodulize','pluralize'])) : '/components/'+ h.changeCase.paramCase(h.inflection.transform(name, ['demodulize','pluralize'])) %>", defer: true %%>
+<%%= javascript_pack_tag "<%= name.split('::').length > 1 ? 'components/'+ h.changeCase.lower(name.split('::')[0]) +'/'+ h.changeCase.paramCase(h.inflection.transform(name, ['demodulize','pluralize'])) : 'components/'+ h.changeCase.paramCase(h.inflection.transform(name, ['demodulize','pluralize'])) %>", defer: true %%>
 <style>
     <%= h.changeCase.paramCase(h.inflection.demodulize(name)) %>-form {
         margin: 0;

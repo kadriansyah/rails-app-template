@@ -2,7 +2,7 @@
 to: "<%= name.split('::').length > 1 ? 'app/views/'+ h.changeCase.lower(name.split('::')[0]) +'/'+ h.changeCase.paramCase(h.inflection.transform(name, ['demodulize','pluralize'])) +'.html.erb' : 'app/views/'+ h.changeCase.paramCase(h.inflection.transform(name, ['demodulize','pluralize'])) +'.html.erb' %>"
 unless_exists: true
 ---
-<%%= javascript_pack_tag "<%= name.split('::').length > 1 ? '/components/'+ h.changeCase.lower(name.split('::')[0]) +'/'+ h.changeCase.paramCase(h.inflection.transform(name, ['demodulize','pluralize'])) : '/components/'+ h.changeCase.paramCase(h.inflection.transform(name, ['demodulize','pluralize'])) %>", defer: true %%>
+<%%= javascript_pack_tag "<%= name.split('::').length > 1 ? 'components/'+ h.changeCase.lower(name.split('::')[0]) +'/'+ h.changeCase.paramCase(h.inflection.transform(name, ['demodulize','pluralize'])) : 'components/'+ h.changeCase.paramCase(h.inflection.transform(name, ['demodulize','pluralize'])) %>", defer: true %%>
 <style>
     <%= h.changeCase.paramCase(h.inflection.demodulize(name)) %>-list {
         margin: 0;

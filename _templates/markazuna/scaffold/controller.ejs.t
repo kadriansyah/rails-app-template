@@ -62,7 +62,7 @@ class <%= name.split('::').length > 1 ? name.split('::')[0] +'::'+ h.inflection.
         id = params[:id]
         <%= h.inflection.transform(name, ['demodulize','underscore']) %> = <%= h.inflection.transform(service_name, ['demodulize','underscore']) %>.find_<%= h.inflection.transform(name, ['demodulize','underscore']) %>(id)
 
-        if group
+        if <%= h.inflection.transform(name, ['demodulize','underscore']) %>
             respond_to do |format|
                 format.json { render :json => { status: "200", payload: <%= h.inflection.transform(name, ['demodulize','underscore']) %> } }
             end
