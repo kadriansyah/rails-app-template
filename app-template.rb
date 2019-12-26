@@ -42,6 +42,7 @@ gsub_file 'run.sh', /#appname/, "#{@app_name}"
 run 'chmod +x run.sh'
 
 copy_file 'docker-compose.yml'
+copy_file 'docker-entrypoint.sh'
 copy_file 'Dockerfile'
 copy_file 'rails_s.sh'
 run 'chmod +x rails_s.sh'
