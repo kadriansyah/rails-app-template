@@ -5,7 +5,7 @@ unless_exists: true
 require_dependency 'markazuna/di_container'
 
 class <%= name.split('::').length > 1 ? name.split('::')[0] +'::'+ h.inflection.transform(name, ['demodulize','pluralize']) : h.inflection.transform(name, ['demodulize','pluralize']) %>Controller < ApplicationController
-    include Markazuna::INJECT["<%= h.inflection.transform(service_name, ['demodulize','underscore']) %>"]
+    include Markazuna::INJECT[:<%= h.inflection.transform(service_name, ['demodulize','underscore']) %>]
 
     # http://api.rubyonrails.org/classes/ActionController/ParamsWrapper.html
     wrap_parameters :<%= h.inflection.transform(name, ['demodulize','underscore']) %>, include: [<% fields.split(',').forEach(function(field,idx){%>:<%= field %><% if(idx < fields.split(',').length - 1) { %>, <% }}); %>]
