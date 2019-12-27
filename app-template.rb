@@ -6,7 +6,7 @@
 # rails new [app_name] --skip-active-record --skip-turbolinks -m rails-app-template/app-template.rb
 
 ## scaffolding
-# rails g markazuna alo/tag --service_name tag_service --fields id name description
+# ./generator.sh scaffold --name Core::Category --fields "id,name,description" --page_controller admin --service_name Core::CategoryService
 
 # template options: webmag, magnews, videomag
 template_name = 'webmag'
@@ -17,6 +17,7 @@ end
 
 # _templates generator
 directory '_templates'
+copy_file 'generator.sh'
 
 # rvm environment related
 copy_file '.ruby-gemset'
