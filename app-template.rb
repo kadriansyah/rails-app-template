@@ -8,6 +8,9 @@
 ## scaffolding
 # ./generator.sh scaffold --name Core::Category --fields "id,name,description" --page_controller admin --service_name Core::CategoryService
 
+## custom component
+# ./generator.sh custom --name chip
+
 # template options: webmag, magnews, videomag
 template_name = 'webmag'
 

@@ -1,9 +1,9 @@
 ---
-to: app/javascript/packs/components/markazuna/<%= h.inflection.dasherize(name) %>.js
+to: app/javascript/packs/components/markazuna/<%= h.changeCase.paramCase(name) %>.js
 ---
 import { LitElement, html, css } from 'lit-element';
 
-export class <%= h.inflection.camelize(name) %> extends LitElement {
+export class <%= name %> extends LitElement {
     constructor() {
         super();
         this.state = {};
@@ -31,4 +31,4 @@ export class <%= h.inflection.camelize(name) %> extends LitElement {
         `;
     }
 }
-customElements.define('<%= h.inflection.dasherize(name) %>', <%= h.inflection.camelize(name) %>);
+customElements.define('<%= h.changeCase.paramCase(name) %>', <%= name %>);
