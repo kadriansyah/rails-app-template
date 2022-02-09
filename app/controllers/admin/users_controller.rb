@@ -1,4 +1,4 @@
-require_dependency 'markazuna/di_container'
+require 'markazuna/di_container'
 
 class Admin::UsersController < ApplicationController
     include Markazuna::INJECT['admin_service']

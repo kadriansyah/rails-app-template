@@ -1,2 +1,2 @@
 #!/bin/bash
-RAILS_ENV='development' rails s -b 0.0.0.0
+rvm-exec 3.0.3 rails s -b 0.0.0.0

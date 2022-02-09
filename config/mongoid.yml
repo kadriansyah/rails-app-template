@@ -24,10 +24,10 @@ production:
         #     - use: web
 
         # The name of the user for authentication.
-        user: 'admin'
+        #user: 'admin'
 
         # The password of the user for authentication.
-        password: 'password'
+        #password: 'password'
 
         # The user's database roles.
         # roles:
@@ -157,10 +157,10 @@ development:
         #     - use: web
 
         # The name of the user for authentication.
-        user: 'admin'
+        #user: 'admin'
 
         # The password of the user for authentication.
-        password: 'password'
+        #password: 'password'
 
         # The user's database roles.
         # roles:

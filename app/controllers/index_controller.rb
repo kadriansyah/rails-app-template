@@ -1,4 +1,4 @@
-require_dependency 'markazuna/di_container'
+require 'markazuna/di_container'
 
 class IndexController < ActionController::Base
     include Markazuna::INJECT['article_service']

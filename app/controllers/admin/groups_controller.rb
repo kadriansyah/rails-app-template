@@ -1,4 +1,4 @@
-require_dependency 'markazuna/di_container'
+require 'markazuna/di_container'
 
 class Admin::GroupsController < ApplicationController
     include Markazuna::INJECT['group_service']

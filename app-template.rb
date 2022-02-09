@@ -125,7 +125,7 @@ server {
     location @passenger {
         passenger_enabled on;
         passenger_user app;
-        passenger_ruby /usr/local/bin/ruby;
+        passenger_ruby /usr/bin/ruby3.0;
         passenger_app_env production;
         passenger_min_instances 100;
     }
@@ -172,7 +172,7 @@ server {
     location @passenger {
         passenger_enabled on;
         passenger_user app;
-        passenger_ruby /usr/local/bin/ruby;
+        passenger_ruby /usr/bin/ruby3.0;
         passenger_app_env production;
         passenger_min_instances 100;
     }
@@ -263,12 +263,13 @@ run 'rails webpacker:install'
 # 	RUBY
 # end
 
-# whitelisted_ips on development & disable check_yarn_integrity
-insert_into_file 'config/environments/development.rb', after: "config.file_watcher = ActiveSupport::EventedFileUpdateChecker\n" do <<-RUBY
-    config.web_console.whitelisted_ips = '172.24.0.1' # change and add ips depends on your needs
-    config.webpacker.check_yarn_integrity = false
-    RUBY
-end
+## disable this due to issue on Apple M1 (https://github.com/evilmartians/terraforming-rails/issues/34)
+# # whitelisted_ips on development & disable check_yarn_integrity
+# insert_into_file 'config/environments/development.rb', after: "config.file_watcher = ActiveSupport::EventedFileUpdateChecker\n" do <<-RUBY
+#     config.web_console.whitelisted_ips = '172.24.0.1' # change and add ips depends on your needs
+#     config.webpacker.check_yarn_integrity = false
+#     RUBY
+# end
 
 # environment production, fallback to assets pipeline if a precompiled asset is missed.
 gsub_file 'config/environments/production.rb', /config.assets.compile = false/, 'config.assets.compile = true'
