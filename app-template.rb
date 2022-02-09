@@ -1,15 +1,21 @@
 ## important!
+## you must have RVM installed (https://rvm.io/)
+### rvm install 3.0.0
+### rvm use 3.0.0@[app_name] --create
+
 ## you must have nodejs installed (https://github.com/creationix/nvm)
 ## you must have yarn installed (https://yarnpkg.com/lang/en/docs/install/#mac-stable)
+### create or edit .yarnrc.yml file and add with the following line:
+### nodeLinker: node-modules
+
+## install rails
+# gem install rails --no-document  
 
 ## rails app template (kadriansyah@gmail.com)
-# rails new [app_name] --skip-active-record --skip-turbolinks -m rails-app-template/app-template.rb
+### rails new [app_name] --skip-active-record --skip-turbolinks -m rails-app-template/app-template.rb
 
 ## scaffolding
 # ./generator.sh scaffold --name Core::Category --fields "id,name,description" --page_controller admin --service_name Core::CategoryService
-
-## custom component
-# ./generator.sh custom --name chip
 
 # template options: webmag, magnews, videomag
 template_name = 'webmag'
@@ -67,6 +73,12 @@ run 'chmod +x production_log.sh'
 
 gsub_file 'docker-compose.yml', /#appname/, "#{@app_name}"
 gsub_file 'Dockerfile', /#appname/, "#{@app_name}"
+
+copy_file 'app.key'
+run "mv app.key #{@app_name}.key"
+
+copy_file 'app.pem'
+run "mv app.pem #{@app_name}.pem"
 
 # nginx virtual host (be carefull with backslash on location, we need to escape it using double backslash)
 add_file "#{@app_name}.com"
@@ -183,12 +195,12 @@ append_to_file "Gemfile", <<-EOF
 source "https://rubygems.org"
 
 # gems
-gem 'rails', '~> 6.0.1'
-gem 'bootsnap', '>= 1.4.2', require: false
-gem 'sass-rails', '>= 6'
+gem 'rails', '~> 6.1', '>= 6.1.4.4'
+gem 'bootsnap', '~> 1.10', '>= 1.10.3', require: false
+gem 'sass-rails'
 gem 'uglifier'
 gem 'jquery-rails'
-gem 'jbuilder', '~> 2.7'
+gem 'jbuilder'
 gem 'mongoid'
 gem 'dry-container'
 gem 'dry-auto_inject'
@@ -200,13 +212,13 @@ gem 'sidekiq'
 gem 'devise'
 gem 'kaminari-mongoid'
 gem 'kaminari-actionview'
-gem 'webpacker', '~> 4.0'
+gem 'webpacker'
 gem 'figaro' # put environment variable on application.yml
 gem 'capistrano'
 gem 'rails-controller-testing'
 gem 'tzinfo-data'
 gem 'execjs'
-gem 'puma', '~> 4.1'
+gem 'puma'
 
 group :development do
     gem 'byebug', platform: :mri
@@ -237,19 +249,19 @@ run 'bundle update --bundler'
 # webpacker
 run 'rails webpacker:install'
 
-# rspec
-run 'rails generate rspec:install'
-directory 'spec', 'spec'
-insert_into_file 'spec/rails_helper.rb', after: "require 'rspec/rails'\n" do <<-RUBY
-require 'support/factory_bot'
-require 'devise'
-    RUBY
-end
-insert_into_file 'spec/rails_helper.rb', after: "config.filter_rails_from_backtrace!\n" do <<-RUBY
-	# devise
-	config.include Devise::Test::IntegrationHelpers, type: :request
-	RUBY
-end
+# # rspec
+# run 'rails generate rspec:install'
+# directory 'spec', 'spec'
+# insert_into_file 'spec/rails_helper.rb', after: "require 'rspec/rails'\n" do <<-RUBY
+# require 'support/factory_bot'
+# require 'devise'
+#     RUBY
+# end
+# insert_into_file 'spec/rails_helper.rb', after: "config.filter_rails_from_backtrace!\n" do <<-RUBY
+# 	# devise
+# 	config.include Devise::Test::IntegrationHelpers, type: :request
+# 	RUBY
+# end
 
 # whitelisted_ips on development & disable check_yarn_integrity
 insert_into_file 'config/environments/development.rb', after: "config.file_watcher = ActiveSupport::EventedFileUpdateChecker\n" do <<-RUBY
@@ -318,6 +330,7 @@ directory 'lib', 'lib'
 run 'yarn add @webcomponents/webcomponentsjs'
 
 # elements needed
+run 'yarn add @babel/core'
 run 'yarn add @babel/polyfill'
 run 'yarn add @babel/runtime'
 run 'yarn add @babel/plugin-transform-runtime'
@@ -327,7 +340,6 @@ run 'yarn add @rails/actioncable'
 run 'yarn add @rails/activestorage'
 run 'yarn add @rails/ujs'
 run 'yarn add @rails/webpacker'
-run 'yarn add hygen'
 run 'yarn add jquery'
 run 'yarn add lit-element'
 run 'yarn add purecss'
@@ -338,8 +350,8 @@ run 'mv node_modules/lit-element/ app/javascript/'
 run 'mv node_modules/lit-html/ app/javascript/'
 run 'cp node_modules/@webcomponents/webcomponentsjs/custom-elements-es5-adapter.js public/'
 
-# prevent from check_yarn_integrity issue
-run 'yarn install --check-files'
+# # prevent from check_yarn_integrity issue
+# run 'yarn install --check-files'
 
 # polymer custom components
 directory 'app/javascript/packs', 'app/javascript/packs'
@@ -631,7 +643,7 @@ gsub_file 'config/deploy.rb', /#.*$/, ""
 insert_into_file 'config/deploy.rb', after: /lock.*$/ do <<-EOF
 
 set :application, '#{@app_name}'
-set :rvm_ruby_version, '2.5.1@#{@app_name}'
+set :rvm_ruby_version, '3.0.0@#{@app_name}'
 
 set :repo_url, 'git@github.com:kadriansyah/#{@app_name}.git'
 set :branch, 'master'
