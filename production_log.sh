@@ -1,2 +1,2 @@
 #!/bin/bash
-docker exec -it #appname tail -f /var/www/html/#appname.com/log/production.log
+docker exec -it #appname tail -f /home/app/#appname.com/log/production.log
