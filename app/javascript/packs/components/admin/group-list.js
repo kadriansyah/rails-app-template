@@ -1,4 +1,4 @@
-import { html, css } from 'lit-element';
+import { html, css } from 'lit';
 import { BaseList } from '../base-list.js'
 import edit from '../images/edit.svg'
 import del from '../images/delete.svg'
