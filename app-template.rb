@@ -332,7 +332,8 @@ run 'yarn add @webcomponents/webcomponentsjs'
 
 # elements needed
 run 'yarn add @babel/core'
-run 'yarn add @babel/polyfill'
+# run 'yarn add @babel/polyfill'
+run 'yarn add core-js'
 run 'yarn add @babel/runtime'
 run 'yarn add @babel/plugin-transform-runtime'
 run 'yarn add @babel/plugin-syntax-dynamic-import'
@@ -342,7 +343,8 @@ run 'yarn add @rails/activestorage'
 run 'yarn add @rails/ujs'
 run 'yarn add @rails/webpacker'
 run 'yarn add jquery'
-run 'yarn add lit-element'
+# run 'yarn add lit-element'
+run 'yarn add lit'
 run 'yarn add purecss'
 run 'yarn add tinymce@5.1.4'
 
@@ -350,9 +352,6 @@ run 'yarn add tinymce@5.1.4'
 run 'mv node_modules/lit-element/ app/javascript/'
 run 'mv node_modules/lit-html/ app/javascript/'
 run 'cp node_modules/@webcomponents/webcomponentsjs/custom-elements-es5-adapter.js public/'
-
-# # prevent from check_yarn_integrity issue
-# run 'yarn install --check-files'
 
 # polymer custom components
 directory 'app/javascript/packs', 'app/javascript/packs'
